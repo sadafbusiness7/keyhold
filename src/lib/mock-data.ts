@@ -79,7 +79,20 @@ export type Lease = {
   depositHeld: number;
 };
 
+export type Portfolio = {
+  id: string;
+  name: string;
+  propertyIds: string[];
+};
+
+export const portfolios: Portfolio[] = [
+  { id: "toronto", name: "Toronto Portfolio", propertyIds: ["p1", "p3", "p4"] },
+  { id: "hamilton", name: "Hamilton Portfolio", propertyIds: ["p2"] },
+  { id: "vancouver", name: "Vancouver Portfolio", propertyIds: ["p5", "p6"] },
+];
+
 export const properties: Property[] = [
+
   {
     id: "p1",
     ownerId: "u_owner",
