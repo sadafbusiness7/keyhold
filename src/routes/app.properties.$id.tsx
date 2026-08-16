@@ -14,8 +14,10 @@ import {
   Plus,
   PencilSimple,
   Archive,
-  DownloadSimple
+  DownloadSimple,
+  ArrowsClockwise
 } from "@phosphor-icons/react";
+
 import { DetailBreadcrumbs, DetailHeader, DetailTabs, DetailSection } from "@/components/keyhold/detail-layout";
 import { propertyById, units as allUnits, tenants as allTenants, cad, type Unit, type UnitStatus } from "@/lib/mock-data";
 import { ActivityFeed } from "@/components/keyhold/activity-feed";
