@@ -78,7 +78,7 @@ function RentPageInner() {
   const perms = usePermissions();
   const rent = useRent();
 
-  const [tab, setTab] = useState<"ledger" | "credits" | "payouts" | "movedout">("ledger");
+  const [tab, setTab] = useState<"ledger" | "credits" | "payouts" | "movedout" | "arrears">("ledger");
   const [openInvoice, setOpenInvoice] = useState<Invoice | null>(null);
   const [showCharge, setShowCharge] = useState(false);
   const [showMoveOut, setShowMoveOut] = useState(false);
@@ -207,7 +207,9 @@ function RentPageInner() {
         {([
           ["ledger", "Rent ledger"],
           ["credits", "Credits & deposits"],
+          ["arrears", "Arrears management"],
           ["payouts", "Payouts & reconciliation"],
+
           ["movedout", `Moved out (${rent.moveOuts.length})`],
         ] as const).map(([key, label]) => (
 
@@ -343,7 +345,9 @@ function RentPageInner() {
 
       {tab === "credits" && <CreditsPanel setLedgerTenantId={setLedgerTenantId} />}
       {tab === "payouts" && <PayoutsPanel />}
+      {tab === "arrears" && <ArrearsPanel />}
       {tab === "movedout" && <MovedOutPanel />}
+
 
 
       {openInvoice && <InvoiceSheet invoice={openInvoice} onClose={() => setOpenInvoice(null)} />}
