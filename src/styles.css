@@ -111,14 +111,15 @@
 
   --navy: oklch(0.335 0.055 244.5);
   --navy-soft: oklch(0.96 0.015 244.5);
-  --action: oklch(0.546 0.215 263.4); /* Cyan/Blue */
+  --action: oklch(0.51 0.22 263.4); /* Cyan/Blue - slight darken for contrast */
   --action-soft: oklch(0.96 0.03 263.4);
-  --maple: oklch(0.545 0.203 26.8); /* Red/Magenta */
+  --maple: oklch(0.5 0.2 26.8); /* Red/Magenta - slight darken */
   --maple-soft: oklch(0.96 0.03 26.8);
-  --success: oklch(0.514 0.099 158.5); /* Green */
+  --success: oklch(0.48 0.1 158.5); /* Green - slight darken */
   --success-soft: oklch(0.96 0.03 158.5);
-  --warning: oklch(0.632 0.152 58.3); /* Orange */
-  --warning-soft: oklch(0.96 0.04 70);
+  --warning: oklch(0.52 0.15 58.3); /* Darker orange for WCAG AA */
+  --warning-soft: oklch(0.97 0.04 70);
+
 
   --surface: oklch(0.995 0 0);
   --surface-sunk: oklch(0.966 0.002 259);
@@ -255,8 +256,70 @@
   :focus-visible {
     outline: 2px solid var(--action);
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
   }
+
+  /* Accessible hidden but readable by screen readers */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Skip to content link */
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    z-index: 1000;
+    background: var(--action);
+    color: white;
+    padding: 1rem;
+    transition: top 0.2s;
+  }
+  .skip-link:focus {
+    top: 0;
+  }
+
+  @media print {
+    body {
+      background: white !important;
+      color: black !important;
+      font-size: 11pt;
+    }
+    .no-print, nav, header, aside, .sticky, button {
+      display: none !important;
+    }
+    main {
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .card-soft {
+      border: 1px solid #ccc !important;
+      box-shadow: none !important;
+      background: white !important;
+      break-inside: avoid;
+    }
+    .money {
+      font-weight: bold;
+    }
+    @page {
+      size: letter;
+      margin: 0.5in;
+    }
+    /* T776 and Report specific print improvements */
+    .print-break-before {
+      page-break-before: always;
+    }
+  }
+
 
   /* ── Signature icon treatment ───────────────────────────────────────────
      Phosphor duotone is our single icon set. The primary layer inherits the

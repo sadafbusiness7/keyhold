@@ -305,19 +305,20 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
             <AccountMenu />
           </div>
         </header>
-        <main className="mx-auto w-full max-w-6xl px-4 py-6 pb-28 sm:px-6 lg:py-10">
+        <main id="main-content" className="mx-auto w-full max-w-6xl px-4 py-6 pb-28 sm:px-6 lg:py-10" tabIndex={-1}>
           <ModuleBoundary name="This screen">{children}</ModuleBoundary>
         </main>
+
 
       </div>
 
       <AskKeyhold />
       <CommandPalette />
       <ShortcutsSheet />
-
     </div>
   );
 }
+
 
 export function PageHeader({
   title,
