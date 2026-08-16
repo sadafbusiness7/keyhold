@@ -7,7 +7,9 @@ import {
   FileText,
   Receipt,
   ChatText,
+  EnvelopeSimple,
   ShieldCheck,
+
   ClockCounterClockwise,
   Handshake,
   Scales,
@@ -53,6 +55,8 @@ const SECTIONS = [
   { key: "lease", label: "Lease settings", Icon: FileText },
   { key: "tax", label: "Tax settings", Icon: Receipt },
   { key: "templates", label: "Templates", Icon: ChatText },
+  { key: "emails", label: "Email Gallery", Icon: EnvelopeSimple },
+
   { key: "security", label: "Security", Icon: ShieldCheck },
   { key: "audit", label: "Audit log", Icon: ClockCounterClockwise },
   { key: "consent", label: "Consent records", Icon: Handshake },
@@ -113,6 +117,16 @@ function SettingsPage() {
           {section === "lease" && <LeasePanel />}
           {section === "tax" && <TaxPanel />}
           {section === "templates" && <TemplatesPanel />}
+          {section === "emails" && (
+            <div className="card-soft overflow-hidden h-[800px]">
+              <iframe 
+                src="/app/settings/emails" 
+                className="w-full h-full border-0" 
+                title="Email Template Gallery"
+              />
+            </div>
+          )}
+
           {section === "security" && (
             <>
               <SecurityPanel />
