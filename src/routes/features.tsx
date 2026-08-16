@@ -1,7 +1,15 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Buildings, CurrencyDollar, Wrench, FileText, Monitor, ChartBar } from "@phosphor-icons/react";
+import { createFileRoute } from "@tanstack/react-router";
+import { MarketingShell } from "@/components/keyhold/marketing-shell";
+import { CurrencyDollar, Wrench, FileText, Monitor, ChartBar, ArrowRight } from "@phosphor-icons/react";
+import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/features")({
+  head: () => ({
+    meta: [
+      { title: "Features — Keyhold" },
+      { name: "description", content: "Everything you need to manage your rentals calmly. Rent tracking, maintenance, leases, and reporting." },
+    ],
+  }),
   component: FeaturesOverviewPage,
 });
 
@@ -15,30 +23,28 @@ const features = [
 
 function FeaturesOverviewPage() {
   return (
-    <div className="min-h-screen bg-surface">
-      <header className="border-b border-border bg-white">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-navy text-white">
-              <Buildings weight="duotone" className="h-5 w-5" />
-            </span>
-            <span className="font-display text-lg font-extrabold text-navy">Keyhold</span>
-          </Link>
-        </nav>
-      </header>
-
-      <main className="mx-auto max-w-6xl px-4 py-20">
+    <MarketingShell>
+      <div className="mx-auto max-w-6xl px-4 py-20">
         <h1 className="font-display text-4xl font-extrabold text-navy">Everything you need to stay calm.</h1>
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <p className="mt-6 text-lg text-muted-foreground max-w-2xl">
+          We built Keyhold to solve the specific headaches of Canadian self-managing landlords. No bloat, just the tools that matter.
+        </p>
+        
+        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map(f => (
-            <Link key={f.href} to={f.href} className="card-soft p-8 group">
-              <f.icon weight="duotone" className="h-10 w-10 text-action group-hover:scale-110 transition-transform" />
-              <h3 className="mt-4 font-bold text-navy text-xl">{f.label}</h3>
-              <p className="mt-2 text-muted-foreground">{f.desc}</p>
+            <Link key={f.href} to={f.href as any} className="card-soft p-8 group flex flex-col items-start text-left">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-navy text-white group-hover:scale-110 transition-transform">
+                <f.icon weight="duotone" className="h-6 w-6" />
+              </div>
+              <h3 className="mt-6 font-bold text-navy text-xl">{f.label}</h3>
+              <p className="mt-2 text-muted-foreground flex-1">{f.desc}</p>
+              <div className="mt-6 flex items-center gap-2 text-sm font-bold text-action">
+                Learn more <ArrowRight weight="bold" />
+              </div>
             </Link>
           ))}
         </div>
-      </main>
-    </div>
+      </div>
+    </MarketingShell>
   );
 }

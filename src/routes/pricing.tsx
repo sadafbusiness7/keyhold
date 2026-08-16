@@ -1,13 +1,15 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { PageHeader } from "@/components/keyhold/app-shell";
+import { createFileRoute } from "@tanstack/react-router";
+import { MarketingShell } from "@/components/keyhold/marketing-shell";
 import { PricingCalculator } from "@/components/keyhold/pricing-calculator";
-import { Buildings, CheckCircle, ChatCircleDots, ArrowRight } from "@phosphor-icons/react";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
       { title: "Pricing — Keyhold" },
       { name: "description", content: "Simple, flat pricing for Canadian landlords. CA$4.99/mo for up to 12 units. No hidden fees." },
+      { property: "og:title", content: "Simple, Flat Pricing for Canadian Landlords" },
+      { property: "og:description", content: "CA$4.99/mo for up to 12 units. Pay-as-you-go, no contracts." },
+      { name: "twitter:card", content: "summary_large_image" }
     ],
   }),
   component: PricingPage,
@@ -15,18 +17,7 @@ export const Route = createFileRoute("/pricing")({
 
 function PricingPage() {
   return (
-    <div className="min-h-screen bg-surface">
-      <header className="border-b border-border bg-white">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-navy text-white">
-              <Buildings weight="duotone" className="h-5 w-5" />
-            </span>
-            <span className="font-display text-lg font-extrabold text-navy">Keyhold</span>
-          </Link>
-        </nav>
-      </header>
-
+    <MarketingShell>
       <main>
         <PricingCalculator />
         
@@ -47,10 +38,6 @@ function PricingPage() {
           </div>
         </section>
       </main>
-
-      <footer className="border-t border-border bg-surface-sunk py-12 text-center text-sm text-muted-foreground">
-        © 2026 Keyhold. Made in Canada.
-      </footer>
-    </div>
+    </MarketingShell>
   );
 }
