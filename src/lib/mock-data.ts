@@ -186,6 +186,10 @@ function makeUnits(propertyId: string, count: number, baseRent: number, startAt 
       rent: baseRent + bedrooms * 350,
       tenantId: n % 7 === 0 ? null : `t-${propertyId}-${n}`,
       leaseEnd: n % 7 === 0 ? null : `2027-0${(n % 9) + 1}-01`,
+      status: n % 7 === 0 ? "vacant" : "occupied",
+      turnoverDays: n % 7 === 0 ? (n * 3) % 45 : 0,
+      turnoverCostCents: n % 7 === 0 ? ((n * 12345) % 150000) : 0,
+
     } satisfies Unit;
   });
 }
