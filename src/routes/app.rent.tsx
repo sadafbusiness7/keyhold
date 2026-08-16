@@ -210,7 +210,7 @@ function RentPageInner() {
           name="Rent invoices"
           items={rows}
           getId={(r) => r.invoice.id}
-          getStatus={(r) => r.status}
+          getStatus={(r) => r.status as any}
           searchPlaceholder="Search tenant, home or charge"
           dateOf={(r) => r.invoice.dueDate}
           columns={[
@@ -225,7 +225,7 @@ function RentPageInner() {
             { key: "balance", label: "Balance", align: "right", value: (r) => r.balance,
               render: (r) => <span className={`money font-bold ${r.balance ? "text-maple" : "text-success"}`}>{money(r.balance)}</span> },
             { key: "due", label: "Due", value: (r) => r.invoice.dueDate, render: (r) => <span className="tnum">{longDate(r.invoice.dueDate)}</span> },
-            { key: "status", label: "Status", sortable: false, value: (r) => r.status, render: (r) => <StatusLabel status={r.status} /> },
+            { key: "status", label: "Status", sortable: false, value: (r) => r.status, render: (r) => <StatusLabel status={r.status as any} /> },
           ]}
           filters={[
             {
@@ -295,7 +295,8 @@ function RentPageInner() {
           quickView={(r) => ({
             title: r.tenant,
             subtitle: `${r.home} · ${r.invoice.description}`,
-            status: r.status,
+            status: r.status as any,
+
             fields: [
               { label: "Amount", value: <span className="money">{money(r.invoice.amountCents)}</span> },
               { label: "Paid", value: <span className="money">{money(r.paid)}</span> },
