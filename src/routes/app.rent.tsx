@@ -23,7 +23,7 @@ import { RequireFinancials } from "@/components/keyhold/access-guard";
 import { PageHeader } from "@/components/keyhold/app-shell";
 import { StatusLabel } from "@/components/keyhold/status";
 import { DataList } from "@/components/keyhold/data-list";
-import { InvoiceSheet, ManualChargeSheet, MoveOutSheet, AddDepositSheet, DepositLedgerSheet } from "@/components/keyhold/rent-panels";
+import { InvoiceSheet, ManualChargeSheet, MoveOutSheet, AddDepositSheet, DepositLedgerSheet, TenantStatementSheet, RecurringChargesSheet, AdjustmentSheet } from "@/components/keyhold/rent-panels";
 import { usePermissions } from "@/lib/mock-access";
 import { tenantById, unitAddress, longDate } from "@/lib/mock-data";
 import { useRent, lastMonthHeldCents } from "@/lib/mock-rent";
