@@ -5,7 +5,7 @@
 import { useRef } from "react";
 import { toast } from "sonner";
 import { UploadSimple, Trash, Palette, Translate, Key, Receipt, EnvelopeSimple } from "@phosphor-icons/react";
-import { ACCENT_PRESETS, brandStyle, useBranding } from "@/lib/mock-branding";
+import { ACCENT_PRESETS, accentForeground, brandStyle, useBranding } from "@/lib/mock-branding";
 import { LOCALES, useI18n } from "@/lib/i18n";
 
 const inputClass = "mt-1 min-h-11 w-full rounded-xl border border-input bg-background px-3 text-sm";
@@ -157,7 +157,7 @@ function BrandPreview() {
   const { branding } = useBranding();
   const style = brandStyle(branding);
   const accent = branding.accent;
-  const onAccent = String(style["--brand-accent-foreground" as keyof typeof style]);
+  const onAccent = accentForeground(accent);
 
   const Logo = () =>
     branding.logoDataUrl ? (
