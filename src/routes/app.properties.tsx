@@ -22,13 +22,16 @@ export const Route = createFileRoute("/app/properties")({
 });
 
 function PropertiesPage() {
+  const navigate = Route.useNavigate();
   const { properties, units, canSeeFinancials, canSeeTenantSensitive, isOwner } = usePermissions();
+
   const propName = (id: string) => properties.find((p) => p.id === id)?.name ?? "—";
 
   const columns: Column<Unit>[] = [
     { key: "label", label: "Unit", locked: true, value: (u) => u.label, render: (u) => (
-      <span className="font-display font-bold text-navy">{u.label}</span>
+      <Link to={`/app/units/${u.id}` as any} className="font-display font-bold text-navy hover:underline">{u.label}</Link>
     ) },
+
     { key: "property", label: "Property", value: (u) => propName(u.propertyId) },
     { key: "kind", label: "Type", value: (u) => u.kind },
     { key: "tenant", label: "Who lives here", value: (u) => {
@@ -145,7 +148,7 @@ function PropertiesPage() {
           };
         }}
         rowActions={[
-          { key: "view", label: "View unit", Icon: Eye },
+          { key: "view", label: "View unit", Icon: Eye, onSelect: (u) => navigate({ to: `/app/units/${u.id}` as any }) },
           { key: "edit", label: "Edit unit", Icon: PencilSimple },
           { key: "duplicate", label: "Duplicate unit", Icon: Copy },
           { key: "listing", label: "Create listing", Icon: House, onSelect: () => toast.success("Opening the listing builder…") },

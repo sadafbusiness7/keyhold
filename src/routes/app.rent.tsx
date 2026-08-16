@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Plus,
   DownloadSimple,
@@ -15,7 +15,9 @@ import {
   CurrencyDollar,
   Bank,
   Calculator,
+  Users,
 } from "@phosphor-icons/react";
+
 import { toast } from "sonner";
 import { RequireFinancials } from "@/components/keyhold/access-guard";
 import { PageHeader } from "@/components/keyhold/app-shell";
@@ -231,7 +233,8 @@ function RentPageInner() {
           dateOf={(r) => r.invoice.dueDate}
           columns={[
             { key: "tenant", label: "Tenant", locked: true, value: (r) => r.tenant,
-              render: (r) => <span className="font-display font-bold text-navy">{r.tenant}</span> },
+              render: (r) => <Link to={`/app/tenants/${r.invoice.tenantId}` as any} className="font-display font-bold text-navy hover:underline">{r.tenant}</Link> },
+
             { key: "home", label: "Home", value: (r) => r.home },
             { key: "charge", label: "For", value: (r) => r.invoice.description },
             { key: "amount", label: "Amount", align: "right", value: (r) => r.invoice.amountCents,
@@ -294,7 +297,9 @@ function RentPageInner() {
             },
           ]}
           rowActions={[
+            { key: "tenant", label: "View tenant", Icon: Users, onSelect: (r) => Route.useNavigate()({ to: `/app/tenants/${r.invoice.tenantId}` as any }) },
             { key: "open", label: "Open invoice", Icon: Eye, onSelect: (r) => setOpenInvoice(r.invoice) },
+
             { key: "pay", label: "Record payment", Icon: CurrencyDollar, onSelect: (r) => setOpenInvoice(r.invoice) },
             { key: "remind", label: "Send reminder", Icon: PaperPlaneTilt, onSelect: (r) => toast.success(`Reminder sent to ${r.tenant}`) },
             { key: "duplicate", label: "Duplicate charge", Icon: Copy },

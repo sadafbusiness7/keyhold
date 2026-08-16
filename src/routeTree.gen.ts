@@ -73,12 +73,16 @@ import { Route as VsBuildiumRouteImport } from './routes/vs.buildium'
 import { Route as VsDoorloopRouteImport } from './routes/vs.doorloop'
 import { Route as VsSpreadsheetsRouteImport } from './routes/vs.spreadsheets'
 import { Route as AppLeasesIndexRouteImport } from './routes/app.leases.index'
+import { Route as AppLeasesIdRouteImport } from './routes/app.leases.$id'
 import { Route as AppLeasesLeaseIdRouteImport } from './routes/app.leases.$leaseId'
 import { Route as AppLeasesNewRouteImport } from './routes/app.leases.new'
 import { Route as AppLeasesSignRouteImport } from './routes/app.leases.sign'
+import { Route as AppPropertiesIdRouteImport } from './routes/app.properties.$id'
 import { Route as AppProspectsIndexRouteImport } from './routes/app.prospects.index'
 import { Route as AppProspectsProspectIdRouteImport } from './routes/app.prospects.$prospectId'
 import { Route as AppSettingsEmailsRouteImport } from './routes/app.settings.emails'
+import { Route as AppTenantsIdRouteImport } from './routes/app.tenants.$id'
+import { Route as AppUnitsIdRouteImport } from './routes/app.units.$id'
 import { Route as ApiPublicCalendarFeedRouteImport } from './routes/api/public/calendar/feed'
 import { Route as ApiPublicEmailInboundRouteImport } from './routes/api/public/email/inbound'
 import { Route as AppLeasesWizardIndexRouteImport } from './routes/app.leases.wizard.index'
@@ -404,6 +408,11 @@ const AppLeasesIndexRoute = AppLeasesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppLeasesRoute,
 } as any)
+const AppLeasesIdRoute = AppLeasesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AppLeasesRoute,
+} as any)
 const AppLeasesLeaseIdRoute = AppLeasesLeaseIdRouteImport.update({
   id: '/$leaseId',
   path: '/$leaseId',
@@ -419,6 +428,11 @@ const AppLeasesSignRoute = AppLeasesSignRouteImport.update({
   path: '/sign',
   getParentRoute: () => AppLeasesRoute,
 } as any)
+const AppPropertiesIdRoute = AppPropertiesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AppPropertiesRoute,
+} as any)
 const AppProspectsIndexRoute = AppProspectsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -433,6 +447,16 @@ const AppSettingsEmailsRoute = AppSettingsEmailsRouteImport.update({
   id: '/emails',
   path: '/emails',
   getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppTenantsIdRoute = AppTenantsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AppTenantsRoute,
+} as any)
+const AppUnitsIdRoute = AppUnitsIdRouteImport.update({
+  id: '/units/$id',
+  path: '/units/$id',
+  getParentRoute: () => AppRoute,
 } as any)
 const ApiPublicCalendarFeedRoute = ApiPublicCalendarFeedRouteImport.update({
   id: '/api/public/calendar/feed',
@@ -491,7 +515,7 @@ export interface FileRoutesByFullPath {
   '/app/notices': typeof AppNoticesRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/onboarding': typeof AppOnboardingRoute
-  '/app/properties': typeof AppPropertiesRoute
+  '/app/properties': typeof AppPropertiesRouteWithChildren
   '/app/prospects': typeof AppProspectsRouteWithChildren
   '/app/renewals': typeof AppRenewalsRoute
   '/app/rent': typeof AppRentRoute
@@ -501,7 +525,7 @@ export interface FileRoutesByFullPath {
   '/app/support': typeof AppSupportRoute
   '/app/tax': typeof AppTaxRoute
   '/app/team': typeof AppTeamRoute
-  '/app/tenants': typeof AppTenantsRoute
+  '/app/tenants': typeof AppTenantsRouteWithChildren
   '/apply/$slug': typeof ApplySlugRoute
   '/features/leases': typeof FeaturesLeasesRoute
   '/features/maintenance': typeof FeaturesMaintenanceRoute
@@ -520,11 +544,15 @@ export interface FileRoutesByFullPath {
   '/vs/spreadsheets': typeof VsSpreadsheetsRoute
   '/app/': typeof AppIndexRoute
   '/legal/': typeof LegalIndexRoute
+  '/app/leases/$id': typeof AppLeasesIdRoute
   '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
   '/app/leases/new': typeof AppLeasesNewRoute
   '/app/leases/sign': typeof AppLeasesSignRoute
+  '/app/properties/$id': typeof AppPropertiesIdRoute
   '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
   '/app/settings/emails': typeof AppSettingsEmailsRoute
+  '/app/tenants/$id': typeof AppTenantsIdRoute
+  '/app/units/$id': typeof AppUnitsIdRoute
   '/app/leases/': typeof AppLeasesIndexRoute
   '/app/prospects/': typeof AppProspectsIndexRoute
   '/api/public/calendar/feed': typeof ApiPublicCalendarFeedRoute
@@ -565,7 +593,7 @@ export interface FileRoutesByTo {
   '/app/notices': typeof AppNoticesRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/onboarding': typeof AppOnboardingRoute
-  '/app/properties': typeof AppPropertiesRoute
+  '/app/properties': typeof AppPropertiesRouteWithChildren
   '/app/renewals': typeof AppRenewalsRoute
   '/app/rent': typeof AppRentRoute
   '/app/rent-increases': typeof AppRentIncreasesRoute
@@ -574,7 +602,7 @@ export interface FileRoutesByTo {
   '/app/support': typeof AppSupportRoute
   '/app/tax': typeof AppTaxRoute
   '/app/team': typeof AppTeamRoute
-  '/app/tenants': typeof AppTenantsRoute
+  '/app/tenants': typeof AppTenantsRouteWithChildren
   '/apply/$slug': typeof ApplySlugRoute
   '/features/leases': typeof FeaturesLeasesRoute
   '/features/maintenance': typeof FeaturesMaintenanceRoute
@@ -593,11 +621,15 @@ export interface FileRoutesByTo {
   '/vs/spreadsheets': typeof VsSpreadsheetsRoute
   '/app': typeof AppIndexRoute
   '/legal': typeof LegalIndexRoute
+  '/app/leases/$id': typeof AppLeasesIdRoute
   '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
   '/app/leases/new': typeof AppLeasesNewRoute
   '/app/leases/sign': typeof AppLeasesSignRoute
+  '/app/properties/$id': typeof AppPropertiesIdRoute
   '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
   '/app/settings/emails': typeof AppSettingsEmailsRoute
+  '/app/tenants/$id': typeof AppTenantsIdRoute
+  '/app/units/$id': typeof AppUnitsIdRoute
   '/app/leases': typeof AppLeasesIndexRoute
   '/app/prospects': typeof AppProspectsIndexRoute
   '/api/public/calendar/feed': typeof ApiPublicCalendarFeedRoute
@@ -641,7 +673,7 @@ export interface FileRoutesById {
   '/app/notices': typeof AppNoticesRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/onboarding': typeof AppOnboardingRoute
-  '/app/properties': typeof AppPropertiesRoute
+  '/app/properties': typeof AppPropertiesRouteWithChildren
   '/app/prospects': typeof AppProspectsRouteWithChildren
   '/app/renewals': typeof AppRenewalsRoute
   '/app/rent': typeof AppRentRoute
@@ -651,7 +683,7 @@ export interface FileRoutesById {
   '/app/support': typeof AppSupportRoute
   '/app/tax': typeof AppTaxRoute
   '/app/team': typeof AppTeamRoute
-  '/app/tenants': typeof AppTenantsRoute
+  '/app/tenants': typeof AppTenantsRouteWithChildren
   '/apply/$slug': typeof ApplySlugRoute
   '/features/leases': typeof FeaturesLeasesRoute
   '/features/maintenance': typeof FeaturesMaintenanceRoute
@@ -670,11 +702,15 @@ export interface FileRoutesById {
   '/vs/spreadsheets': typeof VsSpreadsheetsRoute
   '/app/': typeof AppIndexRoute
   '/legal/': typeof LegalIndexRoute
+  '/app/leases/$id': typeof AppLeasesIdRoute
   '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
   '/app/leases/new': typeof AppLeasesNewRoute
   '/app/leases/sign': typeof AppLeasesSignRoute
+  '/app/properties/$id': typeof AppPropertiesIdRoute
   '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
   '/app/settings/emails': typeof AppSettingsEmailsRoute
+  '/app/tenants/$id': typeof AppTenantsIdRoute
+  '/app/units/$id': typeof AppUnitsIdRoute
   '/app/leases/': typeof AppLeasesIndexRoute
   '/app/prospects/': typeof AppProspectsIndexRoute
   '/api/public/calendar/feed': typeof ApiPublicCalendarFeedRoute
@@ -748,11 +784,15 @@ export interface FileRouteTypes {
     | '/vs/spreadsheets'
     | '/app/'
     | '/legal/'
+    | '/app/leases/$id'
     | '/app/leases/$leaseId'
     | '/app/leases/new'
     | '/app/leases/sign'
+    | '/app/properties/$id'
     | '/app/prospects/$prospectId'
     | '/app/settings/emails'
+    | '/app/tenants/$id'
+    | '/app/units/$id'
     | '/app/leases/'
     | '/app/prospects/'
     | '/api/public/calendar/feed'
@@ -821,11 +861,15 @@ export interface FileRouteTypes {
     | '/vs/spreadsheets'
     | '/app'
     | '/legal'
+    | '/app/leases/$id'
     | '/app/leases/$leaseId'
     | '/app/leases/new'
     | '/app/leases/sign'
+    | '/app/properties/$id'
     | '/app/prospects/$prospectId'
     | '/app/settings/emails'
+    | '/app/tenants/$id'
+    | '/app/units/$id'
     | '/app/leases'
     | '/app/prospects'
     | '/api/public/calendar/feed'
@@ -897,11 +941,15 @@ export interface FileRouteTypes {
     | '/vs/spreadsheets'
     | '/app/'
     | '/legal/'
+    | '/app/leases/$id'
     | '/app/leases/$leaseId'
     | '/app/leases/new'
     | '/app/leases/sign'
+    | '/app/properties/$id'
     | '/app/prospects/$prospectId'
     | '/app/settings/emails'
+    | '/app/tenants/$id'
+    | '/app/units/$id'
     | '/app/leases/'
     | '/app/prospects/'
     | '/api/public/calendar/feed'
@@ -1391,6 +1439,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeasesIndexRouteImport
       parentRoute: typeof AppLeasesRoute
     }
+    '/app/leases/$id': {
+      id: '/app/leases/$id'
+      path: '/$id'
+      fullPath: '/app/leases/$id'
+      preLoaderRoute: typeof AppLeasesIdRouteImport
+      parentRoute: typeof AppLeasesRoute
+    }
     '/app/leases/$leaseId': {
       id: '/app/leases/$leaseId'
       path: '/$leaseId'
@@ -1412,6 +1467,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeasesSignRouteImport
       parentRoute: typeof AppLeasesRoute
     }
+    '/app/properties/$id': {
+      id: '/app/properties/$id'
+      path: '/$id'
+      fullPath: '/app/properties/$id'
+      preLoaderRoute: typeof AppPropertiesIdRouteImport
+      parentRoute: typeof AppPropertiesRoute
+    }
     '/app/prospects/': {
       id: '/app/prospects/'
       path: '/'
@@ -1432,6 +1494,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/settings/emails'
       preLoaderRoute: typeof AppSettingsEmailsRouteImport
       parentRoute: typeof AppSettingsRoute
+    }
+    '/app/tenants/$id': {
+      id: '/app/tenants/$id'
+      path: '/$id'
+      fullPath: '/app/tenants/$id'
+      preLoaderRoute: typeof AppTenantsIdRouteImport
+      parentRoute: typeof AppTenantsRoute
+    }
+    '/app/units/$id': {
+      id: '/app/units/$id'
+      path: '/units/$id'
+      fullPath: '/app/units/$id'
+      preLoaderRoute: typeof AppUnitsIdRouteImport
+      parentRoute: typeof AppRoute
     }
     '/api/public/calendar/feed': {
       id: '/api/public/calendar/feed'
@@ -1465,6 +1541,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppLeasesRouteChildren {
+  AppLeasesIdRoute: typeof AppLeasesIdRoute
   AppLeasesLeaseIdRoute: typeof AppLeasesLeaseIdRoute
   AppLeasesNewRoute: typeof AppLeasesNewRoute
   AppLeasesSignRoute: typeof AppLeasesSignRoute
@@ -1474,6 +1551,7 @@ interface AppLeasesRouteChildren {
 }
 
 const AppLeasesRouteChildren: AppLeasesRouteChildren = {
+  AppLeasesIdRoute: AppLeasesIdRoute,
   AppLeasesLeaseIdRoute: AppLeasesLeaseIdRoute,
   AppLeasesNewRoute: AppLeasesNewRoute,
   AppLeasesSignRoute: AppLeasesSignRoute,
@@ -1484,6 +1562,18 @@ const AppLeasesRouteChildren: AppLeasesRouteChildren = {
 
 const AppLeasesRouteWithChildren = AppLeasesRoute._addFileChildren(
   AppLeasesRouteChildren,
+)
+
+interface AppPropertiesRouteChildren {
+  AppPropertiesIdRoute: typeof AppPropertiesIdRoute
+}
+
+const AppPropertiesRouteChildren: AppPropertiesRouteChildren = {
+  AppPropertiesIdRoute: AppPropertiesIdRoute,
+}
+
+const AppPropertiesRouteWithChildren = AppPropertiesRoute._addFileChildren(
+  AppPropertiesRouteChildren,
 )
 
 interface AppProspectsRouteChildren {
@@ -1512,6 +1602,18 @@ const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
   AppSettingsRouteChildren,
 )
 
+interface AppTenantsRouteChildren {
+  AppTenantsIdRoute: typeof AppTenantsIdRoute
+}
+
+const AppTenantsRouteChildren: AppTenantsRouteChildren = {
+  AppTenantsIdRoute: AppTenantsIdRoute,
+}
+
+const AppTenantsRouteWithChildren = AppTenantsRoute._addFileChildren(
+  AppTenantsRouteChildren,
+)
+
 interface AppRouteChildren {
   AppAddTenantRoute: typeof AppAddTenantRoute
   AppAnnouncementsRoute: typeof AppAnnouncementsRoute
@@ -1533,7 +1635,7 @@ interface AppRouteChildren {
   AppNoticesRoute: typeof AppNoticesRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
   AppOnboardingRoute: typeof AppOnboardingRoute
-  AppPropertiesRoute: typeof AppPropertiesRoute
+  AppPropertiesRoute: typeof AppPropertiesRouteWithChildren
   AppProspectsRoute: typeof AppProspectsRouteWithChildren
   AppRenewalsRoute: typeof AppRenewalsRoute
   AppRentRoute: typeof AppRentRoute
@@ -1543,8 +1645,9 @@ interface AppRouteChildren {
   AppSupportRoute: typeof AppSupportRoute
   AppTaxRoute: typeof AppTaxRoute
   AppTeamRoute: typeof AppTeamRoute
-  AppTenantsRoute: typeof AppTenantsRoute
+  AppTenantsRoute: typeof AppTenantsRouteWithChildren
   AppIndexRoute: typeof AppIndexRoute
+  AppUnitsIdRoute: typeof AppUnitsIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -1568,7 +1671,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppNoticesRoute: AppNoticesRoute,
   AppNotificationsRoute: AppNotificationsRoute,
   AppOnboardingRoute: AppOnboardingRoute,
-  AppPropertiesRoute: AppPropertiesRoute,
+  AppPropertiesRoute: AppPropertiesRouteWithChildren,
   AppProspectsRoute: AppProspectsRouteWithChildren,
   AppRenewalsRoute: AppRenewalsRoute,
   AppRentRoute: AppRentRoute,
@@ -1578,8 +1681,9 @@ const AppRouteChildren: AppRouteChildren = {
   AppSupportRoute: AppSupportRoute,
   AppTaxRoute: AppTaxRoute,
   AppTeamRoute: AppTeamRoute,
-  AppTenantsRoute: AppTenantsRoute,
+  AppTenantsRoute: AppTenantsRouteWithChildren,
   AppIndexRoute: AppIndexRoute,
+  AppUnitsIdRoute: AppUnitsIdRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

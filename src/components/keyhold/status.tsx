@@ -20,6 +20,8 @@ const toneClass: Record<Tone, { rail: string; text: string; chip: string }> = {
 
 
 export type StatusKey =
+  | "active"
+
   | "paid"
   | "due-soon"
   | "overdue"
@@ -76,7 +78,9 @@ export const statusMeta: Record<StatusKey, { label: string; tone: Tone }> = {
   whenever: { label: "Whenever", tone: "navy" },
   pending: { label: "Pending", tone: "action" },
   failed: { label: "Failed", tone: "maple" },
+  active: { label: "Active", tone: "success" },
 };
+
 
 
 

@@ -37,13 +37,16 @@ const rentOf = (t: Tenant) => rentRows.find((r) => r.tenantId === t.id);
 
 
 function TenantsPageInner() {
+  const navigate = Route.useNavigate();
   const { noticesForTenant } = useNotices();
+
   const rent = useRent();
 
 
   const columns: Column<Tenant>[] = [
     { key: "name", label: "Tenant", locked: true, value: (t) => t.name,
-      render: (t) => <span className="font-display font-bold text-navy">{t.name}</span> },
+      render: (t) => <Link to={`/app/tenants/${t.id}` as any} className="font-display font-bold text-navy hover:underline">{t.name}</Link> },
+
     { key: "unit", label: "Home", value: (t) => unitAddress(t.unitId) },
     { key: "rent", label: "Rent", align: "right", value: (t) => rentOf(t)?.rent ?? 0,
       render: (t) => <span className="money font-extrabold text-navy">{cad(rentOf(t)?.rent ?? 0)}</span> },
@@ -126,7 +129,8 @@ function TenantsPageInner() {
           },
         ]}
         rowActions={[
-          { key: "view", label: "View tenant", Icon: Eye },
+          { key: "view", label: "View tenant", Icon: Eye, onSelect: (t) => navigate({ to: `/app/tenants/${t.id}` as any }) },
+
           { key: "edit", label: "Edit details", Icon: PencilSimple },
           { key: "notice", label: "Serve a notice", Icon: Stamp, onSelect: () => toast.success("Opening the notice builder…") },
           { key: "archive", label: "Archive", Icon: Archive },
