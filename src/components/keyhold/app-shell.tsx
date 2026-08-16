@@ -308,18 +308,15 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
         <main id="main-content" className="mx-auto w-full max-w-6xl px-4 py-6 pb-28 sm:px-6 lg:py-10" tabIndex={-1}>
           <ModuleBoundary name={tx(title) || "This screen"}>{children}</ModuleBoundary>
         </main>
-
-        </main>
-
       </div>
 
       <AskKeyhold />
       <CommandPalette />
       <ShortcutsSheet />
-
     </div>
   );
 }
+
 
 export function PageHeader({
   title,
