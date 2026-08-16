@@ -203,7 +203,7 @@ function TenantDetailPage() {
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="card-soft p-5">
                 <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Outstanding Balance</p>
-                <p className="mt-1 text-2xl font-extrabold text-maple">{money(rent.creditFor(id) < 0 ? Math.abs(rent.creditFor(id)) : 0)}</p>
+                <p className="mt-1 text-2xl font-extrabold text-maple">{money(Math.max(0, -rent.creditFor(id)))}</p>
               </div>
               <div className="card-soft p-5">
                 <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Credit on File</p>
