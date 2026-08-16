@@ -599,7 +599,7 @@ export function AddDepositSheet({ onClose }: { onClose: () => void }) {
           </div>
           <div>
             <label htmlFor="ad-date" className="text-sm font-medium">Received on</label>
-            <input id="ad-date" type="date" value={date} onChange={(e) => setDueDate(e.target.value)} className={`${field} tnum`} />
+            <input id="ad-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className={`${field} tnum`} />
           </div>
         </div>
         <button type="submit" className="min-h-11 w-full rounded-full bg-action px-5 text-sm font-semibold text-primary-foreground hover:bg-action/90">
