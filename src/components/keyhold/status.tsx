@@ -35,7 +35,10 @@ export type StatusKey =
   | "resolved"
   | "occupied"
   | "vacant"
+  | "turnover"
+  | "listing"
   | "new"
+
   | "assigned"
   | "scheduled"
   | "completed"
@@ -61,6 +64,9 @@ export const statusMeta: Record<StatusKey, { label: string; tone: Tone }> = {
   resolved: { label: "Resolved", tone: "success" },
   occupied: { label: "Lived in", tone: "success" },
   vacant: { label: "Empty", tone: "warning" },
+  turnover: { label: "Turnover", tone: "action" },
+  listing: { label: "Listing", tone: "action" },
+
   // maintenance requests & work orders
   new: { label: "New", tone: "action" },
   assigned: { label: "Assigned", tone: "action" },
