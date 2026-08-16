@@ -188,7 +188,7 @@ export function AccessProvider({ children }: { children: ReactNode }) {
   const [ownerAccess, setOwnerAccessRows] = useState<OwnerAccess[]>(seedOwnerAccess);
   const [assignments, setAssignments] = useState<PropertyAssignment[]>(seedAssignments);
   const [accessLog, setAccessLog] = useState<AccessLogEntry[]>(seedLog);
-  const [currentUserId, setCurrentUserId] = useState("u_joseph");
+  const [currentUserId, setCurrentUserId] = useState("u_owner");
 
   const currentUser: AppUser = users.find((u) => u.id === currentUserId) ?? seedUsers[0]!;
   const actorId = currentUser.id;
