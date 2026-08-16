@@ -22,7 +22,9 @@ export const Route = createFileRoute("/app/properties")({
 });
 
 function PropertiesPage() {
+  const navigate = Route.useNavigate();
   const { properties, units, canSeeFinancials, canSeeTenantSensitive, isOwner } = usePermissions();
+
   const propName = (id: string) => properties.find((p) => p.id === id)?.name ?? "—";
 
   const columns: Column<Unit>[] = [
@@ -145,7 +147,7 @@ function PropertiesPage() {
           };
         }}
         rowActions={[
-          { key: "view", label: "View unit", Icon: Eye },
+          { key: "view", label: "View unit", Icon: Eye, onSelect: (u) => navigate({ to: `/app/units/${u.id}` as any }) },
           { key: "edit", label: "Edit unit", Icon: PencilSimple },
           { key: "duplicate", label: "Duplicate unit", Icon: Copy },
           { key: "listing", label: "Create listing", Icon: House, onSelect: () => toast.success("Opening the listing builder…") },
