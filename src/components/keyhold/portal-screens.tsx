@@ -1286,3 +1286,77 @@ export function PortalPaymentFlow({
     </div>
   );
 }
+
+export function PortalAutopayCard({ scope }: { scope: ReturnType<typeof usePortalScope> }) {
+  const autopay = scope.lease ? scope.rent.autopayForLease(scope.lease.id) : null;
+  const methods = scope.rent.methodsForTenant(scope.tenant.id);
+  const defaultMethod = methods.find(m => m.isDefault) || methods[0];
+
+  if (!scope.lease) return null;
+
+  return (
+    <section className="card-soft p-5 space-y-4">
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="font-display text-lg font-bold text-navy">Autopay</h2>
+        <div className={`kh-tag ${autopay?.enabled ? "bg-success-soft text-success" : "bg-navy-soft text-navy"}`}>
+          {autopay?.enabled ? "Active" : "Not enrolled"}
+        </div>
+      </div>
+
+      <p className="text-sm text-muted-foreground">
+        When active, rent is automatically paid on the 1st of each month using your default method.
+      </p>
+
+      {autopay?.enabled ? (
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 rounded-xl bg-navy-soft p-4">
+            <div className="grid h-10 w-10 place-items-center rounded-full bg-white text-navy shadow-sm">
+              <Bank weight="duotone" className="h-6 w-6" />
+            </div>
+            <div className="flex-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Method</p>
+              <p className="font-bold text-navy">
+                {methods.find(m => m.id === autopay.methodId)?.label || "Bank account"}
+              </p>
+            </div>
+          </div>
+          <div className="rounded-xl border border-border p-3 space-y-2">
+            <p className="inline-flex items-center gap-2 text-xs font-bold text-navy">
+              <Clock weight="duotone" className="h-4 w-4" /> Pre-charge notice
+            </p>
+            <p className="text-xs text-muted-foreground">
+              We will send you a reminder 3 days before each charge. You can cancel or pause autopay at any time before the due date.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              scope.rent.toggleAutopay(scope.lease!.id, scope.tenant.id, "", false);
+              toast.success("Autopay disabled. You will need to pay manually next month.");
+            }}
+            className={quietBtn}
+          >
+            Cancel autopay
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <p className="text-sm font-medium text-navy">Benefit from on-time payments automatically.</p>
+          <button
+            type="button"
+            disabled={methods.length === 0}
+            onClick={() => {
+              if (defaultMethod) {
+                scope.rent.toggleAutopay(scope.lease!.id, scope.tenant.id, defaultMethod.id, true);
+                toast.success("Autopay enabled starting next month.");
+              }
+            }}
+            className={primaryBtn}
+          >
+            {methods.length === 0 ? "Add a method to enable" : `Enable with ${defaultMethod?.label}`}
+          </button>
+        </div>
+      )}
+    </section>
+  );
+}
