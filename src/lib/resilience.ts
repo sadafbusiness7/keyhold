@@ -10,16 +10,16 @@ export function useUnsavedChanges(isDirty: boolean, message = "You have unsaved 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (isDirty) {
         e.preventDefault();
-        return (e.returnValue = message);
+        e.returnValue = message;
+        return message;
       }
+      return undefined;
     };
-
 
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-
   }, [isDirty, message]);
 }
 
@@ -27,17 +27,12 @@ export function useUnsavedChanges(isDirty: boolean, message = "You have unsaved 
  * Session expiry simulation.
  */
 export function useSessionExpiry() {
-  useEffect(() => {
-    // Randomly simulate a session expiry once in a blue moon for demo purposes
-    // Or just provide a manual trigger for the resilience audit.
-  }, []);
-
   const simulateExpiry = () => {
     toast.error("Session expired", {
       description: "Your session has timed out. We've preserved your work locally — please sign in again.",
       action: {
         label: "Sign in",
-        onClick: () => window.location.href = "/signin"
+        onClick: () => (window.location.href = "/signin"),
       },
       duration: Infinity,
     });
