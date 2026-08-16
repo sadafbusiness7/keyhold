@@ -536,3 +536,184 @@ export function MoveOutSheet({ onClose }: { onClose: () => void }) {
     </Sheet>
   );
 }
+
+export function AddDepositSheet({ onClose }: { onClose: () => void }) {
+  const rent = useRent();
+  const options = rent.leases.filter((l) => !rent.isMovedOut(l.tenantId));
+  const [tenantId, setTenantId] = useState(options[0]?.tenantId ?? "");
+  const [amount, setAmount] = useState("");
+  const [date, setDate] = useState(rent.today);
+  const [kind, setKind] = useState<Deposit["kind"]>("last-month");
+
+  return (
+    <Sheet title="Add a deposit" onClose={onClose}>
+      <form
+        className="space-y-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const cents = parseAmountToCents(amount);
+          if (cents === null || cents <= 0) {
+            toast.error("Enter a valid deposit amount.");
+            return;
+          }
+          const lease = rent.leases.find(l => l.tenantId === tenantId);
+          if (!lease) return;
+          
+          rent.addDeposit({
+            tenantId,
+            leaseId: lease.id,
+            kind,
+            amountCents: cents,
+            receivedOn: date,
+          });
+          toast.success("Deposit recorded and interest tracking started.");
+          onClose();
+        }}
+      >
+        <p className="text-sm text-muted-foreground">
+          Track last month's rent or other security deposits. Interest accrues automatically.
+        </p>
+        <div>
+          <label htmlFor="ad-tenant" className="text-sm font-medium">Tenant</label>
+          <select id="ad-tenant" value={tenantId} onChange={(e) => setTenantId(e.target.value)} className={field}>
+            {options.map((l) => (
+              <option key={l.tenantId} value={l.tenantId}>
+                {tenantById(l.tenantId)?.name} — {unitAddress(l.unitId)}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="ad-kind" className="text-sm font-medium">Deposit kind</label>
+          <select id="ad-kind" value={kind} onChange={(e) => setKind(e.target.value as any)} className={field}>
+            <option value="last-month">Last month's rent</option>
+            <option value="security">Security deposit</option>
+            <option value="pet">Pet deposit</option>
+            <option value="key">Key deposit</option>
+          </select>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label htmlFor="ad-amount" className="text-sm font-medium">Amount (CAD)</label>
+            <input id="ad-amount" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} className={`${field} tnum`} />
+          </div>
+          <div>
+            <label htmlFor="ad-date" className="text-sm font-medium">Received on</label>
+            <input id="ad-date" type="date" value={date} onChange={(e) => setDueDate(e.target.value)} className={`${field} tnum`} />
+          </div>
+        </div>
+        <button type="submit" className="min-h-11 w-full rounded-full bg-action px-5 text-sm font-semibold text-primary-foreground hover:bg-action/90">
+          Record deposit
+        </button>
+      </form>
+    </Sheet>
+  );
+}
+
+export function DepositLedgerSheet({ tenantId, onClose }: { tenantId: string; onClose: () => void }) {
+  const rent = useRent();
+  const tenant = tenantById(tenantId);
+  const deposits = rent.depositsForTenant(tenantId);
+
+  return (
+    <Sheet title="Deposit ledger" onClose={onClose}>
+      <header>
+        <h3 className="font-display text-xl font-extrabold text-navy">{tenant?.name}</h3>
+        <p className="text-sm text-muted-foreground">Detailed history of held deposits and interest.</p>
+      </header>
+
+      {deposits.length === 0 ? (
+        <p className="card-soft p-5 text-sm text-muted-foreground text-center">No deposits held for this tenant.</p>
+      ) : (
+        <ul className="space-y-4">
+          {deposits.map(d => {
+            const accrued = calculateAccruedInterest(d, rent.today, rent.interestPayments);
+            const annual = annualInterestOwing(d);
+            const payments = rent.interestForDeposit(d.id);
+            
+            return (
+              <li key={d.id} className="card-soft overflow-hidden border border-border">
+                <div className="bg-navy-soft px-4 py-3 border-b border-border flex items-center justify-between">
+                  <span className="font-display font-bold text-navy uppercase tracking-wider text-xs">{d.kind.replace("-", " ")}</span>
+                  <span className="text-[10px] text-muted-foreground font-semibold uppercase">Since {longDate(d.receivedOn)}</span>
+                </div>
+                <div className="p-4">
+                  <div className="flex justify-between items-end mb-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Principal held</p>
+                      <p className="money text-2xl font-extrabold text-navy">{money(d.amountCents)}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-muted-foreground">Accrued interest</p>
+                      <p className="money text-2xl font-extrabold text-success">+{money(accrued)}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 border-t border-border pt-3">
+                    <div>
+                      <p className="text-[10px] text-muted-foreground uppercase font-bold">Annual owing</p>
+                      <p className="tnum text-sm font-semibold text-navy">{money(annual)}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[10px] text-muted-foreground uppercase font-bold">Guideline rate</p>
+                      <p className="tnum text-sm font-semibold text-navy">2.5%</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <button 
+                      className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-action px-3 text-xs font-bold text-primary-foreground hover:bg-action/90 disabled:opacity-50"
+                      disabled={accrued <= 0}
+                      onClick={() => {
+                        rent.recordInterestPaid(d.id, accrued, "applied");
+                        toast.success(`${money(accrued)} interest applied to tenant credit.`);
+                      }}
+                    >
+                      <Calculator weight="duotone" className="h-4 w-4" /> Apply to credit
+                    </button>
+                    <button 
+                      className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-border px-3 text-xs font-bold text-navy hover:bg-navy-soft disabled:opacity-50"
+                      disabled={accrued <= 0}
+                      onClick={() => {
+                        rent.recordInterestPaid(d.id, accrued, "paid");
+                        toast.success(`${money(accrued)} interest recorded as paid.`);
+                      }}
+                    >
+                      Record as paid
+                    </button>
+                  </div>
+                  
+                  {payments.length > 0 && (
+                    <div className="mt-4 border-t border-border pt-3">
+                      <p className="text-[10px] text-muted-foreground uppercase font-bold mb-2">Interest history</p>
+                      <ul className="space-y-1">
+                        {payments.map(p => (
+                          <li key={p.id} className="flex justify-between text-[11px] text-muted-foreground">
+                            <span>{longDate(p.paidOn)} · {p.method === "applied" ? "Applied to credit" : "Paid to tenant"}</span>
+                            <span className="font-semibold text-navy">{money(p.amountCents)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
+      <div className="mt-6 p-4 rounded-xl bg-navy-soft border border-action/20 flex gap-3">
+        <Info weight="duotone" className="h-5 w-5 text-action shrink-0" />
+        <div>
+          <p className="text-xs leading-relaxed text-navy">
+            {LEGAL_DISCLAIMER} Ontario requires annual interest on last month's rent at the guideline rate.
+          </p>
+          <a href={LTB_SOURCE_URL} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-action hover:underline mt-1 block">
+            Link to official source
+          </a>
+        </div>
+      </div>
+    </Sheet>
+  );
+}
