@@ -25,7 +25,10 @@ import {
   type Payment,
   type PaymentMethod,
   type RentSettings,
+  type SavedPaymentMethod,
+  type AutopayStatus,
 } from "@/lib/rent-engine";
+
 
 /** MOCK: the demo "today". A backend would use the server clock. */
 export const TODAY = "2026-08-12";
