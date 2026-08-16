@@ -122,6 +122,14 @@ function useRentStore() {
   const [credits, setCredits] = useState<CreditEntry[]>(seedCredits);
   const [settings, setSettings] = useState<RentSettings>(defaultSettings);
   const [moveOuts, setMoveOuts] = useState<MoveOut[]>([]);
+  const [savedMethods, setSavedMethods] = useState<SavedPaymentMethod[]>([
+    { id: "sm1", tenantId: "t3", type: "bank", last4: "8821", brand: "TD Canada Trust", label: "TD Chequing", isDefault: true },
+    { id: "sm2", tenantId: "t3", type: "card", last4: "4242", brand: "Visa", label: "Personal Visa", isDefault: false },
+  ]);
+  const [autopayConfigs, setAutopayConfigs] = useState<AutopayStatus[]>([
+    { leaseId: "l3", tenantId: "t3", enabled: true, methodId: "sm1" },
+  ]);
+
 
   const uid = (p: string) => `${p}-${Math.random().toString(36).slice(2, 9)}`;
 
@@ -285,6 +293,28 @@ function useRentStore() {
     };
     const undoMoveOut = (tenantId: string) => setMoveOuts((prev) => prev.filter((m) => m.tenantId !== tenantId));
 
+    const toggleAutopay = (leaseId: string, tenantId: string, methodId: string, enabled: boolean) => {
+      setAutopayConfigs(prev => {
+        const filtered = prev.filter(a => a.leaseId !== leaseId);
+        if (!enabled) return filtered;
+        return [...filtered, { leaseId, tenantId, enabled, methodId }];
+      });
+    };
+
+    const addPaymentMethod = (method: Omit<SavedPaymentMethod, "id">) => {
+      const id = uid("sm");
+      setSavedMethods(prev => {
+        const next = method.isDefault ? prev.map(m => m.tenantId === method.tenantId ? { ...m, isDefault: false } : m) : prev;
+        return [...next, { ...method, id }];
+      });
+      return id;
+    };
+
+    const removePaymentMethod = (id: string) => {
+      setSavedMethods(prev => prev.filter(m => m.id !== id));
+      setAutopayConfigs(prev => prev.filter(a => a.methodId !== id));
+    };
+
     return {
       today: TODAY,
       invoices,
@@ -292,6 +322,8 @@ function useRentStore() {
       credits,
       settings,
       moveOuts,
+      savedMethods,
+      autopayConfigs,
       nextRun,
       nextRunPeriod,
       nextRunLabel: periodLabel(nextRunPeriod),
@@ -299,6 +331,8 @@ function useRentStore() {
       unitOf: (unitId: string) => unitById(unitId),
       creditFor: (tenantId: string) => creditBalanceCents(credits, tenantId),
       isMovedOut: (tenantId: string) => moveOuts.some((m) => m.tenantId === tenantId),
+      methodsForTenant: (tenantId: string) => savedMethods.filter(m => m.tenantId === tenantId),
+      autopayForLease: (leaseId: string) => autopayConfigs.find(a => a.leaseId === leaseId),
       setSettings,
       runInvoicing,
       addManualInvoice,
@@ -310,7 +344,11 @@ function useRentStore() {
       voidInvoice,
       moveOut,
       undoMoveOut,
+      toggleAutopay,
+      addPaymentMethod,
+      removePaymentMethod,
     };
+
   }, [invoices, payments, credits, settings, moveOuts]);
 }
 

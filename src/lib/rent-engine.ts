@@ -13,8 +13,9 @@
  */
 
 export type InvoiceKind = "rent" | "utilities" | "damage" | "nsf" | "other";
-export type InvoiceStatus = "paid" | "partial" | "overdue" | "due-soon" | "void";
-export type PaymentMethod = "e-Transfer" | "Cheque" | "Cash" | "Pre-authorized debit";
+export type InvoiceStatus = "paid" | "partial" | "overdue" | "due-soon" | "void" | "pending" | "failed";
+export type PaymentMethod = "e-Transfer" | "Cheque" | "Cash" | "Pre-authorized debit" | "Bank account" | "Credit card";
+
 
 export type Invoice = {
   id: string;
@@ -51,7 +52,29 @@ export type Payment = {
   reversedOn?: string;
   reversalReason?: "nsf" | "correction";
   note?: string;
+  status?: "pending" | "succeeded" | "failed";
+  feeCents?: number;
+  payoutStatus?: "pending" | "scheduled" | "paid";
+  payoutDate?: string;
 };
+
+export type SavedPaymentMethod = {
+  id: string;
+  tenantId: string;
+  type: "bank" | "card";
+  last4: string;
+  brand?: string; // e.g. "Visa", "TD Canada Trust"
+  label: string;
+  isDefault: boolean;
+};
+
+export type AutopayStatus = {
+  leaseId: string;
+  tenantId: string;
+  enabled: boolean;
+  methodId: string;
+};
+
 
 export type CreditEntry = {
   id: string;

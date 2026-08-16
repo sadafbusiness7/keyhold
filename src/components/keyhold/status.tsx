@@ -71,7 +71,11 @@ export const statusMeta: Record<StatusKey, { label: string; tone: Tone }> = {
   urgent: { label: "Urgent", tone: "warning" },
   soon: { label: "Soon", tone: "action" },
   whenever: { label: "Whenever", tone: "navy" },
+  pending: { label: "Pending", tone: "action" },
+  failed: { label: "Failed", tone: "maple" },
+  scheduled: { label: "Scheduled", tone: "action" },
 };
+
 
 /**
  * Signature status marker: squared, tracked-out type with a tone square —
