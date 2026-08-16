@@ -336,7 +336,7 @@ function RentPageInner() {
         />
       )}
 
-      {tab === "credits" && <CreditsPanel />}
+      {tab === "credits" && <CreditsPanel setLedgerTenantId={setLedgerTenantId} />}
       {tab === "payouts" && <PayoutsPanel />}
       {tab === "movedout" && <MovedOutPanel />}
 
