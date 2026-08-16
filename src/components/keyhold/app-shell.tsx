@@ -256,8 +256,10 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
       {/* Mobile top bar */}
       <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-border bg-sidebar px-4 py-3 lg:hidden">
         <Brand />
+        <PortfolioSelector className="h-9 min-h-9 px-3 py-1" />
         <GlobalSearch />
         <NotificationBell />
+
         <AccountMenu />
         <button
           type="button"
