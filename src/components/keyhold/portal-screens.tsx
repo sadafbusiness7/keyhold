@@ -19,6 +19,7 @@ import {
   WifiHigh,
   Clock,
   TrendUp,
+  ArrowSquareOut,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { RailCard, StatusLabel } from "@/components/keyhold/status";
@@ -44,6 +45,11 @@ import {
   paidCents,
   toCsv,
   yearlyReceipt,
+  calculateAccruedInterest,
+  annualInterestOwing,
+  LEGAL_DISCLAIMER,
+  LTB_SOURCE_URL,
+  ONTARIO_INTEREST_GUIDELINE,
   type Invoice,
 } from "@/lib/rent-engine";
 import { useMaintenance } from "@/lib/mock-maintenance";
@@ -371,6 +377,7 @@ export function PortalRent({ scope }: { scope: ReturnType<typeof usePortalScope>
       <h1 className="font-display text-2xl font-extrabold text-navy">Rent</h1>
 
       <PortalAutopayCard scope={scope} />
+      <PortalDeposits scope={scope} />
 
       <RailCard status={balanceOwed > 0 ? "overdue" : "paid"} className="p-5">
 
@@ -1361,3 +1368,65 @@ export function PortalAutopayCard({ scope }: { scope: ReturnType<typeof usePorta
     </section>
   );
 }
+
+function PortalDeposits({ scope }: { scope: ReturnType<typeof usePortalScope> }) {
+  const { rent, today } = scope;
+  const deposits = rent.depositsForTenant(PORTAL_TENANT_ID);
+
+  if (deposits.length === 0) return null;
+
+  return (
+    <section aria-labelledby="portal-deposits" className="card-soft overflow-hidden">
+      <div className="bg-navy-soft px-5 py-3">
+        <h2 id="portal-deposits" className="font-display text-sm font-bold text-navy uppercase tracking-wider">
+          Deposits & Interest
+        </h2>
+      </div>
+      <div className="p-5">
+        <p className="text-sm text-muted-foreground mb-4">
+          Keyhold tracks your deposits and interest accrued per Ontario guidelines.
+        </p>
+        <ul className="space-y-4">
+          {deposits.map((d) => {
+            const accrued = calculateAccruedInterest(d, today, rent.interestPayments);
+            const annual = annualInterestOwing(d);
+            return (
+              <li key={d.id} className="border-t border-border pt-4 first:border-0 first:pt-0">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-bold text-navy capitalize">{d.kind.replace("-", " ")} deposit</p>
+                    <p className="tnum text-xs text-muted-foreground">Received {longDate(d.receivedOn)}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="money font-extrabold text-navy">{money(d.amountCents)}</p>
+                    {accrued > 0 && (
+                      <p className="money text-xs font-bold text-success">+{money(accrued)} interest</p>
+                    )}
+                  </div>
+                </div>
+                <div className="mt-2 flex justify-between items-center bg-background/50 rounded-lg p-2 text-[10px] text-muted-foreground">
+                  <span>Annual interest owing: <span className="money font-bold text-navy">{money(annual)}</span></span>
+                  <span>Rate: {(d.interestRate ?? ONTARIO_INTEREST_GUIDELINE) * 100}%</span>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+        <div className="mt-6 border-t border-border pt-4">
+          <p className="text-[10px] leading-relaxed text-muted-foreground">
+            {LEGAL_DISCLAIMER}
+          </p>
+          <a
+            href={LTB_SOURCE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 inline-flex items-center gap-1 text-[10px] font-bold text-action hover:underline"
+          >
+            Official Ontario Rent Guidelines <ArrowSquareOut className="h-3 w-3" />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+

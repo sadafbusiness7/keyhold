@@ -27,6 +27,8 @@ import {
   type RentSettings,
   type SavedPaymentMethod,
   type AutopayStatus,
+  type Deposit,
+  type InterestPayment,
 } from "@/lib/rent-engine";
 
 
@@ -132,6 +134,17 @@ function useRentStore() {
   const [autopayConfigs, setAutopayConfigs] = useState<AutopayStatus[]>([
     { leaseId: "l3", tenantId: "t3", enabled: true, methodId: "sm1" },
   ]);
+  const [deposits, setDeposits] = useState<Deposit[]>(() => 
+    allLeases.map(l => ({
+      id: `dep-${l.id}`,
+      tenantId: l.tenantId,
+      leaseId: l.id,
+      kind: "last-month",
+      amountCents: toCents(l.depositHeld),
+      receivedOn: l.start,
+    }))
+  );
+  const [interestPayments, setInterestPayments] = useState<InterestPayment[]>([]);
 
 
   const uid = (p: string) => `${p}-${Math.random().toString(36).slice(2, 9)}`;
@@ -330,6 +343,8 @@ function useRentStore() {
       moveOuts,
       savedMethods,
       autopayConfigs,
+      deposits,
+      interestPayments,
       nextRun,
       nextRunPeriod,
       nextRunLabel: periodLabel(nextRunPeriod),
@@ -339,6 +354,8 @@ function useRentStore() {
       isMovedOut: (tenantId: string) => moveOuts.some((m) => m.tenantId === tenantId),
       methodsForTenant: (tenantId: string) => savedMethods.filter(m => m.tenantId === tenantId),
       autopayForLease: (leaseId: string) => autopayConfigs.find(a => a.leaseId === leaseId),
+      depositsForTenant: (tenantId: string) => deposits.filter(d => d.tenantId === tenantId),
+      interestForDeposit: (depositId: string) => interestPayments.filter(p => p.depositId === depositId),
       setSettings,
       runInvoicing,
       addManualInvoice,
@@ -353,9 +370,29 @@ function useRentStore() {
       toggleAutopay,
       addPaymentMethod,
       removePaymentMethod,
+      addDeposit: (deposit: Omit<Deposit, "id">) => {
+        const id = uid("dep");
+        setDeposits(prev => [...prev, { ...deposit, id }]);
+      },
+      recordInterestPaid: (depositId: string, amountCents: number, method: "applied" | "paid") => {
+        const deposit = deposits.find(d => d.id === depositId);
+        if (!deposit) return;
+        const id = uid("int");
+        setInterestPayments(prev => [...prev, { id, depositId, amountCents, paidOn: TODAY, method }]);
+        if (method === "applied") {
+          setCredits(prev => [...prev, {
+            id: uid("cr"),
+            tenantId: deposit.tenantId,
+            amountCents,
+            reason: `Interest applied from ${deposit.kind} deposit`,
+            date: TODAY,
+            kind: "interest"
+          }]);
+        }
+      },
     };
 
-  }, [invoices, payments, credits, settings, moveOuts]);
+  }, [invoices, payments, credits, settings, moveOuts, deposits, interestPayments, savedMethods, autopayConfigs]);
 }
 
 export function RentProvider({ children }: { children: ReactNode }) {

@@ -13,13 +13,15 @@ import {
   PaperPlaneTilt,
   EnvelopeSimple,
   CurrencyDollar,
+  Bank,
+  Calculator,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { RequireFinancials } from "@/components/keyhold/access-guard";
 import { PageHeader } from "@/components/keyhold/app-shell";
 import { StatusLabel } from "@/components/keyhold/status";
 import { DataList } from "@/components/keyhold/data-list";
-import { InvoiceSheet, ManualChargeSheet, MoveOutSheet } from "@/components/keyhold/rent-panels";
+import { InvoiceSheet, ManualChargeSheet, MoveOutSheet, AddDepositSheet, DepositLedgerSheet } from "@/components/keyhold/rent-panels";
 import { usePermissions } from "@/lib/mock-access";
 import { tenantById, unitAddress, longDate } from "@/lib/mock-data";
 import { useRent, lastMonthHeldCents } from "@/lib/mock-rent";
@@ -29,7 +31,10 @@ import {
   money,
   paidCents,
   periodLabel,
+  calculateAccruedInterest,
+  annualInterestOwing,
   type Invoice,
+  type Deposit,
 } from "@/lib/rent-engine";
 
 export const Route = createFileRoute("/app/rent")({
@@ -75,6 +80,8 @@ function RentPageInner() {
   const [openInvoice, setOpenInvoice] = useState<Invoice | null>(null);
   const [showCharge, setShowCharge] = useState(false);
   const [showMoveOut, setShowMoveOut] = useState(false);
+  const [showAddDeposit, setShowAddDeposit] = useState(false);
+  const [ledgerTenantId, setLedgerTenantId] = useState<string | null>(null);
 
   // Only invoices for units this person is allowed to see money for.
   const visibleUnitIds = useMemo(
@@ -118,6 +125,13 @@ function RentPageInner() {
         subtitle="Invoices generate on their own each month. All amounts in Canadian dollars."
         action={
           <div className="col-span-full flex flex-wrap gap-2 sm:col-auto">
+            <button
+              type="button"
+              onClick={() => setShowAddDeposit(true)}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-4 text-sm font-semibold text-navy hover:bg-navy-soft"
+            >
+              <Bank weight="duotone" className="h-5 w-5" aria-hidden="true" /> Add deposit
+            </button>
             <button
               type="button"
               onClick={() => setShowMoveOut(true)}
@@ -322,7 +336,7 @@ function RentPageInner() {
         />
       )}
 
-      {tab === "credits" && <CreditsPanel />}
+      {tab === "credits" && <CreditsPanel setLedgerTenantId={setLedgerTenantId} />}
       {tab === "payouts" && <PayoutsPanel />}
       {tab === "movedout" && <MovedOutPanel />}
 
@@ -330,11 +344,13 @@ function RentPageInner() {
       {openInvoice && <InvoiceSheet invoice={openInvoice} onClose={() => setOpenInvoice(null)} />}
       {showCharge && <ManualChargeSheet onClose={() => setShowCharge(false)} />}
       {showMoveOut && <MoveOutSheet onClose={() => setShowMoveOut(false)} />}
+      {showAddDeposit && <AddDepositSheet onClose={() => setShowAddDeposit(false)} />}
+      {ledgerTenantId && <DepositLedgerSheet tenantId={ledgerTenantId} onClose={() => setLedgerTenantId(null)} />}
     </>
   );
 }
 
-function CreditsPanel() {
+function CreditsPanel({ setLedgerTenantId }: { setLedgerTenantId: (id: string) => void }) {
   const rent = useRent();
   return (
     <div className="space-y-4">
@@ -344,20 +360,36 @@ function CreditsPanel() {
       <ul className="grid gap-3 sm:grid-cols-2">
         {rent.leases.map((l) => {
           const credit = rent.creditFor(l.tenantId);
-          const held = lastMonthHeldCents(l.tenantId);
+          const deposits = rent.depositsForTenant(l.tenantId);
+          const totalHeld = deposits.reduce((s, d) => s + d.amountCents, 0);
+          const totalAccrued = deposits.reduce((s, d) => s + calculateAccruedInterest(d, rent.today, rent.interestPayments), 0);
+
           return (
             <li key={l.id} className="relative overflow-hidden card-soft p-4 pl-5">
               <span aria-hidden="true" className={`absolute inset-y-0 left-0 w-1 ${credit > 0 ? "bg-success" : "bg-navy"}`} />
-              <p className="font-display font-bold text-navy">{tenantById(l.tenantId)?.name}</p>
-              <p className="truncate text-xs text-muted-foreground">{unitAddress(l.unitId)}</p>
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="font-display font-bold text-navy">{tenantById(l.tenantId)?.name}</p>
+                  <p className="truncate text-xs text-muted-foreground">{unitAddress(l.unitId)}</p>
+                </div>
+                <button 
+                  onClick={() => setLedgerTenantId(l.tenantId)}
+                  className="inline-flex items-center gap-1 text-[10px] font-bold text-action hover:underline uppercase tracking-tight"
+                >
+                  Ledger <Calculator weight="duotone" className="h-3 w-3" />
+                </button>
+              </div>
               <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
                 <div>
                   <dt className="text-muted-foreground">Credit on file</dt>
                   <dd className="money text-lg font-extrabold text-success">{money(credit)}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted-foreground">Last month's rent held</dt>
-                  <dd className="money text-lg font-extrabold text-navy">{money(held)}</dd>
+                  <dt className="text-muted-foreground">Deposits held</dt>
+                  <dd className="money text-lg font-extrabold text-navy">{money(totalHeld)}</dd>
+                  {totalAccrued > 0 && (
+                    <dd className="money text-[10px] font-bold text-success">+{money(totalAccrued)} interest</dd>
+                  )}
                 </div>
               </dl>
             </li>
