@@ -375,7 +375,7 @@ export function usePermissions() {
   } = useAccess();
 
   return useMemo(() => {
-    const isDemo = true; // Every action in this sandbox is demo-scoped
+    const isDemo = true;
     const isOwner = currentUser.accountType === "owner";
 
     const isPm = currentUser.accountType === "pm";
