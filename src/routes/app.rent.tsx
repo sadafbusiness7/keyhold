@@ -294,7 +294,9 @@ function RentPageInner() {
             },
           ]}
           rowActions={[
+            { key: "tenant", label: "View tenant", Icon: Users, onSelect: (r) => Route.useNavigate()({ to: `/app/tenants/${r.invoice.tenantId}` as any }) },
             { key: "open", label: "Open invoice", Icon: Eye, onSelect: (r) => setOpenInvoice(r.invoice) },
+
             { key: "pay", label: "Record payment", Icon: CurrencyDollar, onSelect: (r) => setOpenInvoice(r.invoice) },
             { key: "remind", label: "Send reminder", Icon: PaperPlaneTilt, onSelect: (r) => toast.success(`Reminder sent to ${r.tenant}`) },
             { key: "duplicate", label: "Duplicate charge", Icon: Copy },
