@@ -71,7 +71,7 @@ function RentPageInner() {
   const perms = usePermissions();
   const rent = useRent();
 
-  const [tab, setTab] = useState<"ledger" | "credits" | "movedout">("ledger");
+  const [tab, setTab] = useState<"ledger" | "credits" | "payouts" | "movedout">("ledger");
   const [openInvoice, setOpenInvoice] = useState<Invoice | null>(null);
   const [showCharge, setShowCharge] = useState(false);
   const [showMoveOut, setShowMoveOut] = useState(false);
@@ -191,8 +191,10 @@ function RentPageInner() {
         {([
           ["ledger", "Rent ledger"],
           ["credits", "Credits & deposits"],
+          ["payouts", "Payouts & reconciliation"],
           ["movedout", `Moved out (${rent.moveOuts.length})`],
         ] as const).map(([key, label]) => (
+
           <button
             key={key}
             role="tab"
@@ -236,6 +238,9 @@ function RentPageInner() {
                 { value: "partial", label: "Part paid" },
                 { value: "due-soon", label: "Due soon" },
                 { value: "paid", label: "Paid" },
+                { value: "pending", label: "Pending" },
+                { value: "failed", label: "Failed" },
+
               ],
               match: (r, v) => r.status === v,
             },
@@ -318,7 +323,9 @@ function RentPageInner() {
       )}
 
       {tab === "credits" && <CreditsPanel />}
+      {tab === "payouts" && <PayoutsPanel />}
       {tab === "movedout" && <MovedOutPanel />}
+
 
       {openInvoice && <InvoiceSheet invoice={openInvoice} onClose={() => setOpenInvoice(null)} />}
       {showCharge && <ManualChargeSheet onClose={() => setShowCharge(false)} />}
