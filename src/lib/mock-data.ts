@@ -19,6 +19,8 @@ export type Property = {
 };
 
 
+export type UnitStatus = "occupied" | "vacant" | "turnover" | "listing";
+
 export type Unit = {
   id: string;
   propertyId: string;
@@ -28,7 +30,11 @@ export type Unit = {
   rent: number;
   tenantId: string | null;
   leaseEnd: string | null;
+  status?: UnitStatus;
+  turnoverDays?: number; // Days vacant during turnover
+  turnoverCost?: number; // Total cost of make-ready
 };
+
 
 export type Tenant = {
   id: string;
