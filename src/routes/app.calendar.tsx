@@ -9,12 +9,19 @@ import {
   Wrench,
   SignIn,
   X,
+  Export,
+  Copy,
 } from "@phosphor-icons/react";
+
 import { PageHeader } from "@/components/keyhold/app-shell";
 import { EmptyState } from "@/components/keyhold/empty-state";
 import { calendarEvents, longDate, type CalendarEvent } from "@/lib/mock-data";
 import { TODAY } from "@/lib/mock-rent";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { toast } from "sonner";
+import { getCalendarIcal } from "@/lib/calendar.functions";
+import { useServerFn } from "@tanstack/react-start";
+
 
 export const Route = createFileRoute("/app/calendar")({
   head: () => ({
@@ -46,6 +53,8 @@ const monthLabel = (d: Date) =>
 
 function CalendarPage() {
   const isMobile = useIsMobile();
+  const fetchIcal = useServerFn(getCalendarIcal);
+
   const today = new Date(`${TODAY}T00:00:00Z`);
   const [cursor, setCursor] = useState(today);
   const [mode, setMode] = useState<"month" | "week">("month");
@@ -76,7 +85,36 @@ function CalendarPage() {
 
   return (
     <>
-      <PageHeader title="Calendar" subtitle="Everything with a date attached, colour-coded by what it is." />
+      <PageHeader 
+        title="Calendar" 
+        subtitle="Everything with a date attached, colour-coded by what it is." 
+        action={
+          <button
+            onClick={async () => {
+              try {
+                const ical = await fetchIcal();
+                const url = `data:text/calendar;charset=utf-8,${encodeURIComponent(ical)}`;
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = "keyhold-events.ics";
+                link.click();
+                
+                // Also provide a "subscribe" link pattern
+                const subscribeUrl = `${window.location.origin}/api/public/calendar/feed.ics?token=demo-token`;
+                await navigator.clipboard.writeText(subscribeUrl);
+                toast.success("Feed URL copied to clipboard! Paste this into Google/Apple Calendar.");
+              } catch (e) {
+                toast.error("Failed to export calendar");
+              }
+            }}
+            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-4 text-sm font-semibold text-navy hover:bg-navy-soft"
+          >
+            <Export weight="duotone" className="h-4 w-4" />
+            Subscribe to feed
+          </button>
+        }
+      />
+
 
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-1.5">
