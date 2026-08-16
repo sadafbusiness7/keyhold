@@ -165,10 +165,10 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
       <I18nProvider>
+      <PortfolioProvider>
       <LeasingProvider>
         <AccessProvider>
           <RentProvider>
-            <PortfolioProvider>
             <NoticesProvider>
 
               <MaintenanceProvider>
@@ -183,11 +183,11 @@ function RootComponent() {
                 </OwnersProvider>
               </MaintenanceProvider>
             </NoticesProvider>
-            </PortfolioProvider>
 
           </RentProvider>
         </AccessProvider>
       </LeasingProvider>
+      </PortfolioProvider>
       </I18nProvider>
       </ThemeProvider>
     </QueryClientProvider>
