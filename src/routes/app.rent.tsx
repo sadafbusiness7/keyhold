@@ -90,7 +90,8 @@ function RentPageInner() {
   // Only invoices for units this person is allowed to see money for.
   const visibleUnitIds = useMemo(
     () => new Set(perms.units.filter((u) => perms.canSeeFinancials(u.propertyId)).map((u) => u.id)),
-    [perms],
+    [perms.units, perms.canSeeFinancials],
+
   );
   const scoped = useMemo(
     () => rent.invoices.filter((i) => visibleUnitIds.has(i.unitId)),
