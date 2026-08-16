@@ -35,6 +35,10 @@ import {
   Bell,
   Scales,
   Keyboard,
+  CaretDown,
+  Check,
+  Globe,
+  Plus,
 
 } from "@phosphor-icons/react";
 import { AskKeyhold } from "./ask-keyhold";
@@ -43,7 +47,9 @@ import { useT, useTx } from "@/lib/i18n";
 import { AccountMenu } from "./account-menu";
 import { DemoSwitcher } from "./demo-switcher";
 import { usePermissions } from "@/lib/mock-access";
+import { usePortfolio } from "@/lib/mock-portfolio";
 import { GlobalSearch, CommandPalette, ShortcutsSheet } from "./global-search";
+
 import { ModuleBoundary, OfflineBanner } from "./module-boundary";
 import { ShortcutsProvider, useShortcuts } from "@/lib/shortcuts";
 import { NotificationBell } from "./notification-panels";
