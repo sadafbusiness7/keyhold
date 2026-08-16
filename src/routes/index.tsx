@@ -1397,15 +1397,17 @@ function Home() {
 
               <Link
                 to="/signup"
+              <Link
+                to="/signup"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-action px-7 text-base font-semibold text-primary-foreground hover:bg-action/90"
               >
                 Start free <ArrowRight weight="duotone" className="h-5 w-5" aria-hidden="true" />
               </Link>
               <Link
-                to="/portal"
+                to="/signin"
                 className="inline-flex min-h-12 items-center justify-center rounded-full border border-border bg-card px-7 text-base font-semibold text-navy hover:bg-navy-soft"
               >
-                View demo
+                Sign in
               </Link>
             </div>
           </div>
