@@ -279,7 +279,6 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
           return;
         }
         appendMessage(conversationId, {
-
           id: uid("m"),
           conversationId,
           senderId: YOU,
@@ -288,7 +287,8 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
           status: nextStatus(),
           attachments,
           ...(forwardedFrom ? { forwardedFrom } : {}),
-        }),
+        });
+      },
       startConversation: (participantIds, subject, body, attachments = []) => {
         const id = uid("c");
         const first = contactById(participantIds[0] ?? "");
