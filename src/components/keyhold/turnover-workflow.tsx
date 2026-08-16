@@ -49,7 +49,9 @@ export function TurnoverWorkflow({ unit, open, onOpenChange, onComplete }: Turno
         turnoverDays: 5,
         turnoverCompletedOn: new Date().toISOString().slice(0, 10),
       });
+      toast.success(`Turnover complete for Unit ${unit.label}. Unit is now rent-ready.`);
       onOpenChange(false);
+
     }
   };
 
