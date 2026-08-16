@@ -487,6 +487,7 @@ export function usePermissions() {
     currentUser,
     assignments,
     users,
+    isDemo,
     accessLog,
     invitePm,
     resendInvite,
@@ -499,5 +500,6 @@ export function usePermissions() {
     inviteOwner,
     setOwnerAccess,
     removeOwnerAccess,
+
   ]);
 }
