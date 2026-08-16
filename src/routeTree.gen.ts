@@ -61,6 +61,7 @@ import { Route as AppLeasesNewRouteImport } from './routes/app.leases.new'
 import { Route as AppLeasesSignRouteImport } from './routes/app.leases.sign'
 import { Route as AppProspectsIndexRouteImport } from './routes/app.prospects.index'
 import { Route as AppProspectsProspectIdRouteImport } from './routes/app.prospects.$prospectId'
+import { Route as AppSettingsEmailsRouteImport } from './routes/app.settings.emails'
 import { Route as ApiPublicCalendarFeedRouteImport } from './routes/api/public/calendar/feed'
 import { Route as ApiPublicEmailInboundRouteImport } from './routes/api/public/email/inbound'
 import { Route as AppLeasesWizardIndexRouteImport } from './routes/app.leases.wizard.index'
@@ -326,6 +327,11 @@ const AppProspectsProspectIdRoute = AppProspectsProspectIdRouteImport.update({
   path: '/$prospectId',
   getParentRoute: () => AppProspectsRoute,
 } as any)
+const AppSettingsEmailsRoute = AppSettingsEmailsRouteImport.update({
+  id: '/emails',
+  path: '/emails',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
 const ApiPublicCalendarFeedRoute = ApiPublicCalendarFeedRouteImport.update({
   id: '/api/public/calendar/feed',
   path: '/api/public/calendar/feed',
@@ -381,7 +387,7 @@ export interface FileRoutesByFullPath {
   '/app/rent': typeof AppRentRoute
   '/app/rent-increases': typeof AppRentIncreasesRoute
   '/app/reports': typeof AppReportsRoute
-  '/app/settings': typeof AppSettingsRoute
+  '/app/settings': typeof AppSettingsRouteWithChildren
   '/app/support': typeof AppSupportRoute
   '/app/tax': typeof AppTaxRoute
   '/app/team': typeof AppTeamRoute
@@ -399,6 +405,7 @@ export interface FileRoutesByFullPath {
   '/app/leases/new': typeof AppLeasesNewRoute
   '/app/leases/sign': typeof AppLeasesSignRoute
   '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
+  '/app/settings/emails': typeof AppSettingsEmailsRoute
   '/app/leases/': typeof AppLeasesIndexRoute
   '/app/prospects/': typeof AppProspectsIndexRoute
   '/api/public/calendar/feed': typeof ApiPublicCalendarFeedRoute
@@ -436,7 +443,7 @@ export interface FileRoutesByTo {
   '/app/rent': typeof AppRentRoute
   '/app/rent-increases': typeof AppRentIncreasesRoute
   '/app/reports': typeof AppReportsRoute
-  '/app/settings': typeof AppSettingsRoute
+  '/app/settings': typeof AppSettingsRouteWithChildren
   '/app/support': typeof AppSupportRoute
   '/app/tax': typeof AppTaxRoute
   '/app/team': typeof AppTeamRoute
@@ -454,6 +461,7 @@ export interface FileRoutesByTo {
   '/app/leases/new': typeof AppLeasesNewRoute
   '/app/leases/sign': typeof AppLeasesSignRoute
   '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
+  '/app/settings/emails': typeof AppSettingsEmailsRoute
   '/app/leases': typeof AppLeasesIndexRoute
   '/app/prospects': typeof AppProspectsIndexRoute
   '/api/public/calendar/feed': typeof ApiPublicCalendarFeedRoute
@@ -495,7 +503,7 @@ export interface FileRoutesById {
   '/app/rent': typeof AppRentRoute
   '/app/rent-increases': typeof AppRentIncreasesRoute
   '/app/reports': typeof AppReportsRoute
-  '/app/settings': typeof AppSettingsRoute
+  '/app/settings': typeof AppSettingsRouteWithChildren
   '/app/support': typeof AppSupportRoute
   '/app/tax': typeof AppTaxRoute
   '/app/team': typeof AppTeamRoute
@@ -513,6 +521,7 @@ export interface FileRoutesById {
   '/app/leases/new': typeof AppLeasesNewRoute
   '/app/leases/sign': typeof AppLeasesSignRoute
   '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
+  '/app/settings/emails': typeof AppSettingsEmailsRoute
   '/app/leases/': typeof AppLeasesIndexRoute
   '/app/prospects/': typeof AppProspectsIndexRoute
   '/api/public/calendar/feed': typeof ApiPublicCalendarFeedRoute
@@ -573,6 +582,7 @@ export interface FileRouteTypes {
     | '/app/leases/new'
     | '/app/leases/sign'
     | '/app/prospects/$prospectId'
+    | '/app/settings/emails'
     | '/app/leases/'
     | '/app/prospects/'
     | '/api/public/calendar/feed'
@@ -628,6 +638,7 @@ export interface FileRouteTypes {
     | '/app/leases/new'
     | '/app/leases/sign'
     | '/app/prospects/$prospectId'
+    | '/app/settings/emails'
     | '/app/leases'
     | '/app/prospects'
     | '/api/public/calendar/feed'
@@ -686,6 +697,7 @@ export interface FileRouteTypes {
     | '/app/leases/new'
     | '/app/leases/sign'
     | '/app/prospects/$prospectId'
+    | '/app/settings/emails'
     | '/app/leases/'
     | '/app/prospects/'
     | '/api/public/calendar/feed'
@@ -1079,6 +1091,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProspectsProspectIdRouteImport
       parentRoute: typeof AppProspectsRoute
     }
+    '/app/settings/emails': {
+      id: '/app/settings/emails'
+      path: '/emails'
+      fullPath: '/app/settings/emails'
+      preLoaderRoute: typeof AppSettingsEmailsRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
     '/api/public/calendar/feed': {
       id: '/api/public/calendar/feed'
       path: '/api/public/calendar/feed'
@@ -1146,6 +1165,18 @@ const AppProspectsRouteWithChildren = AppProspectsRoute._addFileChildren(
   AppProspectsRouteChildren,
 )
 
+interface AppSettingsRouteChildren {
+  AppSettingsEmailsRoute: typeof AppSettingsEmailsRoute
+}
+
+const AppSettingsRouteChildren: AppSettingsRouteChildren = {
+  AppSettingsEmailsRoute: AppSettingsEmailsRoute,
+}
+
+const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
+  AppSettingsRouteChildren,
+)
+
 interface AppRouteChildren {
   AppAddTenantRoute: typeof AppAddTenantRoute
   AppAnnouncementsRoute: typeof AppAnnouncementsRoute
@@ -1173,7 +1204,7 @@ interface AppRouteChildren {
   AppRentRoute: typeof AppRentRoute
   AppRentIncreasesRoute: typeof AppRentIncreasesRoute
   AppReportsRoute: typeof AppReportsRoute
-  AppSettingsRoute: typeof AppSettingsRoute
+  AppSettingsRoute: typeof AppSettingsRouteWithChildren
   AppSupportRoute: typeof AppSupportRoute
   AppTaxRoute: typeof AppTaxRoute
   AppTeamRoute: typeof AppTeamRoute
@@ -1208,7 +1239,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppRentRoute: AppRentRoute,
   AppRentIncreasesRoute: AppRentIncreasesRoute,
   AppReportsRoute: AppReportsRoute,
-  AppSettingsRoute: AppSettingsRoute,
+  AppSettingsRoute: AppSettingsRouteWithChildren,
   AppSupportRoute: AppSupportRoute,
   AppTaxRoute: AppTaxRoute,
   AppTeamRoute: AppTeamRoute,
