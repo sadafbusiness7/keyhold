@@ -35,6 +35,7 @@ function TenantsPage() {
 const rentOf = (t: Tenant) => rentRows.find((r) => r.tenantId === t.id);
 
 
+
 function TenantsPageInner() {
   const { noticesForTenant } = useNotices();
   const rent = useRent();
@@ -145,20 +146,22 @@ function TenantsPageInner() {
           },
         ]}
         quickView={(t) => {
-          const rent = rentOf(t);
+          const rentData = rentOf(t);
           const history = noticesForTenant(t.id);
-          const lease = rent.leases.find(l => l.tenantId === t.id);
+          const lease = rent.leases.find((l: any) => l.tenantId === t.id);
           const autopay = lease ? rent.autopayForLease(lease.id) : null;
           const methods = rent.methodsForTenant(t.id);
+
 
           return {
 
             title: t.name,
             subtitle: unitAddress(t.unitId),
-            status: rent?.status,
+            status: rentData?.status,
             fields: [
-              { label: "Rent", value: <span className="money">{cad(rent?.rent ?? 0)}</span> },
-              { label: "Balance", value: <span className="money">{cad(rent?.balance ?? 0)}</span> },
+              { label: "Rent", value: <span className="money">{cad(rentData?.rent ?? 0)}</span> },
+              { label: "Balance", value: <span className="money">{cad(rentData?.balance ?? 0)}</span> },
+
               { label: "Moved in", value: longDate(t.movedIn) },
               { label: "Email", value: <a className="text-action" href={`mailto:${t.email}`}>{t.email}</a> },
               { label: "Phone", value: <a className="text-action" href={`tel:${t.phone.replace(/[^\d]/g, "")}`}>{t.phone}</a> },
