@@ -10,33 +10,681 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as OwnerRouteImport } from './routes/owner'
+import { Route as PortalRouteImport } from './routes/portal'
+import { Route as SigninRouteImport } from './routes/signin'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppAddTenantRouteImport } from './routes/app.add-tenant'
+import { Route as AppAnnouncementsRouteImport } from './routes/app.announcements'
+import { Route as AppAssetsRouteImport } from './routes/app.assets'
+import { Route as AppBulkRouteImport } from './routes/app.bulk'
+import { Route as AppCalendarRouteImport } from './routes/app.calendar'
+import { Route as AppCreditReportingRouteImport } from './routes/app.credit-reporting'
+import { Route as AppDisbursementsRouteImport } from './routes/app.disbursements'
+import { Route as AppDocumentsRouteImport } from './routes/app.documents'
+import { Route as AppFormsRouteImport } from './routes/app.forms'
+import { Route as AppImportRouteImport } from './routes/app.import'
+import { Route as AppInsightsRouteImport } from './routes/app.insights'
+import { Route as AppInspectionsRouteImport } from './routes/app.inspections'
+import { Route as AppLeasesRouteImport } from './routes/app.leases'
+import { Route as AppLegalRouteImport } from './routes/app.legal'
+import { Route as AppListingsRouteImport } from './routes/app.listings'
+import { Route as AppMaintenanceRouteImport } from './routes/app.maintenance'
+import { Route as AppMessagesRouteImport } from './routes/app.messages'
+import { Route as AppNoticesRouteImport } from './routes/app.notices'
+import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
+import { Route as AppOnboardingRouteImport } from './routes/app.onboarding'
+import { Route as AppPropertiesRouteImport } from './routes/app.properties'
+import { Route as AppProspectsRouteImport } from './routes/app.prospects'
+import { Route as AppRenewalsRouteImport } from './routes/app.renewals'
+import { Route as AppRentRouteImport } from './routes/app.rent'
+import { Route as AppRentIncreasesRouteImport } from './routes/app.rent-increases'
+import { Route as AppReportsRouteImport } from './routes/app.reports'
+import { Route as AppSettingsRouteImport } from './routes/app.settings'
+import { Route as AppSupportRouteImport } from './routes/app.support'
+import { Route as AppTaxRouteImport } from './routes/app.tax'
+import { Route as AppTeamRouteImport } from './routes/app.team'
+import { Route as AppTenantsRouteImport } from './routes/app.tenants'
+import { Route as ApplySlugRouteImport } from './routes/apply.$slug'
+import { Route as LegalIndexRouteImport } from './routes/legal.index'
+import { Route as LegalAccessibilityRouteImport } from './routes/legal.accessibility'
+import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
+import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
+import { Route as LegalSecurityRouteImport } from './routes/legal.security'
+import { Route as LegalTermsRouteImport } from './routes/legal.terms'
+import { Route as ListingSlugRouteImport } from './routes/listing.$slug'
+import { Route as AppLeasesIndexRouteImport } from './routes/app.leases.index'
+import { Route as AppLeasesLeaseIdRouteImport } from './routes/app.leases.$leaseId'
+import { Route as AppLeasesNewRouteImport } from './routes/app.leases.new'
+import { Route as AppLeasesSignRouteImport } from './routes/app.leases.sign'
+import { Route as AppProspectsIndexRouteImport } from './routes/app.prospects.index'
+import { Route as AppProspectsProspectIdRouteImport } from './routes/app.prospects.$prospectId'
+import { Route as AppLeasesWizardIndexRouteImport } from './routes/app.leases.wizard.index'
+import { Route as AppLeasesWizardProspectIdRouteImport } from './routes/app.leases.wizard.$prospectId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerRoute = OwnerRouteImport.update({
+  id: '/owner',
+  path: '/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SigninRoute = SigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAddTenantRoute = AppAddTenantRouteImport.update({
+  id: '/add-tenant',
+  path: '/add-tenant',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAnnouncementsRoute = AppAnnouncementsRouteImport.update({
+  id: '/announcements',
+  path: '/announcements',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAssetsRoute = AppAssetsRouteImport.update({
+  id: '/assets',
+  path: '/assets',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBulkRoute = AppBulkRouteImport.update({
+  id: '/bulk',
+  path: '/bulk',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCalendarRoute = AppCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCreditReportingRoute = AppCreditReportingRouteImport.update({
+  id: '/credit-reporting',
+  path: '/credit-reporting',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDisbursementsRoute = AppDisbursementsRouteImport.update({
+  id: '/disbursements',
+  path: '/disbursements',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDocumentsRoute = AppDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFormsRoute = AppFormsRouteImport.update({
+  id: '/forms',
+  path: '/forms',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppImportRoute = AppImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInsightsRoute = AppInsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInspectionsRoute = AppInspectionsRouteImport.update({
+  id: '/inspections',
+  path: '/inspections',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLeasesRoute = AppLeasesRouteImport.update({
+  id: '/leases',
+  path: '/leases',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLegalRoute = AppLegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppListingsRoute = AppListingsRouteImport.update({
+  id: '/listings',
+  path: '/listings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMaintenanceRoute = AppMaintenanceRouteImport.update({
+  id: '/maintenance',
+  path: '/maintenance',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMessagesRoute = AppMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNoticesRoute = AppNoticesRouteImport.update({
+  id: '/notices',
+  path: '/notices',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOnboardingRoute = AppOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPropertiesRoute = AppPropertiesRouteImport.update({
+  id: '/properties',
+  path: '/properties',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProspectsRoute = AppProspectsRouteImport.update({
+  id: '/prospects',
+  path: '/prospects',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRenewalsRoute = AppRenewalsRouteImport.update({
+  id: '/renewals',
+  path: '/renewals',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRentRoute = AppRentRouteImport.update({
+  id: '/rent',
+  path: '/rent',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRentIncreasesRoute = AppRentIncreasesRouteImport.update({
+  id: '/rent-increases',
+  path: '/rent-increases',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppReportsRoute = AppReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSupportRoute = AppSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTaxRoute = AppTaxRouteImport.update({
+  id: '/tax',
+  path: '/tax',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTeamRoute = AppTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTenantsRoute = AppTenantsRouteImport.update({
+  id: '/tenants',
+  path: '/tenants',
+  getParentRoute: () => AppRoute,
+} as any)
+const ApplySlugRoute = ApplySlugRouteImport.update({
+  id: '/apply/$slug',
+  path: '/apply/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalIndexRoute = LegalIndexRouteImport.update({
+  id: '/legal/',
+  path: '/legal/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalAccessibilityRoute = LegalAccessibilityRouteImport.update({
+  id: '/legal/accessibility',
+  path: '/legal/accessibility',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalCookiesRoute = LegalCookiesRouteImport.update({
+  id: '/legal/cookies',
+  path: '/legal/cookies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
+  id: '/legal/privacy',
+  path: '/legal/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalSecurityRoute = LegalSecurityRouteImport.update({
+  id: '/legal/security',
+  path: '/legal/security',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalTermsRoute = LegalTermsRouteImport.update({
+  id: '/legal/terms',
+  path: '/legal/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListingSlugRoute = ListingSlugRouteImport.update({
+  id: '/listing/$slug',
+  path: '/listing/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppLeasesIndexRoute = AppLeasesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppLeasesRoute,
+} as any)
+const AppLeasesLeaseIdRoute = AppLeasesLeaseIdRouteImport.update({
+  id: '/$leaseId',
+  path: '/$leaseId',
+  getParentRoute: () => AppLeasesRoute,
+} as any)
+const AppLeasesNewRoute = AppLeasesNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AppLeasesRoute,
+} as any)
+const AppLeasesSignRoute = AppLeasesSignRouteImport.update({
+  id: '/sign',
+  path: '/sign',
+  getParentRoute: () => AppLeasesRoute,
+} as any)
+const AppProspectsIndexRoute = AppProspectsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppProspectsRoute,
+} as any)
+const AppProspectsProspectIdRoute = AppProspectsProspectIdRouteImport.update({
+  id: '/$prospectId',
+  path: '/$prospectId',
+  getParentRoute: () => AppProspectsRoute,
+} as any)
+const AppLeasesWizardIndexRoute = AppLeasesWizardIndexRouteImport.update({
+  id: '/wizard/',
+  path: '/wizard/',
+  getParentRoute: () => AppLeasesRoute,
+} as any)
+const AppLeasesWizardProspectIdRoute =
+  AppLeasesWizardProspectIdRouteImport.update({
+    id: '/wizard/$prospectId',
+    path: '/wizard/$prospectId',
+    getParentRoute: () => AppLeasesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/portal': typeof PortalRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/app/add-tenant': typeof AppAddTenantRoute
+  '/app/announcements': typeof AppAnnouncementsRoute
+  '/app/assets': typeof AppAssetsRoute
+  '/app/bulk': typeof AppBulkRoute
+  '/app/calendar': typeof AppCalendarRoute
+  '/app/credit-reporting': typeof AppCreditReportingRoute
+  '/app/disbursements': typeof AppDisbursementsRoute
+  '/app/documents': typeof AppDocumentsRoute
+  '/app/forms': typeof AppFormsRoute
+  '/app/import': typeof AppImportRoute
+  '/app/insights': typeof AppInsightsRoute
+  '/app/inspections': typeof AppInspectionsRoute
+  '/app/leases': typeof AppLeasesRouteWithChildren
+  '/app/legal': typeof AppLegalRoute
+  '/app/listings': typeof AppListingsRoute
+  '/app/maintenance': typeof AppMaintenanceRoute
+  '/app/messages': typeof AppMessagesRoute
+  '/app/notices': typeof AppNoticesRoute
+  '/app/notifications': typeof AppNotificationsRoute
+  '/app/onboarding': typeof AppOnboardingRoute
+  '/app/properties': typeof AppPropertiesRoute
+  '/app/prospects': typeof AppProspectsRouteWithChildren
+  '/app/renewals': typeof AppRenewalsRoute
+  '/app/rent': typeof AppRentRoute
+  '/app/rent-increases': typeof AppRentIncreasesRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/support': typeof AppSupportRoute
+  '/app/tax': typeof AppTaxRoute
+  '/app/team': typeof AppTeamRoute
+  '/app/tenants': typeof AppTenantsRoute
+  '/apply/$slug': typeof ApplySlugRoute
+  '/legal/accessibility': typeof LegalAccessibilityRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/security': typeof LegalSecurityRoute
+  '/legal/terms': typeof LegalTermsRoute
+  '/listing/$slug': typeof ListingSlugRoute
+  '/app/': typeof AppIndexRoute
+  '/legal/': typeof LegalIndexRoute
+  '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
+  '/app/leases/new': typeof AppLeasesNewRoute
+  '/app/leases/sign': typeof AppLeasesSignRoute
+  '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
+  '/app/leases/': typeof AppLeasesIndexRoute
+  '/app/prospects/': typeof AppProspectsIndexRoute
+  '/app/leases/wizard/$prospectId': typeof AppLeasesWizardProspectIdRoute
+  '/app/leases/wizard/': typeof AppLeasesWizardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/owner': typeof OwnerRoute
+  '/portal': typeof PortalRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/app/add-tenant': typeof AppAddTenantRoute
+  '/app/announcements': typeof AppAnnouncementsRoute
+  '/app/assets': typeof AppAssetsRoute
+  '/app/bulk': typeof AppBulkRoute
+  '/app/calendar': typeof AppCalendarRoute
+  '/app/credit-reporting': typeof AppCreditReportingRoute
+  '/app/disbursements': typeof AppDisbursementsRoute
+  '/app/documents': typeof AppDocumentsRoute
+  '/app/forms': typeof AppFormsRoute
+  '/app/import': typeof AppImportRoute
+  '/app/insights': typeof AppInsightsRoute
+  '/app/inspections': typeof AppInspectionsRoute
+  '/app/legal': typeof AppLegalRoute
+  '/app/listings': typeof AppListingsRoute
+  '/app/maintenance': typeof AppMaintenanceRoute
+  '/app/messages': typeof AppMessagesRoute
+  '/app/notices': typeof AppNoticesRoute
+  '/app/notifications': typeof AppNotificationsRoute
+  '/app/onboarding': typeof AppOnboardingRoute
+  '/app/properties': typeof AppPropertiesRoute
+  '/app/renewals': typeof AppRenewalsRoute
+  '/app/rent': typeof AppRentRoute
+  '/app/rent-increases': typeof AppRentIncreasesRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/support': typeof AppSupportRoute
+  '/app/tax': typeof AppTaxRoute
+  '/app/team': typeof AppTeamRoute
+  '/app/tenants': typeof AppTenantsRoute
+  '/apply/$slug': typeof ApplySlugRoute
+  '/legal/accessibility': typeof LegalAccessibilityRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/security': typeof LegalSecurityRoute
+  '/legal/terms': typeof LegalTermsRoute
+  '/listing/$slug': typeof ListingSlugRoute
+  '/app': typeof AppIndexRoute
+  '/legal': typeof LegalIndexRoute
+  '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
+  '/app/leases/new': typeof AppLeasesNewRoute
+  '/app/leases/sign': typeof AppLeasesSignRoute
+  '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
+  '/app/leases': typeof AppLeasesIndexRoute
+  '/app/prospects': typeof AppProspectsIndexRoute
+  '/app/leases/wizard/$prospectId': typeof AppLeasesWizardProspectIdRoute
+  '/app/leases/wizard': typeof AppLeasesWizardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/portal': typeof PortalRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/app/add-tenant': typeof AppAddTenantRoute
+  '/app/announcements': typeof AppAnnouncementsRoute
+  '/app/assets': typeof AppAssetsRoute
+  '/app/bulk': typeof AppBulkRoute
+  '/app/calendar': typeof AppCalendarRoute
+  '/app/credit-reporting': typeof AppCreditReportingRoute
+  '/app/disbursements': typeof AppDisbursementsRoute
+  '/app/documents': typeof AppDocumentsRoute
+  '/app/forms': typeof AppFormsRoute
+  '/app/import': typeof AppImportRoute
+  '/app/insights': typeof AppInsightsRoute
+  '/app/inspections': typeof AppInspectionsRoute
+  '/app/leases': typeof AppLeasesRouteWithChildren
+  '/app/legal': typeof AppLegalRoute
+  '/app/listings': typeof AppListingsRoute
+  '/app/maintenance': typeof AppMaintenanceRoute
+  '/app/messages': typeof AppMessagesRoute
+  '/app/notices': typeof AppNoticesRoute
+  '/app/notifications': typeof AppNotificationsRoute
+  '/app/onboarding': typeof AppOnboardingRoute
+  '/app/properties': typeof AppPropertiesRoute
+  '/app/prospects': typeof AppProspectsRouteWithChildren
+  '/app/renewals': typeof AppRenewalsRoute
+  '/app/rent': typeof AppRentRoute
+  '/app/rent-increases': typeof AppRentIncreasesRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/support': typeof AppSupportRoute
+  '/app/tax': typeof AppTaxRoute
+  '/app/team': typeof AppTeamRoute
+  '/app/tenants': typeof AppTenantsRoute
+  '/apply/$slug': typeof ApplySlugRoute
+  '/legal/accessibility': typeof LegalAccessibilityRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/security': typeof LegalSecurityRoute
+  '/legal/terms': typeof LegalTermsRoute
+  '/listing/$slug': typeof ListingSlugRoute
+  '/app/': typeof AppIndexRoute
+  '/legal/': typeof LegalIndexRoute
+  '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
+  '/app/leases/new': typeof AppLeasesNewRoute
+  '/app/leases/sign': typeof AppLeasesSignRoute
+  '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
+  '/app/leases/': typeof AppLeasesIndexRoute
+  '/app/prospects/': typeof AppProspectsIndexRoute
+  '/app/leases/wizard/$prospectId': typeof AppLeasesWizardProspectIdRoute
+  '/app/leases/wizard/': typeof AppLeasesWizardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/owner'
+    | '/portal'
+    | '/signin'
+    | '/signup'
+    | '/app/add-tenant'
+    | '/app/announcements'
+    | '/app/assets'
+    | '/app/bulk'
+    | '/app/calendar'
+    | '/app/credit-reporting'
+    | '/app/disbursements'
+    | '/app/documents'
+    | '/app/forms'
+    | '/app/import'
+    | '/app/insights'
+    | '/app/inspections'
+    | '/app/leases'
+    | '/app/legal'
+    | '/app/listings'
+    | '/app/maintenance'
+    | '/app/messages'
+    | '/app/notices'
+    | '/app/notifications'
+    | '/app/onboarding'
+    | '/app/properties'
+    | '/app/prospects'
+    | '/app/renewals'
+    | '/app/rent'
+    | '/app/rent-increases'
+    | '/app/reports'
+    | '/app/settings'
+    | '/app/support'
+    | '/app/tax'
+    | '/app/team'
+    | '/app/tenants'
+    | '/apply/$slug'
+    | '/legal/accessibility'
+    | '/legal/cookies'
+    | '/legal/privacy'
+    | '/legal/security'
+    | '/legal/terms'
+    | '/listing/$slug'
+    | '/app/'
+    | '/legal/'
+    | '/app/leases/$leaseId'
+    | '/app/leases/new'
+    | '/app/leases/sign'
+    | '/app/prospects/$prospectId'
+    | '/app/leases/'
+    | '/app/prospects/'
+    | '/app/leases/wizard/$prospectId'
+    | '/app/leases/wizard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/owner'
+    | '/portal'
+    | '/signin'
+    | '/signup'
+    | '/app/add-tenant'
+    | '/app/announcements'
+    | '/app/assets'
+    | '/app/bulk'
+    | '/app/calendar'
+    | '/app/credit-reporting'
+    | '/app/disbursements'
+    | '/app/documents'
+    | '/app/forms'
+    | '/app/import'
+    | '/app/insights'
+    | '/app/inspections'
+    | '/app/legal'
+    | '/app/listings'
+    | '/app/maintenance'
+    | '/app/messages'
+    | '/app/notices'
+    | '/app/notifications'
+    | '/app/onboarding'
+    | '/app/properties'
+    | '/app/renewals'
+    | '/app/rent'
+    | '/app/rent-increases'
+    | '/app/reports'
+    | '/app/settings'
+    | '/app/support'
+    | '/app/tax'
+    | '/app/team'
+    | '/app/tenants'
+    | '/apply/$slug'
+    | '/legal/accessibility'
+    | '/legal/cookies'
+    | '/legal/privacy'
+    | '/legal/security'
+    | '/legal/terms'
+    | '/listing/$slug'
+    | '/app'
+    | '/legal'
+    | '/app/leases/$leaseId'
+    | '/app/leases/new'
+    | '/app/leases/sign'
+    | '/app/prospects/$prospectId'
+    | '/app/leases'
+    | '/app/prospects'
+    | '/app/leases/wizard/$prospectId'
+    | '/app/leases/wizard'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/owner'
+    | '/portal'
+    | '/signin'
+    | '/signup'
+    | '/app/add-tenant'
+    | '/app/announcements'
+    | '/app/assets'
+    | '/app/bulk'
+    | '/app/calendar'
+    | '/app/credit-reporting'
+    | '/app/disbursements'
+    | '/app/documents'
+    | '/app/forms'
+    | '/app/import'
+    | '/app/insights'
+    | '/app/inspections'
+    | '/app/leases'
+    | '/app/legal'
+    | '/app/listings'
+    | '/app/maintenance'
+    | '/app/messages'
+    | '/app/notices'
+    | '/app/notifications'
+    | '/app/onboarding'
+    | '/app/properties'
+    | '/app/prospects'
+    | '/app/renewals'
+    | '/app/rent'
+    | '/app/rent-increases'
+    | '/app/reports'
+    | '/app/settings'
+    | '/app/support'
+    | '/app/tax'
+    | '/app/team'
+    | '/app/tenants'
+    | '/apply/$slug'
+    | '/legal/accessibility'
+    | '/legal/cookies'
+    | '/legal/privacy'
+    | '/legal/security'
+    | '/legal/terms'
+    | '/listing/$slug'
+    | '/app/'
+    | '/legal/'
+    | '/app/leases/$leaseId'
+    | '/app/leases/new'
+    | '/app/leases/sign'
+    | '/app/prospects/$prospectId'
+    | '/app/leases/'
+    | '/app/prospects/'
+    | '/app/leases/wizard/$prospectId'
+    | '/app/leases/wizard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PortalRoute: typeof PortalRoute
+  SigninRoute: typeof SigninRoute
+  SignupRoute: typeof SignupRoute
+  ApplySlugRoute: typeof ApplySlugRoute
+  LegalAccessibilityRoute: typeof LegalAccessibilityRoute
+  LegalCookiesRoute: typeof LegalCookiesRoute
+  LegalPrivacyRoute: typeof LegalPrivacyRoute
+  LegalSecurityRoute: typeof LegalSecurityRoute
+  LegalTermsRoute: typeof LegalTermsRoute
+  ListingSlugRoute: typeof ListingSlugRoute
+  LegalIndexRoute: typeof LegalIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +696,503 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/add-tenant': {
+      id: '/app/add-tenant'
+      path: '/add-tenant'
+      fullPath: '/app/add-tenant'
+      preLoaderRoute: typeof AppAddTenantRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/announcements': {
+      id: '/app/announcements'
+      path: '/announcements'
+      fullPath: '/app/announcements'
+      preLoaderRoute: typeof AppAnnouncementsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/assets': {
+      id: '/app/assets'
+      path: '/assets'
+      fullPath: '/app/assets'
+      preLoaderRoute: typeof AppAssetsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/bulk': {
+      id: '/app/bulk'
+      path: '/bulk'
+      fullPath: '/app/bulk'
+      preLoaderRoute: typeof AppBulkRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/calendar': {
+      id: '/app/calendar'
+      path: '/calendar'
+      fullPath: '/app/calendar'
+      preLoaderRoute: typeof AppCalendarRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/credit-reporting': {
+      id: '/app/credit-reporting'
+      path: '/credit-reporting'
+      fullPath: '/app/credit-reporting'
+      preLoaderRoute: typeof AppCreditReportingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/disbursements': {
+      id: '/app/disbursements'
+      path: '/disbursements'
+      fullPath: '/app/disbursements'
+      preLoaderRoute: typeof AppDisbursementsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/documents': {
+      id: '/app/documents'
+      path: '/documents'
+      fullPath: '/app/documents'
+      preLoaderRoute: typeof AppDocumentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/forms': {
+      id: '/app/forms'
+      path: '/forms'
+      fullPath: '/app/forms'
+      preLoaderRoute: typeof AppFormsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/import': {
+      id: '/app/import'
+      path: '/import'
+      fullPath: '/app/import'
+      preLoaderRoute: typeof AppImportRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/insights': {
+      id: '/app/insights'
+      path: '/insights'
+      fullPath: '/app/insights'
+      preLoaderRoute: typeof AppInsightsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/inspections': {
+      id: '/app/inspections'
+      path: '/inspections'
+      fullPath: '/app/inspections'
+      preLoaderRoute: typeof AppInspectionsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/leases': {
+      id: '/app/leases'
+      path: '/leases'
+      fullPath: '/app/leases'
+      preLoaderRoute: typeof AppLeasesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/legal': {
+      id: '/app/legal'
+      path: '/legal'
+      fullPath: '/app/legal'
+      preLoaderRoute: typeof AppLegalRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/listings': {
+      id: '/app/listings'
+      path: '/listings'
+      fullPath: '/app/listings'
+      preLoaderRoute: typeof AppListingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/maintenance': {
+      id: '/app/maintenance'
+      path: '/maintenance'
+      fullPath: '/app/maintenance'
+      preLoaderRoute: typeof AppMaintenanceRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/messages': {
+      id: '/app/messages'
+      path: '/messages'
+      fullPath: '/app/messages'
+      preLoaderRoute: typeof AppMessagesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/notices': {
+      id: '/app/notices'
+      path: '/notices'
+      fullPath: '/app/notices'
+      preLoaderRoute: typeof AppNoticesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/notifications': {
+      id: '/app/notifications'
+      path: '/notifications'
+      fullPath: '/app/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/onboarding': {
+      id: '/app/onboarding'
+      path: '/onboarding'
+      fullPath: '/app/onboarding'
+      preLoaderRoute: typeof AppOnboardingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/properties': {
+      id: '/app/properties'
+      path: '/properties'
+      fullPath: '/app/properties'
+      preLoaderRoute: typeof AppPropertiesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/prospects': {
+      id: '/app/prospects'
+      path: '/prospects'
+      fullPath: '/app/prospects'
+      preLoaderRoute: typeof AppProspectsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/renewals': {
+      id: '/app/renewals'
+      path: '/renewals'
+      fullPath: '/app/renewals'
+      preLoaderRoute: typeof AppRenewalsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/rent': {
+      id: '/app/rent'
+      path: '/rent'
+      fullPath: '/app/rent'
+      preLoaderRoute: typeof AppRentRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/rent-increases': {
+      id: '/app/rent-increases'
+      path: '/rent-increases'
+      fullPath: '/app/rent-increases'
+      preLoaderRoute: typeof AppRentIncreasesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/reports': {
+      id: '/app/reports'
+      path: '/reports'
+      fullPath: '/app/reports'
+      preLoaderRoute: typeof AppReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/support': {
+      id: '/app/support'
+      path: '/support'
+      fullPath: '/app/support'
+      preLoaderRoute: typeof AppSupportRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/tax': {
+      id: '/app/tax'
+      path: '/tax'
+      fullPath: '/app/tax'
+      preLoaderRoute: typeof AppTaxRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/team': {
+      id: '/app/team'
+      path: '/team'
+      fullPath: '/app/team'
+      preLoaderRoute: typeof AppTeamRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/tenants': {
+      id: '/app/tenants'
+      path: '/tenants'
+      fullPath: '/app/tenants'
+      preLoaderRoute: typeof AppTenantsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/apply/$slug': {
+      id: '/apply/$slug'
+      path: '/apply/$slug'
+      fullPath: '/apply/$slug'
+      preLoaderRoute: typeof ApplySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/': {
+      id: '/legal/'
+      path: '/legal'
+      fullPath: '/legal/'
+      preLoaderRoute: typeof LegalIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/accessibility': {
+      id: '/legal/accessibility'
+      path: '/legal/accessibility'
+      fullPath: '/legal/accessibility'
+      preLoaderRoute: typeof LegalAccessibilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/cookies': {
+      id: '/legal/cookies'
+      path: '/legal/cookies'
+      fullPath: '/legal/cookies'
+      preLoaderRoute: typeof LegalCookiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/privacy': {
+      id: '/legal/privacy'
+      path: '/legal/privacy'
+      fullPath: '/legal/privacy'
+      preLoaderRoute: typeof LegalPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/security': {
+      id: '/legal/security'
+      path: '/legal/security'
+      fullPath: '/legal/security'
+      preLoaderRoute: typeof LegalSecurityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/terms': {
+      id: '/legal/terms'
+      path: '/legal/terms'
+      fullPath: '/legal/terms'
+      preLoaderRoute: typeof LegalTermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/listing/$slug': {
+      id: '/listing/$slug'
+      path: '/listing/$slug'
+      fullPath: '/listing/$slug'
+      preLoaderRoute: typeof ListingSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/leases/': {
+      id: '/app/leases/'
+      path: '/'
+      fullPath: '/app/leases/'
+      preLoaderRoute: typeof AppLeasesIndexRouteImport
+      parentRoute: typeof AppLeasesRoute
+    }
+    '/app/leases/$leaseId': {
+      id: '/app/leases/$leaseId'
+      path: '/$leaseId'
+      fullPath: '/app/leases/$leaseId'
+      preLoaderRoute: typeof AppLeasesLeaseIdRouteImport
+      parentRoute: typeof AppLeasesRoute
+    }
+    '/app/leases/new': {
+      id: '/app/leases/new'
+      path: '/new'
+      fullPath: '/app/leases/new'
+      preLoaderRoute: typeof AppLeasesNewRouteImport
+      parentRoute: typeof AppLeasesRoute
+    }
+    '/app/leases/sign': {
+      id: '/app/leases/sign'
+      path: '/sign'
+      fullPath: '/app/leases/sign'
+      preLoaderRoute: typeof AppLeasesSignRouteImport
+      parentRoute: typeof AppLeasesRoute
+    }
+    '/app/prospects/': {
+      id: '/app/prospects/'
+      path: '/'
+      fullPath: '/app/prospects/'
+      preLoaderRoute: typeof AppProspectsIndexRouteImport
+      parentRoute: typeof AppProspectsRoute
+    }
+    '/app/prospects/$prospectId': {
+      id: '/app/prospects/$prospectId'
+      path: '/$prospectId'
+      fullPath: '/app/prospects/$prospectId'
+      preLoaderRoute: typeof AppProspectsProspectIdRouteImport
+      parentRoute: typeof AppProspectsRoute
+    }
+    '/app/leases/wizard/': {
+      id: '/app/leases/wizard/'
+      path: '/wizard'
+      fullPath: '/app/leases/wizard/'
+      preLoaderRoute: typeof AppLeasesWizardIndexRouteImport
+      parentRoute: typeof AppLeasesRoute
+    }
+    '/app/leases/wizard/$prospectId': {
+      id: '/app/leases/wizard/$prospectId'
+      path: '/wizard/$prospectId'
+      fullPath: '/app/leases/wizard/$prospectId'
+      preLoaderRoute: typeof AppLeasesWizardProspectIdRouteImport
+      parentRoute: typeof AppLeasesRoute
+    }
   }
 }
 
+interface AppLeasesRouteChildren {
+  AppLeasesLeaseIdRoute: typeof AppLeasesLeaseIdRoute
+  AppLeasesNewRoute: typeof AppLeasesNewRoute
+  AppLeasesSignRoute: typeof AppLeasesSignRoute
+  AppLeasesIndexRoute: typeof AppLeasesIndexRoute
+  AppLeasesWizardProspectIdRoute: typeof AppLeasesWizardProspectIdRoute
+  AppLeasesWizardIndexRoute: typeof AppLeasesWizardIndexRoute
+}
+
+const AppLeasesRouteChildren: AppLeasesRouteChildren = {
+  AppLeasesLeaseIdRoute: AppLeasesLeaseIdRoute,
+  AppLeasesNewRoute: AppLeasesNewRoute,
+  AppLeasesSignRoute: AppLeasesSignRoute,
+  AppLeasesIndexRoute: AppLeasesIndexRoute,
+  AppLeasesWizardProspectIdRoute: AppLeasesWizardProspectIdRoute,
+  AppLeasesWizardIndexRoute: AppLeasesWizardIndexRoute,
+}
+
+const AppLeasesRouteWithChildren = AppLeasesRoute._addFileChildren(
+  AppLeasesRouteChildren,
+)
+
+interface AppProspectsRouteChildren {
+  AppProspectsProspectIdRoute: typeof AppProspectsProspectIdRoute
+  AppProspectsIndexRoute: typeof AppProspectsIndexRoute
+}
+
+const AppProspectsRouteChildren: AppProspectsRouteChildren = {
+  AppProspectsProspectIdRoute: AppProspectsProspectIdRoute,
+  AppProspectsIndexRoute: AppProspectsIndexRoute,
+}
+
+const AppProspectsRouteWithChildren = AppProspectsRoute._addFileChildren(
+  AppProspectsRouteChildren,
+)
+
+interface AppRouteChildren {
+  AppAddTenantRoute: typeof AppAddTenantRoute
+  AppAnnouncementsRoute: typeof AppAnnouncementsRoute
+  AppAssetsRoute: typeof AppAssetsRoute
+  AppBulkRoute: typeof AppBulkRoute
+  AppCalendarRoute: typeof AppCalendarRoute
+  AppCreditReportingRoute: typeof AppCreditReportingRoute
+  AppDisbursementsRoute: typeof AppDisbursementsRoute
+  AppDocumentsRoute: typeof AppDocumentsRoute
+  AppFormsRoute: typeof AppFormsRoute
+  AppImportRoute: typeof AppImportRoute
+  AppInsightsRoute: typeof AppInsightsRoute
+  AppInspectionsRoute: typeof AppInspectionsRoute
+  AppLeasesRoute: typeof AppLeasesRouteWithChildren
+  AppLegalRoute: typeof AppLegalRoute
+  AppListingsRoute: typeof AppListingsRoute
+  AppMaintenanceRoute: typeof AppMaintenanceRoute
+  AppMessagesRoute: typeof AppMessagesRoute
+  AppNoticesRoute: typeof AppNoticesRoute
+  AppNotificationsRoute: typeof AppNotificationsRoute
+  AppOnboardingRoute: typeof AppOnboardingRoute
+  AppPropertiesRoute: typeof AppPropertiesRoute
+  AppProspectsRoute: typeof AppProspectsRouteWithChildren
+  AppRenewalsRoute: typeof AppRenewalsRoute
+  AppRentRoute: typeof AppRentRoute
+  AppRentIncreasesRoute: typeof AppRentIncreasesRoute
+  AppReportsRoute: typeof AppReportsRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppSupportRoute: typeof AppSupportRoute
+  AppTaxRoute: typeof AppTaxRoute
+  AppTeamRoute: typeof AppTeamRoute
+  AppTenantsRoute: typeof AppTenantsRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAddTenantRoute: AppAddTenantRoute,
+  AppAnnouncementsRoute: AppAnnouncementsRoute,
+  AppAssetsRoute: AppAssetsRoute,
+  AppBulkRoute: AppBulkRoute,
+  AppCalendarRoute: AppCalendarRoute,
+  AppCreditReportingRoute: AppCreditReportingRoute,
+  AppDisbursementsRoute: AppDisbursementsRoute,
+  AppDocumentsRoute: AppDocumentsRoute,
+  AppFormsRoute: AppFormsRoute,
+  AppImportRoute: AppImportRoute,
+  AppInsightsRoute: AppInsightsRoute,
+  AppInspectionsRoute: AppInspectionsRoute,
+  AppLeasesRoute: AppLeasesRouteWithChildren,
+  AppLegalRoute: AppLegalRoute,
+  AppListingsRoute: AppListingsRoute,
+  AppMaintenanceRoute: AppMaintenanceRoute,
+  AppMessagesRoute: AppMessagesRoute,
+  AppNoticesRoute: AppNoticesRoute,
+  AppNotificationsRoute: AppNotificationsRoute,
+  AppOnboardingRoute: AppOnboardingRoute,
+  AppPropertiesRoute: AppPropertiesRoute,
+  AppProspectsRoute: AppProspectsRouteWithChildren,
+  AppRenewalsRoute: AppRenewalsRoute,
+  AppRentRoute: AppRentRoute,
+  AppRentIncreasesRoute: AppRentIncreasesRoute,
+  AppReportsRoute: AppReportsRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppSupportRoute: AppSupportRoute,
+  AppTaxRoute: AppTaxRoute,
+  AppTeamRoute: AppTeamRoute,
+  AppTenantsRoute: AppTenantsRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PortalRoute: PortalRoute,
+  SigninRoute: SigninRoute,
+  SignupRoute: SignupRoute,
+  ApplySlugRoute: ApplySlugRoute,
+  LegalAccessibilityRoute: LegalAccessibilityRoute,
+  LegalCookiesRoute: LegalCookiesRoute,
+  LegalPrivacyRoute: LegalPrivacyRoute,
+  LegalSecurityRoute: LegalSecurityRoute,
+  LegalTermsRoute: LegalTermsRoute,
+  ListingSlugRoute: ListingSlugRoute,
+  LegalIndexRoute: LegalIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
