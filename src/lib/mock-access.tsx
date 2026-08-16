@@ -439,8 +439,10 @@ export function usePermissions() {
 
     return {
       user: currentUser,
+      isDemo,
       users,
       accessLog,
+
       isOwner,
       isPm,
       isTenant,
