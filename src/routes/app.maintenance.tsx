@@ -118,8 +118,9 @@ function RequestsTab() {
       m.requests
         .filter((r) => perms.canSee(r.propertyId))
         .sort((a, b) => URGENCY_RANK[a.urgency] - URGENCY_RANK[b.urgency] || REQUEST_RANK[a.status] - REQUEST_RANK[b.status]),
-    [m.requests, perms],
+    [m.requests, perms.canSee, perms.properties],
   );
+
   const current = m.requests.find((r) => r.id === openId) ?? null;
 
   return (

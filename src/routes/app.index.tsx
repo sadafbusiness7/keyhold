@@ -72,6 +72,7 @@ function StatTile({
 
 function Dashboard() {
   const { user, isOwner, properties, units, rentRows, tickets, leases, canSeeFinancials, canSeeReports } = usePermissions();
+
   const expectedRent = rentRows.reduce((s, r) => s + r.rent, 0);
   const receivedRent = rentRows.reduce((s, r) => s + (r.rent - r.balance), 0);
   const owedRent = rentRows.reduce((s, r) => s + r.balance, 0);

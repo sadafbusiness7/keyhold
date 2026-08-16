@@ -97,6 +97,7 @@ function RentPageInner() {
     [rent.invoices, visibleUnitIds],
   );
 
+
   const periods = useMemo(
     () => Array.from(new Set(scoped.map((i) => i.period))).sort().reverse(),
     [scoped],
