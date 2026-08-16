@@ -1407,6 +1407,7 @@ function Home() {
                 Sign in
               </Link>
             </div>
+
           </div>
 
           <HeroWidgetSlider />
