@@ -533,3 +533,64 @@ function PayoutsPanel() {
     </div>
   );
 }
+
+function ArrearsPanel() {
+  const rent = useRent();
+  const perms = usePermissions();
+  const navigate = Route.useNavigate();
+
+  const arrearsData = useMemo(() => {
+    return rent.leases
+      .map(l => {
+        const balance = -rent.creditFor(l.tenantId);
+        const plan = rent.paymentPlanForTenant(l.tenantId);
+        return {
+          lease: l,
+          tenant: tenantById(l.tenantId),
+          balance,
+          plan
+        };
+      })
+      .filter(d => d.balance > 0)
+      .sort((a, b) => b.balance - a.balance);
+  }, [rent.leases, rent.creditFor, rent.paymentPlanForTenant]);
+
+  return (
+    <div className="space-y-6">
+      <div className="grid gap-4 sm:grid-cols-4">
+        <Metric label="Total Arrears" value={money(arrearsData.reduce((s, d) => s + d.balance, 0))} tone="maple" />
+        <Metric label="Tenants Owing" value={String(arrearsData.length)} tone="navy" />
+        <Metric label="On Plans" value={String(arrearsData.filter(d => d.plan).length)} tone="success" />
+        <Metric label="Action Needed" value={String(arrearsData.filter(d => d.balance > 200000).length)} tone="maple" />
+      </div>
+
+      <DataList
+        name="Arrears"
+        items={arrearsData}
+        getId={d => d.lease.id}
+        columns={[
+          { key: "tenant", label: "Tenant", value: d => d.tenant?.name ?? "—", render: d => (
+            <Link to={`/app/tenants/${d.lease.tenantId}` as any} className="font-display font-bold text-navy hover:underline">{d.tenant?.name}</Link>
+          )},
+          { key: "owing", label: "Owed", align: "right", value: d => d.balance, render: d => <span className="money font-bold text-maple">{money(d.balance)}</span> },
+          { key: "plan", label: "Payment Plan", value: d => d.plan?.status ?? "None", render: d => d.plan ? (
+            <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-bold ${
+              d.plan.status === "on-track" ? "bg-success-soft text-success" : "bg-warning-soft text-warning"
+            }`}>
+              {d.plan.status === "on-track" ? "On track" : "Behind"}
+            </span>
+          ) : <span className="text-muted-foreground text-xs">—</span> },
+          { key: "action", label: "Next step", value: () => "Send reminder", render: d => (
+            <button onClick={() => toast.success(`Reminder sent to ${d.tenant?.name}`)} className="text-action text-xs font-bold uppercase hover:underline">Send N4</button>
+          )}
+        ]}
+        rowActions={[
+          { key: "tenant", label: "View tenant profile", Icon: Users, onSelect: (d) => navigate({ to: `/app/tenants/${d.lease.tenantId}` as any }) },
+          { key: "plan", label: "Create payment plan", Icon: Plus, onSelect: () => toast.info("Payment plan builder opening...") },
+          { key: "waive", label: "Waive late fee", Icon: Trash, onSelect: () => toast.success("Fee waived.") },
+        ]}
+      />
+    </div>
+  );
+}
+
