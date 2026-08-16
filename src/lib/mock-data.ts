@@ -93,6 +93,7 @@ export const portfolios: Portfolio[] = [
 
 export const properties: Property[] = [
 
+
   {
     id: "p1",
     ownerId: "u_owner",
