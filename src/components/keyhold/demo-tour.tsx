@@ -70,10 +70,10 @@ export function DemoTour() {
     }
   }, [isDemo, search.tour]);
 
-  if (!isVisible) return null;
+  if (!isVisible || !step) return null;
 
-  const step = STEPS[currentStep];
   const Icon = step.icon;
+
 
   const next = () => {
     if (currentStep < STEPS.length - 1) {
