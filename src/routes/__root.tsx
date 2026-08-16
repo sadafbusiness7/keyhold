@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { Toaster } from "sonner";
+import { useRouterState } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -23,6 +24,8 @@ import { CanadaProvider } from "../lib/mock-canada";
 import { ConsentProvider } from "../lib/mock-consent";
 import { ThemeProvider, themeBootScript } from "../lib/theme";
 import { I18nProvider } from "../lib/i18n";
+import { DemoBanner } from "../components/keyhold/demo-banner";
+
 
 function NotFoundComponent() {
   return (
@@ -159,7 +162,7 @@ function RootComponent() {
                 <OwnersProvider>
                   <CanadaProvider>
                     <ConsentProvider>
-                      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+                      <DemoGate />
                       <Outlet />
                       <Toaster richColors position="top-center" />
                     </ConsentProvider>
