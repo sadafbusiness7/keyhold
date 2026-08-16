@@ -360,20 +360,36 @@ function CreditsPanel() {
       <ul className="grid gap-3 sm:grid-cols-2">
         {rent.leases.map((l) => {
           const credit = rent.creditFor(l.tenantId);
-          const held = lastMonthHeldCents(l.tenantId);
+          const deposits = rent.depositsForTenant(l.tenantId);
+          const totalHeld = deposits.reduce((s, d) => s + d.amountCents, 0);
+          const totalAccrued = deposits.reduce((s, d) => s + calculateAccruedInterest(d, rent.today, rent.interestPayments), 0);
+
           return (
             <li key={l.id} className="relative overflow-hidden card-soft p-4 pl-5">
               <span aria-hidden="true" className={`absolute inset-y-0 left-0 w-1 ${credit > 0 ? "bg-success" : "bg-navy"}`} />
-              <p className="font-display font-bold text-navy">{tenantById(l.tenantId)?.name}</p>
-              <p className="truncate text-xs text-muted-foreground">{unitAddress(l.unitId)}</p>
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="font-display font-bold text-navy">{tenantById(l.tenantId)?.name}</p>
+                  <p className="truncate text-xs text-muted-foreground">{unitAddress(l.unitId)}</p>
+                </div>
+                <button 
+                  onClick={() => setLedgerTenantId(l.tenantId)}
+                  className="inline-flex items-center gap-1 text-[10px] font-bold text-action hover:underline uppercase tracking-tight"
+                >
+                  Ledger <Calculator weight="duotone" className="h-3 w-3" />
+                </button>
+              </div>
               <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
                 <div>
                   <dt className="text-muted-foreground">Credit on file</dt>
                   <dd className="money text-lg font-extrabold text-success">{money(credit)}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted-foreground">Last month's rent held</dt>
-                  <dd className="money text-lg font-extrabold text-navy">{money(held)}</dd>
+                  <dt className="text-muted-foreground">Deposits held</dt>
+                  <dd className="money text-lg font-extrabold text-navy">{money(totalHeld)}</dd>
+                  {totalAccrued > 0 && (
+                    <dd className="money text-[10px] font-bold text-success">+{money(totalAccrued)} interest</dd>
+                  )}
                 </div>
               </dl>
             </li>
