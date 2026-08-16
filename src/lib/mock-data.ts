@@ -109,6 +109,7 @@ export const properties: Property[] = [
   {
     id: "p2",
     ownerId: "u_owner",
+    portfolioId: "hamilton",
     name: "Ottawa Street Triplex",
     address: "88 Ottawa St N",
     city: "Hamilton",
@@ -116,6 +117,7 @@ export const properties: Property[] = [
     postalCode: "L8H 3Z1",
     kind: "Triplex",
   },
+
   {
     id: "p3",
     ownerId: "u_owner",
