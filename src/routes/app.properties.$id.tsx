@@ -142,9 +142,25 @@ function PropertyDetailPage() {
                 }},
                 { key: "rent", label: "Rent", align: "right", value: u => u.rent, render: u => <span className="money font-bold text-navy">{cad(u.rent)}</span> },
                 { key: "leaseEnd", label: "Lease End", value: u => u.leaseEnd ?? "—" },
-                { key: "status", label: "Status", sortable: false, value: u => u.tenantId ? "occupied" : "vacant", render: u => (
-                  <StatusLabel status={u.tenantId ? "occupied" : "vacant"} />
+                { key: "status", label: "Status", sortable: false, value: u => u.status || (u.tenantId ? "occupied" : "vacant"), render: u => (
+                  <StatusLabel status={u.status || (u.tenantId ? "occupied" : "vacant")} />
                 )},
+                { key: "actions", label: "", locked: true, align: "right", render: u => {
+                  const status = u.status || (u.tenantId ? "occupied" : "vacant");
+                  if (status === "vacant" || status === "turnover") {
+                    return (
+                      <button
+                        onClick={() => setTurnoverUnit(u)}
+                        className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-action hover:underline"
+                      >
+                        <ArrowsClockwise weight="bold" className="h-3.5 w-3.5" />
+                        Turnover
+                      </button>
+                    );
+                  }
+                  return null;
+                }},
+
               ]}
               emptyIcon={DoorOpen}
               emptyTitle="No units in this property"
