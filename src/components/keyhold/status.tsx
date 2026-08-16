@@ -25,6 +25,8 @@ export type StatusKey =
   | "overdue"
   | "partial"
   | "void"
+  | "pending"
+  | "failed"
   | "emergency"
   | "open"
   | "in-progress"
@@ -43,6 +45,7 @@ export type StatusKey =
   | "urgent"
   | "soon"
   | "whenever";
+
 
 export const statusMeta: Record<StatusKey, { label: string; tone: Tone }> = {
   paid: { label: "Paid", tone: "success" },
@@ -71,7 +74,11 @@ export const statusMeta: Record<StatusKey, { label: string; tone: Tone }> = {
   urgent: { label: "Urgent", tone: "warning" },
   soon: { label: "Soon", tone: "action" },
   whenever: { label: "Whenever", tone: "navy" },
+  pending: { label: "Pending", tone: "action" },
+  failed: { label: "Failed", tone: "maple" },
 };
+
+
 
 /**
  * Signature status marker: squared, tracked-out type with a tone square —

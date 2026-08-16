@@ -1,12 +1,14 @@
 import { RequireFinancials } from "@/components/keyhold/access-guard";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Users, EnvelopeSimple, Phone, Stamp, Eye, PencilSimple, Archive, SignOut, Trash, PaperPlaneTilt, DownloadSimple, UploadSimple } from "@phosphor-icons/react";
+import { Users, EnvelopeSimple, Phone, Stamp, Eye, PencilSimple, Archive, SignOut, Trash, PaperPlaneTilt, DownloadSimple, UploadSimple, CreditCard, Bank, Clock } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/keyhold/app-shell";
 import { DataList, notWired, type Column } from "@/components/keyhold/data-list";
 import { ActivityFeed } from "@/components/keyhold/activity-feed";
 import { StatusLabel } from "@/components/keyhold/status";
 import { tenants, unitAddress, rentRows, cad, longDate, type Tenant } from "@/lib/mock-data";
+import { useRent } from "@/lib/mock-rent";
+
 import { useNotices } from "@/lib/mock-notices";
 import { AddTenantChooser, TenantsHelperLine } from "@/components/keyhold/add-tenant-chooser";
 
@@ -32,8 +34,12 @@ function TenantsPage() {
 
 const rentOf = (t: Tenant) => rentRows.find((r) => r.tenantId === t.id);
 
+
+
 function TenantsPageInner() {
   const { noticesForTenant } = useNotices();
+  const rent = useRent();
+
 
   const columns: Column<Tenant>[] = [
     { key: "name", label: "Tenant", locked: true, value: (t) => t.name,
@@ -88,6 +94,20 @@ function TenantsPageInner() {
             ],
             match: (t, v) => rentOf(t)?.status === v,
           },
+          {
+            key: "autopay",
+            label: "Autopay",
+            options: [
+              { value: "on", label: "Enabled" },
+              { value: "off", label: "Not enrolled" },
+            ],
+            match: (t, v) => {
+              const lease = rent.leases.find(l => l.tenantId === t.id);
+              const config = lease ? rent.autopayForLease(lease.id) : null;
+              return v === "on" ? !!config?.enabled : !config?.enabled;
+            },
+          },
+
         ]}
         emptyIcon={Users}
         emptyTitle="No tenants yet"
@@ -126,20 +146,30 @@ function TenantsPageInner() {
           },
         ]}
         quickView={(t) => {
-          const rent = rentOf(t);
+          const rentData = rentOf(t);
           const history = noticesForTenant(t.id);
+          const lease = rent.leases.find((l: any) => l.tenantId === t.id);
+          const autopay = lease ? rent.autopayForLease(lease.id) : null;
+          const methods = rent.methodsForTenant(t.id);
+
+
           return {
+
             title: t.name,
             subtitle: unitAddress(t.unitId),
-            status: rent?.status,
+            status: rentData?.status,
             fields: [
-              { label: "Rent", value: <span className="money">{cad(rent?.rent ?? 0)}</span> },
-              { label: "Balance", value: <span className="money">{cad(rent?.balance ?? 0)}</span> },
+              { label: "Rent", value: <span className="money">{cad(rentData?.rent ?? 0)}</span> },
+              { label: "Balance", value: <span className="money">{cad(rentData?.balance ?? 0)}</span> },
+
               { label: "Moved in", value: longDate(t.movedIn) },
               { label: "Email", value: <a className="text-action" href={`mailto:${t.email}`}>{t.email}</a> },
               { label: "Phone", value: <a className="text-action" href={`tel:${t.phone.replace(/[^\d]/g, "")}`}>{t.phone}</a> },
               { label: "Notices on file", value: `${history.length}` },
+              { label: "Autopay", value: autopay?.enabled ? <span className="text-success font-bold">Enabled</span> : <span className="text-muted-foreground">Not enrolled</span> },
+              { label: "Payment method", value: methods.length > 0 ? `${methods.length} connected` : "None" },
             ],
+
             actions: (
               <>
                 <Link to="/app/messages" className="inline-flex min-h-11 items-center rounded-full bg-action px-4 text-sm font-semibold text-primary-foreground hover:bg-action/90">

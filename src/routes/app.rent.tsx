@@ -71,7 +71,7 @@ function RentPageInner() {
   const perms = usePermissions();
   const rent = useRent();
 
-  const [tab, setTab] = useState<"ledger" | "credits" | "movedout">("ledger");
+  const [tab, setTab] = useState<"ledger" | "credits" | "payouts" | "movedout">("ledger");
   const [openInvoice, setOpenInvoice] = useState<Invoice | null>(null);
   const [showCharge, setShowCharge] = useState(false);
   const [showMoveOut, setShowMoveOut] = useState(false);
@@ -191,8 +191,10 @@ function RentPageInner() {
         {([
           ["ledger", "Rent ledger"],
           ["credits", "Credits & deposits"],
+          ["payouts", "Payouts & reconciliation"],
           ["movedout", `Moved out (${rent.moveOuts.length})`],
         ] as const).map(([key, label]) => (
+
           <button
             key={key}
             role="tab"
@@ -210,7 +212,7 @@ function RentPageInner() {
           name="Rent invoices"
           items={rows}
           getId={(r) => r.invoice.id}
-          getStatus={(r) => r.status}
+          getStatus={(r) => r.status as any}
           searchPlaceholder="Search tenant, home or charge"
           dateOf={(r) => r.invoice.dueDate}
           columns={[
@@ -225,7 +227,7 @@ function RentPageInner() {
             { key: "balance", label: "Balance", align: "right", value: (r) => r.balance,
               render: (r) => <span className={`money font-bold ${r.balance ? "text-maple" : "text-success"}`}>{money(r.balance)}</span> },
             { key: "due", label: "Due", value: (r) => r.invoice.dueDate, render: (r) => <span className="tnum">{longDate(r.invoice.dueDate)}</span> },
-            { key: "status", label: "Status", sortable: false, value: (r) => r.status, render: (r) => <StatusLabel status={r.status} /> },
+            { key: "status", label: "Status", sortable: false, value: (r) => r.status, render: (r) => <StatusLabel status={r.status as any} /> },
           ]}
           filters={[
             {
@@ -236,6 +238,9 @@ function RentPageInner() {
                 { value: "partial", label: "Part paid" },
                 { value: "due-soon", label: "Due soon" },
                 { value: "paid", label: "Paid" },
+                { value: "pending", label: "Pending" },
+                { value: "failed", label: "Failed" },
+
               ],
               match: (r, v) => r.status === v,
             },
@@ -295,7 +300,8 @@ function RentPageInner() {
           quickView={(r) => ({
             title: r.tenant,
             subtitle: `${r.home} · ${r.invoice.description}`,
-            status: r.status,
+            status: r.status as any,
+
             fields: [
               { label: "Amount", value: <span className="money">{money(r.invoice.amountCents)}</span> },
               { label: "Paid", value: <span className="money">{money(r.paid)}</span> },
@@ -317,7 +323,9 @@ function RentPageInner() {
       )}
 
       {tab === "credits" && <CreditsPanel />}
+      {tab === "payouts" && <PayoutsPanel />}
       {tab === "movedout" && <MovedOutPanel />}
+
 
       {openInvoice && <InvoiceSheet invoice={openInvoice} onClose={() => setOpenInvoice(null)} />}
       {showCharge && <ManualChargeSheet onClose={() => setShowCharge(false)} />}
@@ -404,5 +412,83 @@ function MovedOutPanel() {
         </li>
       ))}
     </ul>
+  );
+}
+
+function PayoutsPanel() {
+  const rent = useRent();
+  const successfulPayments = rent.payments.filter(p => (p as any).status === "succeeded" || !p.reversedOn);
+  
+  return (
+    <div className="space-y-6">
+      <div className="grid gap-3 sm:grid-cols-3">
+        <Metric 
+          label="Pending payout" 
+          value={money(successfulPayments.filter(p => (p as any).payoutStatus !== "paid").reduce((s, p) => s + p.amountCents, 0))} 
+          tone="navy" 
+          hint="Funds arriving in 1-3 days" 
+        />
+        <Metric 
+          label="Last payout" 
+          value={money(425000)} 
+          tone="success" 
+          hint="Deposited Oct 1, 2026" 
+        />
+        <Metric 
+          label="Processing fees" 
+          value={money(successfulPayments.reduce((s, p) => s + ((p as any).feeCents || 0), 0))} 
+          tone="maple" 
+          hint="YTD merchant fees" 
+        />
+      </div>
+
+      <div className="card-soft overflow-hidden">
+        <div className="border-b border-border bg-navy-soft px-5 py-3">
+          <h3 className="font-display text-sm font-bold text-navy uppercase tracking-wider">Payment Queue & Reconciliation</h3>
+        </div>
+        <div className="divide-y divide-border">
+          {rent.payments.length === 0 && (
+            <div className="p-8 text-center text-sm text-muted-foreground">No online payments recorded yet.</div>
+          )}
+          {rent.payments.slice().reverse().map(p => {
+            const tenant = tenantById(p.tenantId);
+            const status = (p as any).status || "succeeded";
+            const payoutStatus = (p as any).payoutStatus || "pending";
+            
+            return (
+              <div key={p.id} className="flex items-center justify-between gap-4 p-4 hover:bg-navy-soft/30 transition-colors">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-navy truncate">{tenant?.name}</span>
+                    <StatusLabel status={status as any} />
+                  </div>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {p.method} · {longDate(p.receivedOn)} · Ref: {p.reference}
+                  </p>
+                </div>
+                
+                <div className="text-right flex items-center gap-6">
+                  <div className="hidden sm:block">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Payout</p>
+                    <p className="text-xs font-semibold text-navy">{payoutStatus === "paid" ? "Deposited" : "Processing"}</p>
+                  </div>
+                  <div>
+                    <p className="money font-extrabold text-navy">{money(p.amountCents)}</p>
+                    {((p as any).feeCents || 0) > 0 && (
+                      <p className="text-[10px] text-maple font-medium">-{money((p as any).feeCents)} fee</p>
+                    )}
+                  </div>
+                  {status === "failed" && (
+                    <button className="rounded-full bg-action px-3 py-1 text-xs font-bold text-primary-foreground hover:bg-action/90" onClick={() => toast.success("Retry initiated.")}>
+                      Retry
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }
