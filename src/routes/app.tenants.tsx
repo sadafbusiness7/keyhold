@@ -45,7 +45,8 @@ function TenantsPageInner() {
 
   const columns: Column<Tenant>[] = [
     { key: "name", label: "Tenant", locked: true, value: (t) => t.name,
-      render: (t) => <span className="font-display font-bold text-navy">{t.name}</span> },
+      render: (t) => <Link to={`/app/tenants/${t.id}` as any} className="font-display font-bold text-navy hover:underline">{t.name}</Link> },
+
     { key: "unit", label: "Home", value: (t) => unitAddress(t.unitId) },
     { key: "rent", label: "Rent", align: "right", value: (t) => rentOf(t)?.rent ?? 0,
       render: (t) => <span className="money font-extrabold text-navy">{cad(rentOf(t)?.rent ?? 0)}</span> },

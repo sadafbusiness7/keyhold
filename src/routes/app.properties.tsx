@@ -29,8 +29,9 @@ function PropertiesPage() {
 
   const columns: Column<Unit>[] = [
     { key: "label", label: "Unit", locked: true, value: (u) => u.label, render: (u) => (
-      <span className="font-display font-bold text-navy">{u.label}</span>
+      <Link to={`/app/units/${u.id}` as any} className="font-display font-bold text-navy hover:underline">{u.label}</Link>
     ) },
+
     { key: "property", label: "Property", value: (u) => propName(u.propertyId) },
     { key: "kind", label: "Type", value: (u) => u.kind },
     { key: "tenant", label: "Who lives here", value: (u) => {
