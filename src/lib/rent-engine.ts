@@ -193,6 +193,35 @@ export function creditBalanceCents(credits: CreditEntry[], tenantId: string) {
   return credits.filter((c) => c.tenantId === tenantId).reduce((s, c) => s + c.amountCents, 0);
 }
 
+/**
+ * Ontario Guideline Rate (approximate for demo).
+ * Real implementation would fetch per year.
+ */
+export const ONTARIO_INTEREST_GUIDELINE = 0.025; // 2.5%
+
+/**
+ * Accrue interest on a deposit from received date until today.
+ * interest = P * r * (days / 365)
+ */
+export function calculateAccruedInterest(deposit: Deposit, today: string, interestPayments: InterestPayment[]): number {
+  const start = new Date(deposit.receivedOn + "T12:00:00");
+  const end = new Date(today + "T12:00:00");
+  const diffDays = Math.max(0, Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
+  
+  const totalAccrued = Math.round(deposit.amountCents * (deposit.interestRate ?? ONTARIO_INTEREST_GUIDELINE) * (diffDays / 365.25));
+  const alreadyPaid = interestPayments.filter(p => p.depositId === deposit.id).reduce((s, p) => s + p.amountCents, 0);
+  
+  return Math.max(0, totalAccrued - alreadyPaid);
+}
+
+/** Accrued interest per year based on full amount. */
+export function annualInterestOwing(deposit: Deposit): number {
+  return Math.round(deposit.amountCents * (deposit.interestRate ?? ONTARIO_INTEREST_GUIDELINE));
+}
+
+export const LEGAL_DISCLAIMER = "General information only, not legal advice. Rates and requirements vary by province.";
+export const LTB_SOURCE_URL = "https://www.ontario.ca/page/rent-increase-guideline";
+
 // ——— generation ———
 
 export type LeaseLike = { id: string; unitId: string; tenantId: string; rent: number; end: string };
