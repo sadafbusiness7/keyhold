@@ -42,9 +42,12 @@ function PropertyDetailPage() {
   const rent = useRent();
   const maintenance = useMaintenance();
 
+  const [turnoverUnit, setTurnoverUnit] = useState<Unit | null>(null);
+
   const propertyUnits = useMemo(() => allUnits.filter(u => u.propertyId === id), [id]);
   const propertyInvoices = useMemo(() => rent.invoices.filter(i => i.unitId.startsWith(id)), [rent.invoices, id]);
   const propertyRequests = useMemo(() => maintenance.requests.filter(r => r.propertyId === id), [maintenance.requests, id]);
+
 
   if (!property) return <div className="p-8 text-center">Property not found</div>;
 
