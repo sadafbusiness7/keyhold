@@ -199,7 +199,7 @@ export const units: Unit[] = [
   { id: "u2", propertyId: "p1", label: "Basement suite", kind: "1 bed suite", bedrooms: 1, rent: 1575, tenantId: "t2", leaseEnd: "2026-09-30" },
   { id: "u3", propertyId: "p2", label: "Unit A", kind: "2 bed unit", bedrooms: 2, rent: 1895, tenantId: "t3", leaseEnd: "2026-08-31" },
   { id: "u4", propertyId: "p2", label: "Unit B", kind: "1 bed unit", bedrooms: 1, rent: 1495, tenantId: "t4", leaseEnd: "2027-01-31" },
-  { id: "u5", propertyId: "p2", label: "Unit C", kind: "Bachelor", bedrooms: 0, rent: 1250, tenantId: null, leaseEnd: null },
+  { id: "u5", propertyId: "p2", label: "Unit C", kind: "Bachelor", bedrooms: 0, rent: 1250, tenantId: null, leaseEnd: null, status: "turnover", turnoverDays: 12, turnoverCostCents: 85000, turnoverStartedOn: "2026-07-28" },
   { id: "u6", propertyId: "p3", label: "Whole home", kind: "3 bed townhome", bedrooms: 3, rent: 3100, tenantId: "t5", leaseEnd: "2026-08-31" },
   ...makeUnits("p4", 14, 1450),
   ...makeUnits("p5", 12, 1850),
