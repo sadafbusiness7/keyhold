@@ -12,10 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FeaturesRouteImport } from './routes/features'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as OwnerRouteImport } from './routes/owner'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AppIndexRouteImport } from './routes/app.index'
@@ -85,9 +89,24 @@ const AppRoute = AppRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesRoute = FeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OwnerRoute = OwnerRouteImport.update({
@@ -103,6 +122,11 @@ const PortalRoute = PortalRouteImport.update({
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoadmapRoute = RoadmapRouteImport.update({
+  id: '/roadmap',
+  path: '/roadmap',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SigninRoute = SigninRouteImport.update({
@@ -376,10 +400,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/app': typeof AppRouteWithChildren
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
+  '/features': typeof FeaturesRoute
+  '/help': typeof HelpRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
   '/pricing': typeof PricingRoute
+  '/roadmap': typeof RoadmapRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/app/add-tenant': typeof AppAddTenantRoute
@@ -437,10 +465,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
+  '/features': typeof FeaturesRoute
+  '/help': typeof HelpRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
   '/pricing': typeof PricingRoute
+  '/roadmap': typeof RoadmapRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/app/add-tenant': typeof AppAddTenantRoute
@@ -498,10 +530,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/app': typeof AppRouteWithChildren
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
+  '/features': typeof FeaturesRoute
+  '/help': typeof HelpRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
   '/pricing': typeof PricingRoute
+  '/roadmap': typeof RoadmapRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/app/add-tenant': typeof AppAddTenantRoute
@@ -562,10 +598,14 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/app'
+    | '/blog'
     | '/contact'
+    | '/features'
+    | '/help'
     | '/owner'
     | '/portal'
     | '/pricing'
+    | '/roadmap'
     | '/signin'
     | '/signup'
     | '/app/add-tenant'
@@ -623,10 +663,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/blog'
     | '/contact'
+    | '/features'
+    | '/help'
     | '/owner'
     | '/portal'
     | '/pricing'
+    | '/roadmap'
     | '/signin'
     | '/signup'
     | '/app/add-tenant'
@@ -683,10 +727,14 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/app'
+    | '/blog'
     | '/contact'
+    | '/features'
+    | '/help'
     | '/owner'
     | '/portal'
     | '/pricing'
+    | '/roadmap'
     | '/signin'
     | '/signup'
     | '/app/add-tenant'
@@ -746,10 +794,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AppRoute: typeof AppRouteWithChildren
+  BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
+  FeaturesRoute: typeof FeaturesRoute
+  HelpRoute: typeof HelpRoute
   OwnerRoute: typeof OwnerRoute
   PortalRoute: typeof PortalRoute
   PricingRoute: typeof PricingRoute
+  RoadmapRoute: typeof RoadmapRoute
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
   ApplySlugRoute: typeof ApplySlugRoute
@@ -787,11 +839,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features': {
+      id: '/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof FeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/owner': {
@@ -813,6 +886,13 @@ declare module '@tanstack/react-router' {
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/roadmap': {
+      id: '/roadmap'
+      path: '/roadmap'
+      fullPath: '/roadmap'
+      preLoaderRoute: typeof RoadmapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signin': {
@@ -1313,10 +1393,14 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AppRoute: AppRouteWithChildren,
+  BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
+  FeaturesRoute: FeaturesRoute,
+  HelpRoute: HelpRoute,
   OwnerRoute: OwnerRoute,
   PortalRoute: PortalRoute,
   PricingRoute: PricingRoute,
+  RoadmapRoute: RoadmapRoute,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
   ApplySlugRoute: ApplySlugRoute,
