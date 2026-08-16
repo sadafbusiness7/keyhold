@@ -1,13 +1,10 @@
 /**
  * MOCK MESSAGING STORE — prototype state only, NOT a backend.
- * -----------------------------------------------------------
- * Holds conversations, messages, contacts and saved templates in React state.
- * Shapes mirror future Supabase tables (conversations, conversation_members,
- * messages, message_templates) so a backend can drop in behind the same API.
- * Swap the seed arrays below for queries and keep the same helper API.
  */
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
 import { toast } from "sonner";
+import { usePermissions } from "@/lib/mock-access";
+
 import { tenants as allTenants, unitAddress, unitById, propertyById } from "@/lib/mock-data";
 
 
@@ -257,7 +254,9 @@ function nextStatus(): DeliveryStatus {
 }
 
 export function MessagesProvider({ children }: { children: ReactNode }) {
+  const { isDemo } = usePermissions();
   const [conversations, setConversations] = useState<Conversation[]>(seedConversations);
+
   const [templates] = useState<Template[]>(seedTemplates);
 
   const value = useMemo<Ctx>(() => {
@@ -272,8 +271,15 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
       conversations,
       templates,
       unreadCount: conversations.filter((c) => c.unread && !c.archived).length,
-      send: (conversationId, body, attachments = [], forwardedFrom) =>
+      send: (conversationId, body, attachments = [], forwardedFrom) => {
+        if (isDemo) {
+          toast.info("Simulation: Message sent. In demo mode, no real email or SMS is dispatched.", {
+            description: body.slice(0, 50) + (body.length > 50 ? "..." : ""),
+          });
+          return;
+        }
         appendMessage(conversationId, {
+
           id: uid("m"),
           conversationId,
           senderId: YOU,
