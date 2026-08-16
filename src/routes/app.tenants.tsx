@@ -163,7 +163,7 @@ function TenantsPageInner() {
               { label: "Phone", value: <a className="text-action" href={`tel:${t.phone.replace(/[^\d]/g, "")}`}>{t.phone}</a> },
               { label: "Notices on file", value: `${history.length}` },
               { label: "Autopay", value: autopay?.enabled ? <span className="text-success font-bold">Enabled</span> : <span className="text-muted-foreground">Not enrolled</span> },
-              { label: "Payment method", value: methods.length > 0 ? \`\${methods.length} connected\` : "None" },
+              { label: "Payment method", value: methods.length > 0 ? `${methods.length} connected` : "None" },
             ],
 
             actions: (

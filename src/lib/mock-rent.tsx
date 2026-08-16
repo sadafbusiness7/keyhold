@@ -202,7 +202,10 @@ function useRentStore() {
         receivedOn: input.receivedOn,
         reference: input.reference?.trim() || "—",
         ...(input.note ? { note: input.note } : {}),
+        feeCents: (input as any).feeCents || 0,
+        status: "succeeded",
       };
+
       setPayments((prev) => [...prev, payment]);
       if (over > 0) {
         setCredits((prev) => [
