@@ -14,6 +14,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DemoRouteImport } from './routes/demo'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as OwnerRouteImport } from './routes/owner'
@@ -106,6 +107,11 @@ const BlogRoute = BlogRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoRoute = DemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesRoute = FeaturesRouteImport.update({
@@ -456,6 +462,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
+  '/demo': typeof DemoRoute
   '/features': typeof FeaturesRouteWithChildren
   '/help': typeof HelpRoute
   '/owner': typeof OwnerRoute
@@ -530,6 +537,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
+  '/demo': typeof DemoRoute
   '/features': typeof FeaturesRouteWithChildren
   '/help': typeof HelpRoute
   '/owner': typeof OwnerRoute
@@ -604,6 +612,7 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
+  '/demo': typeof DemoRoute
   '/features': typeof FeaturesRouteWithChildren
   '/help': typeof HelpRoute
   '/owner': typeof OwnerRoute
@@ -681,6 +690,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/blog'
     | '/contact'
+    | '/demo'
     | '/features'
     | '/help'
     | '/owner'
@@ -755,6 +765,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/blog'
     | '/contact'
+    | '/demo'
     | '/features'
     | '/help'
     | '/owner'
@@ -828,6 +839,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/blog'
     | '/contact'
+    | '/demo'
     | '/features'
     | '/help'
     | '/owner'
@@ -904,6 +916,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
+  DemoRoute: typeof DemoRoute
   FeaturesRoute: typeof FeaturesRouteWithChildren
   HelpRoute: typeof HelpRoute
   OwnerRoute: typeof OwnerRoute
@@ -963,6 +976,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo': {
+      id: '/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features': {
@@ -1590,6 +1610,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
+  DemoRoute: DemoRoute,
   FeaturesRoute: FeaturesRouteWithChildren,
   HelpRoute: HelpRoute,
   OwnerRoute: OwnerRoute,

@@ -1,13 +1,12 @@
 /**
  * MOCK MAINTENANCE STORE — prototype state only, NOT a backend.
- * -------------------------------------------------------------
- * Holds requests, work orders, vendors, bills and recurring rules in React
- * state, and appends an action LOG to every record so the history is
- * defensible. All arithmetic lives in maintenance-engine.ts.
  */
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { toast } from "sonner";
+import { usePermissions } from "@/lib/mock-access";
 import { TODAY } from "@/lib/mock-rent";
 import { tenantById, unitById, units as allUnits } from "@/lib/mock-data";
+
 import {
   addMonthsToDate,
   makeLog,
@@ -289,11 +288,13 @@ type Ctx = ReturnType<typeof useStore>;
 const MaintenanceContext = createContext<Ctx | null>(null);
 
 function useStore() {
+  const { isDemo } = usePermissions();
   const [requests, setRequests] = useState<MaintenanceRequest[]>(seedRequests);
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>(seedWorkOrders);
   const [vendors, setVendors] = useState<Vendor[]>(seedVendors);
   const [bills, setBills] = useState<Bill[]>(seedBills);
   const [rules, setRules] = useState<RecurringRule[]>(seedRules);
+
 
   return useMemo(() => {
     const pushRequestLog = (id: string, entry: LogEntry) =>
@@ -347,6 +348,14 @@ function useStore() {
           log("assignment", "Keyhold", `Assigned to ${manager.name}.`),
         ],
       };
+
+      if (isDemo) {
+        toast.info("Simulation: Request received. In demo mode, notifications are simulated.", {
+          description: `${manager.name} would be notified by ${channel}.`,
+        });
+        return { request, manager, channel };
+      }
+
       setRequests((prev) => [request, ...prev]);
       return { request, manager, channel };
     };
@@ -367,6 +376,32 @@ function useStore() {
 
     /** Work order carries over everything from the request — no re-typing. */
     const createWorkOrder = (input: { requestId: string; vendorId: string | null; scheduledFor: string | null; notifyEmail: boolean; notifySms: boolean; actor: string; scopeOverride?: string }) => {
+      if (isDemo) {
+        toast.info("Simulation: Work order created. In demo mode, vendors are not really notified.");
+        // We still need to return a valid object for the UI to not crash if it expects it
+        const req = requests.find(r => r.id === input.requestId);
+        return { 
+          id: "WO-DEMO", 
+          requestId: input.requestId, 
+          title: req?.subcategory || "Repair",
+          status: "assigned",
+          propertyId: req?.propertyId || "",
+          unitId: req?.unitId || "",
+          tenantId: req?.tenantId || null,
+          scope: req?.description || "",
+          photos: req?.photos || [],
+          accessInstructions: req?.accessInstructions || "",
+          vendorId: input.vendorId,
+          scheduledFor: input.scheduledFor,
+          notifyEmail: input.notifyEmail,
+          notifySms: input.notifySms,
+          createdOn: TODAY,
+          completedOn: null,
+          completionNote: "",
+          log: []
+        } as WorkOrder;
+      }
+
       const request = requests.find((r) => r.id === input.requestId);
       if (!request) return null;
       const id = `WO-${workOrders.length + 1}`;
@@ -404,6 +439,12 @@ function useStore() {
     };
 
     const setWorkOrderStatus = (id: string, status: WorkOrderStatus, actor: string, note = "") => {
+      if (isDemo) {
+        toast.info(`Simulation: Work order status changed to ${status}.`, {
+          description: note || undefined,
+        });
+        return;
+      }
       setWorkOrders((prev) =>
         prev.map((w) =>
           w.id === id

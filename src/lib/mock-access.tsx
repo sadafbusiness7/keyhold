@@ -375,7 +375,9 @@ export function usePermissions() {
   } = useAccess();
 
   return useMemo(() => {
+    const isDemo = true;
     const isOwner = currentUser.accountType === "owner";
+
     const isPm = currentUser.accountType === "pm";
     const isTenant = currentUser.accountType === "tenant";
     const isOwnerClient = currentUser.accountType === "owner-client";
@@ -437,8 +439,10 @@ export function usePermissions() {
 
     return {
       user: currentUser,
+      isDemo,
       users,
       accessLog,
+
       isOwner,
       isPm,
       isTenant,
@@ -485,6 +489,8 @@ export function usePermissions() {
     currentUser,
     assignments,
     users,
+    // isDemo is a constant for now, no need in deps
+
     accessLog,
     invitePm,
     resendInvite,
@@ -497,5 +503,6 @@ export function usePermissions() {
     inviteOwner,
     setOwnerAccess,
     removeOwnerAccess,
+
   ]);
 }

@@ -24,6 +24,8 @@ import {
 } from "@/lib/mock-data";
 import { usePermissions } from "@/lib/mock-access";
 import { DashboardAnalytics } from "@/components/keyhold/dashboard-analytics";
+import { DemoTour } from "@/components/keyhold/demo-tour";
+
 
 export const Route = createFileRoute("/app/")({
   head: () => ({
@@ -281,6 +283,7 @@ function Dashboard() {
           ))}
         </div>
       </section>
+      <DemoTour />
     </>
   );
 }
