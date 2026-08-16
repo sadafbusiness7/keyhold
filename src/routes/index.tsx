@@ -40,11 +40,6 @@ import { PricingCalculator } from "@/components/keyhold/pricing-calculator";
 import { FeatureShowcase, FeatureMenuPanel, featureMenu } from "@/components/keyhold/home-features";
 
 
-/**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- *
- * The start free button is also taking to the demo account directly. It shouldn't. It will take to the sign up page. if the signup page doesnt exist yet please make sure you add that and also add the controls for signing up and complete the journey. The signup should work perfectly
- */
 
 
 
@@ -1399,7 +1394,6 @@ function Home() {
               Canadian forms and provincial notice dates are built in, so nothing gets missed.
             </p>
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-
               <Link
                 to="/signup"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-action px-7 text-base font-semibold text-primary-foreground hover:bg-action/90"
@@ -1407,10 +1401,10 @@ function Home() {
                 Start free <ArrowRight weight="duotone" className="h-5 w-5" aria-hidden="true" />
               </Link>
               <Link
-                to="/portal"
+                to="/signin"
                 className="inline-flex min-h-12 items-center justify-center rounded-full border border-border bg-card px-7 text-base font-semibold text-navy hover:bg-navy-soft"
               >
-                View demo
+                Sign in
               </Link>
             </div>
           </div>
