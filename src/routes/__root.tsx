@@ -26,6 +26,8 @@ import { ConsentProvider } from "../lib/mock-consent";
 import { ThemeProvider, themeBootScript } from "../lib/theme";
 import { PortfolioProvider } from "../lib/mock-portfolio";
 import { I18nProvider } from "../lib/i18n";
+import { BrandingProvider } from "../lib/mock-branding";
+import { registerServiceWorker } from "../lib/pwa";
 
 import { DemoBanner } from "../components/keyhold/demo-banner";
 
@@ -127,6 +129,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -165,6 +169,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
       <I18nProvider>
+      <BrandingProvider>
       <PortfolioProvider>
       <LeasingProvider>
         <AccessProvider>
@@ -188,6 +193,7 @@ function RootComponent() {
         </AccessProvider>
       </LeasingProvider>
       </PortfolioProvider>
+      </BrandingProvider>
       </I18nProvider>
       </ThemeProvider>
     </QueryClientProvider>
