@@ -1091,7 +1091,8 @@ export function PortalPaymentFlow({
           receivedOn: scope.today,
           reference: `Live-Demo-${Math.random().toString(36).slice(2, 7).toUpperCase()}`,
           feeCents: fee,
-        });
+        } as any);
+
         setStep("success");
       }),
       {
