@@ -303,13 +303,19 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
       <div className={`${collapsed ? "lg:ps-20" : "lg:ps-64"}`}>
         {/* Desktop top bar with global search */}
         <header className="sticky top-0 z-20 hidden border-b border-border bg-sidebar/90 backdrop-blur lg:block">
-          <div className="mx-auto flex w-full max-w-6xl items-center justify-end gap-3 px-6 py-3">
-            <GlobalSearch />
-            <ShortcutsButton />
-            <ThemeToggleButton />
-            <NotificationBell />
-            <AccountMenu />
+          <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-6 py-3">
+            <div className="flex items-center gap-3">
+              <PortfolioSelector />
+            </div>
+            <div className="flex items-center gap-3">
+              <GlobalSearch />
+              <ShortcutsButton />
+              <ThemeToggleButton />
+              <NotificationBell />
+              <AccountMenu />
+            </div>
           </div>
+
         </header>
         <main id="main-content" className="mx-auto w-full max-w-6xl px-4 py-6 pb-28 sm:px-6 lg:py-10" tabIndex={-1}>
           <ModuleBoundary name="This screen">{children}</ModuleBoundary>
