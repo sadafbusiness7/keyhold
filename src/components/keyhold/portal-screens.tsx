@@ -342,7 +342,9 @@ export function PortalCreditCard() {
 
 /* ————————————————————————— 2. rent ————————————————————————— */
 export function PortalRent({ scope }: { scope: ReturnType<typeof usePortalScope> }) {
+  const [paymentInvoice, setPaymentInvoice] = useState<Invoice | null>(null);
   const { rent, invoices, payments, balanceOwed, creditCents } = scope;
+
   const year = Number(rent.today.slice(0, 4));
 
   const downloadYearly = (y: number) => {
@@ -368,16 +370,37 @@ export function PortalRent({ scope }: { scope: ReturnType<typeof usePortalScope>
     <div className="space-y-6">
       <h1 className="font-display text-2xl font-extrabold text-navy">Rent</h1>
 
+      <PortalAutopayCard scope={scope} />
+
       <RailCard status={balanceOwed > 0 ? "overdue" : "paid"} className="p-5">
+
         <p className="text-sm text-muted-foreground">What you owe right now</p>
         <p className="money mt-1 text-4xl font-extrabold text-navy">{money(balanceOwed)}</p>
         {creditCents > 0 && (
           <p className="mt-1 text-sm text-success">You have {money(creditCents)} in credit on your account.</p>
         )}
-        <button type="button" className={`${primaryBtn} mt-4`} onClick={() => toast.success("Payment instructions sent to your email.")}>
+        <button
+          type="button"
+          className={`${primaryBtn} mt-4`}
+          onClick={() => {
+            const openInvoices = invoices.filter(i => balanceCents(i, rent.payments) > 0);
+            if (openInvoices.length > 0) {
+              setPaymentInvoice(openInvoices[0]!);
+            }
+          }}
+        >
           Pay rent
         </button>
       </RailCard>
+
+      {paymentInvoice && (
+        <PortalPaymentFlow
+          invoice={paymentInvoice}
+          scope={scope}
+          onClose={() => setPaymentInvoice(null)}
+        />
+      )}
+
 
       <section aria-labelledby="tax-receipt" className="card-soft p-5">
         <h2 id="tax-receipt" className="font-display text-lg font-bold text-navy">Yearly rent receipt</h2>
