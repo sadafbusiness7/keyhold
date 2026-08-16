@@ -1195,7 +1195,7 @@ function TestimonialCard({ t }: { t: (typeof testimonials)[number] }) {
         style={{ color }}
         aria-hidden="true"
       />
-      <div className="flex gap-0.5" aria-label="Five out of five stars">
+      <div className="flex gap-0.5" role="img" aria-label="Five out of five stars">
         {[0, 1, 2, 3, 4].map((i) => (
           <Star key={i} weight="fill" className="h-4 w-4" style={{ color }} aria-hidden="true" />
         ))}
@@ -1576,10 +1576,11 @@ function Home() {
             </p>
           </div>
 
-          <ol className="mt-10 grid gap-4 md:grid-cols-3">
+          <ul className="mt-10 grid gap-4 md:grid-cols-3">
             {assistantSteps.map((s, i) => (
               <RevealPanel key={s.title} className="h-full">
-                <li className="card-soft min-w-0 h-full list-none p-6">
+                <li className="card-soft min-w-0 h-full p-6">
+
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-action-soft font-display text-sm font-extrabold text-action tnum">
                     {i + 1}
                   </span>
@@ -1596,7 +1597,7 @@ function Home() {
                 </li>
               </RevealPanel>
             ))}
-          </ol>
+          </ul>
 
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {assistantStats.map((s) => (

@@ -145,7 +145,7 @@ export function OfflineBanner() {
     <div
       role="status"
       aria-live="polite"
-      className={`flex items-center justify-center gap-2 px-4 py-2 text-center text-xs font-semibold ${
+      className={`flex items-center justify-center gap-2 px-4 py-2 text-center text-xs font-semibold no-print ${
         online ? "bg-success-soft text-success" : "bg-warning-soft text-warning"
       }`}
     >

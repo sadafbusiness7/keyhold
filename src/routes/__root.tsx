@@ -139,8 +139,10 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
       </head>
-      <body>
+      <body className="min-h-screen bg-background text-foreground antialiased">
+        <a href="#main-content" className="skip-link sr-only focus:not-sr-only">Skip to content</a>
         {children}
+
         <Scripts />
       </body>
     </html>

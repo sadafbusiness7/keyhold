@@ -47,7 +47,7 @@ export function DemoSwitcher({ compact = false, position = "relative" }: { compa
         <UserSwitch weight="duotone" className="h-5 w-5 shrink-0" aria-hidden="true" />
         {!compact && (
           <span className="min-w-0 flex-1">
-            <span className="block text-[10px] uppercase tracking-widest opacity-70">Demo: view as…</span>
+            <span className="block text-[10px] uppercase tracking-widest font-bold text-navy/80">Demo: view as…</span>
             <span className="block truncate">{user.name} · {roleLabel}</span>
           </span>
         )}
