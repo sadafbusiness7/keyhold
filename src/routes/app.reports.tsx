@@ -285,12 +285,21 @@ function ReportsPage() {
         ]),
       };
     }
+    if (report === "turnover") {
+      const rows = turnoverAnalysis({ units: allUnits, properties: perms.properties });
+      return {
+        title: "Turnover analysis",
+        headers: ["Property", "Unit", "Status", "Days Vacant", "Lost Rent", "Make-Ready Cost"],
+        rows: rows.map((r) => [r.property, r.unit, r.status, r.daysVacant, money(r.costCents), money(r.turnoverCostCents)]),
+      };
+    }
     const rows = depositLedger({ leases: scopedLeases, units, properties: scopedProperties, tenants, invoices, payments, today });
     return {
       title: "Security deposit ledger",
       headers: ["Tenant", "Property", "Home", "State", "Held", "Applied", "Returned", "Since"],
       rows: rows.map((r) => [r.tenant, r.property, r.unit, r.state, money(r.heldCents), money(r.appliedCents), money(r.returnedCents), r.since]),
     };
+
   }, [report, propertyId, from, to, invoices, payments, bills, requests.length, workOrders.length, today, properties.length, statements]);
 
   const subtitle = `${propertyId === "all" ? "All properties" : scopedProperties[0]?.name ?? ""} · ${longDate(from)} – ${longDate(to)}`;
