@@ -16,7 +16,10 @@ export function useUnsavedChanges(isDirty: boolean, message = "You have unsaved 
 
 
     window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+
   }, [isDirty, message]);
 }
 

@@ -84,7 +84,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           </button>
           <Link to="/" className="text-sm font-semibold text-navy hover:underline">Back to homepage</Link>
         </div>
-        {process.env.NODE_ENV === "development" && (
+        {process.env["NODE_ENV"] === "development" && (
           <pre className="mt-8 text-left text-[10px] overflow-auto max-h-40 p-4 bg-surface-sunk rounded-xl">
             {error.message}
           </pre>
