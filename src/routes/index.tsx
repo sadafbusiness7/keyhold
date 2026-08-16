@@ -40,11 +40,6 @@ import { PricingCalculator } from "@/components/keyhold/pricing-calculator";
 import { FeatureShowcase, FeatureMenuPanel, featureMenu } from "@/components/keyhold/home-features";
 
 
-/**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- *
- * The start free button is also taking to the demo account directly. It shouldn't. It will take to the sign up page. if the signup page doesnt exist yet please make sure you add that and also add the controls for signing up and complete the journey. The signup should work perfectly
- */
 
 
 
