@@ -371,6 +371,7 @@ export function PortalRent({ scope }: { scope: ReturnType<typeof usePortalScope>
       <h1 className="font-display text-2xl font-extrabold text-navy">Rent</h1>
 
       <PortalAutopayCard scope={scope} />
+      <PortalDeposits scope={scope} />
 
       <RailCard status={balanceOwed > 0 ? "overdue" : "paid"} className="p-5">
 
