@@ -227,9 +227,12 @@ export const EMAIL_TEMPLATES = {
               <EmailDetail label="Issued To" value={data.tenantName} />
             </div>
             <EmailButton href={data.viewUrl}>Review Notice</EmailButton>
-            <EmailP style={{ fontSize: "14px", color: "#6B7280" }}>This is a formal communication. If you have questions, please contact your manager directly.</EmailP>
+            <p style={{ fontSize: "14px", color: "#6B7280", margin: "0", lineHeight: "1.5" }}>
+              This is a formal communication. If you have questions, please contact your manager directly.
+            </p>
           </td>
         </tr>
+
       </EmailLayout>
     ),
     text: (data: any) => `Important Notice Served\n\nHi ${data.tenantName}, a formal ${data.noticeType} has been served for ${data.address}. View here: ${data.viewUrl}`,
