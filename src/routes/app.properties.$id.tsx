@@ -147,7 +147,7 @@ function PropertyDetailPage() {
                 { key: "status", label: "Status", sortable: false, value: u => u.status || (u.tenantId ? "occupied" : "vacant"), render: u => (
                   <StatusLabel status={u.status || (u.tenantId ? "occupied" : "vacant")} />
                 )},
-                { key: "actions", label: "", locked: true, align: "right", render: u => {
+                { key: "actions", label: "", locked: true, align: "right", value: () => "", render: u => {
                   const status = u.status || (u.tenantId ? "occupied" : "vacant");
                   if (status === "vacant" || status === "turnover") {
                     return (
@@ -162,6 +162,7 @@ function PropertyDetailPage() {
                   }
                   return null;
                 }},
+
 
               ]}
               emptyIcon={DoorOpen}
