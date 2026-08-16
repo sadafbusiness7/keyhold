@@ -61,6 +61,8 @@ import { Route as AppLeasesNewRouteImport } from './routes/app.leases.new'
 import { Route as AppLeasesSignRouteImport } from './routes/app.leases.sign'
 import { Route as AppProspectsIndexRouteImport } from './routes/app.prospects.index'
 import { Route as AppProspectsProspectIdRouteImport } from './routes/app.prospects.$prospectId'
+import { Route as ApiPublicCalendarFeedRouteImport } from './routes/api/public/calendar/feed'
+import { Route as ApiPublicEmailInboundRouteImport } from './routes/api/public/email/inbound'
 import { Route as AppLeasesWizardIndexRouteImport } from './routes/app.leases.wizard.index'
 import { Route as AppLeasesWizardProspectIdRouteImport } from './routes/app.leases.wizard.$prospectId'
 
@@ -324,6 +326,16 @@ const AppProspectsProspectIdRoute = AppProspectsProspectIdRouteImport.update({
   path: '/$prospectId',
   getParentRoute: () => AppProspectsRoute,
 } as any)
+const ApiPublicCalendarFeedRoute = ApiPublicCalendarFeedRouteImport.update({
+  id: '/api/public/calendar/feed',
+  path: '/api/public/calendar/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicEmailInboundRoute = ApiPublicEmailInboundRouteImport.update({
+  id: '/api/public/email/inbound',
+  path: '/api/public/email/inbound',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppLeasesWizardIndexRoute = AppLeasesWizardIndexRouteImport.update({
   id: '/wizard/',
   path: '/wizard/',
@@ -389,6 +401,8 @@ export interface FileRoutesByFullPath {
   '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
   '/app/leases/': typeof AppLeasesIndexRoute
   '/app/prospects/': typeof AppProspectsIndexRoute
+  '/api/public/calendar/feed': typeof ApiPublicCalendarFeedRoute
+  '/api/public/email/inbound': typeof ApiPublicEmailInboundRoute
   '/app/leases/wizard/$prospectId': typeof AppLeasesWizardProspectIdRoute
   '/app/leases/wizard/': typeof AppLeasesWizardIndexRoute
 }
@@ -442,6 +456,8 @@ export interface FileRoutesByTo {
   '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
   '/app/leases': typeof AppLeasesIndexRoute
   '/app/prospects': typeof AppProspectsIndexRoute
+  '/api/public/calendar/feed': typeof ApiPublicCalendarFeedRoute
+  '/api/public/email/inbound': typeof ApiPublicEmailInboundRoute
   '/app/leases/wizard/$prospectId': typeof AppLeasesWizardProspectIdRoute
   '/app/leases/wizard': typeof AppLeasesWizardIndexRoute
 }
@@ -499,6 +515,8 @@ export interface FileRoutesById {
   '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
   '/app/leases/': typeof AppLeasesIndexRoute
   '/app/prospects/': typeof AppProspectsIndexRoute
+  '/api/public/calendar/feed': typeof ApiPublicCalendarFeedRoute
+  '/api/public/email/inbound': typeof ApiPublicEmailInboundRoute
   '/app/leases/wizard/$prospectId': typeof AppLeasesWizardProspectIdRoute
   '/app/leases/wizard/': typeof AppLeasesWizardIndexRoute
 }
@@ -557,6 +575,8 @@ export interface FileRouteTypes {
     | '/app/prospects/$prospectId'
     | '/app/leases/'
     | '/app/prospects/'
+    | '/api/public/calendar/feed'
+    | '/api/public/email/inbound'
     | '/app/leases/wizard/$prospectId'
     | '/app/leases/wizard/'
   fileRoutesByTo: FileRoutesByTo
@@ -610,6 +630,8 @@ export interface FileRouteTypes {
     | '/app/prospects/$prospectId'
     | '/app/leases'
     | '/app/prospects'
+    | '/api/public/calendar/feed'
+    | '/api/public/email/inbound'
     | '/app/leases/wizard/$prospectId'
     | '/app/leases/wizard'
   id:
@@ -666,6 +688,8 @@ export interface FileRouteTypes {
     | '/app/prospects/$prospectId'
     | '/app/leases/'
     | '/app/prospects/'
+    | '/api/public/calendar/feed'
+    | '/api/public/email/inbound'
     | '/app/leases/wizard/$prospectId'
     | '/app/leases/wizard/'
   fileRoutesById: FileRoutesById
@@ -685,6 +709,8 @@ export interface RootRouteChildren {
   LegalTermsRoute: typeof LegalTermsRoute
   ListingSlugRoute: typeof ListingSlugRoute
   LegalIndexRoute: typeof LegalIndexRoute
+  ApiPublicCalendarFeedRoute: typeof ApiPublicCalendarFeedRoute
+  ApiPublicEmailInboundRoute: typeof ApiPublicEmailInboundRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1053,6 +1079,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProspectsProspectIdRouteImport
       parentRoute: typeof AppProspectsRoute
     }
+    '/api/public/calendar/feed': {
+      id: '/api/public/calendar/feed'
+      path: '/api/public/calendar/feed'
+      fullPath: '/api/public/calendar/feed'
+      preLoaderRoute: typeof ApiPublicCalendarFeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/email/inbound': {
+      id: '/api/public/email/inbound'
+      path: '/api/public/email/inbound'
+      fullPath: '/api/public/email/inbound'
+      preLoaderRoute: typeof ApiPublicEmailInboundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/leases/wizard/': {
       id: '/app/leases/wizard/'
       path: '/wizard'
@@ -1193,6 +1233,8 @@ const rootRouteChildren: RootRouteChildren = {
   LegalTermsRoute: LegalTermsRoute,
   ListingSlugRoute: ListingSlugRoute,
   LegalIndexRoute: LegalIndexRoute,
+  ApiPublicCalendarFeedRoute: ApiPublicCalendarFeedRoute,
+  ApiPublicEmailInboundRoute: ApiPublicEmailInboundRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
