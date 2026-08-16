@@ -15,7 +15,9 @@ import {
   CurrencyDollar,
   Bank,
   Calculator,
+  Users,
 } from "@phosphor-icons/react";
+
 import { toast } from "sonner";
 import { RequireFinancials } from "@/components/keyhold/access-guard";
 import { PageHeader } from "@/components/keyhold/app-shell";
