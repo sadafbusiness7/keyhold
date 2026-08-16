@@ -82,7 +82,9 @@ type ReportKey =
   | "vendor-spend"
   | "lease-expiry"
   | "disbursements"
-  | "deposits";
+  | "deposits"
+  | "turnover";
+
 
 const REPORTS: { key: ReportKey; label: string; blurb: string }[] = [
   { key: "rent-roll", label: "Rent roll", blurb: "Every home, who lives there, what they pay and when the lease ends." },
@@ -96,7 +98,9 @@ const REPORTS: { key: ReportKey; label: string; blurb: string }[] = [
   { key: "lease-expiry", label: "Lease expiry schedule", blurb: "Every tenancy ending in the next twelve months." },
   { key: "disbursements", label: "Owner disbursements", blurb: "Statement and net payable for each managed property." },
   { key: "deposits", label: "Security deposit ledger", blurb: "Deposits held, applied and returned." },
+  { key: "turnover", label: "Unit turnover analysis", blurb: "Make-ready costs, vacancy duration, and rent lost during turnover." },
 ];
+
 
 function ReportsPage() {
   const perms = usePermissions();
