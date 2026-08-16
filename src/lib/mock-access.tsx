@@ -373,9 +373,12 @@ export function usePermissions() {
     setOwnerAccess,
     removeOwnerAccess,
   } = useAccess();
+  
+  const { scopedPropertyIds, activeScope } = usePortfolio();
 
   return useMemo(() => {
     const isDemo = true;
+
     const isOwner = currentUser.accountType === "owner";
 
     const isPm = currentUser.accountType === "pm";
