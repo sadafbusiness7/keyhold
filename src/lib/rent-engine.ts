@@ -219,6 +219,7 @@ export function annualInterestOwing(deposit: Deposit): number {
   return Math.round(deposit.amountCents * (deposit.interestRate ?? ONTARIO_INTEREST_GUIDELINE));
 }
 
+export const ONTARIO_INTEREST_GUIDELINE = 0.025; // 2.5%
 export const LEGAL_DISCLAIMER = "General information only, not legal advice. Rates and requirements vary by province.";
 export const LTB_SOURCE_URL = "https://www.ontario.ca/page/rent-increase-guideline";
 
