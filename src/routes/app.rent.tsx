@@ -350,7 +350,7 @@ function RentPageInner() {
   );
 }
 
-function CreditsPanel() {
+function CreditsPanel({ setLedgerTenantId }: { setLedgerTenantId: (id: string) => void }) {
   const rent = useRent();
   return (
     <div className="space-y-4">
