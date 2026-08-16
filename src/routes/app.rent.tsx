@@ -13,6 +13,8 @@ import {
   PaperPlaneTilt,
   EnvelopeSimple,
   CurrencyDollar,
+  Bank,
+  Calculator,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { RequireFinancials } from "@/components/keyhold/access-guard";
