@@ -48,13 +48,14 @@ export const EmailLayout = ({ previewText, children }: EmailProps) => (
 export const EmailButton = ({ href, children }: { href: string; children: React.ReactNode }) => (
   <table border={0} cellPadding={0} cellSpacing={0} style={{ margin: "24px 0" }}>
     <tr>
-      <td align="center" bgcolor={ACTION_COLOR} style={{ borderRadius: "100px" }}>
+      <td align="center" style={{ backgroundColor: ACTION_COLOR, borderRadius: "100px" }}>
         <a href={href} style={{ fontSize: "16px", fontWeight: "bold", color: "#FFFFFF", textDecoration: "none", padding: "12px 32px", display: "inline-block" }}>
           {children}
         </a>
       </td>
     </tr>
   </table>
+
 );
 
 export const EmailH1 = ({ children }: { children: React.ReactNode }) => (
