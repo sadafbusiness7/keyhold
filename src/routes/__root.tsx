@@ -178,3 +178,11 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
+
+function DemoGate() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isDemo = pathname.startsWith("/app") || pathname.startsWith("/portal") || pathname.startsWith("/owner");
+  if (!isDemo) return null;
+  return <DemoBanner />;
+}
+
