@@ -29,7 +29,8 @@ import { DataList } from "@/components/keyhold/data-list";
 import { useRent } from "@/lib/mock-rent";
 import { useMaintenance } from "@/lib/mock-maintenance";
 import { useMessages } from "@/lib/mock-messages";
-import { money, invoiceStatus, balanceCents } from "@/lib/rent-engine";
+import { money, invoiceStatus, balanceCents, paidCents } from "@/lib/rent-engine";
+
 
 export const Route = createFileRoute("/app/tenants/$id")({
   component: TenantDetailPage,
@@ -53,7 +54,8 @@ function TenantDetailPage() {
   const tenantLeases = useMemo(() => allLeases.filter(l => l.tenantId === id), [id]);
   const tenantInvoices = useMemo(() => rent.invoices.filter(i => i.tenantId === id), [rent.invoices, id]);
   const tenantRequests = useMemo(() => maintenance.requests.filter(r => r.tenantId === id), [maintenance.requests, id]);
-  const tenantThread = useMemo(() => messages.threads.find(th => th.tenantId === id), [messages.threads, id]);
+  const tenantThread = useMemo(() => messages.conversations.find(c => c.participantIds.includes(id)), [messages.conversations, id]);
+
 
   if (!tenant) return <div className="p-8 text-center">Tenant not found</div>;
 
