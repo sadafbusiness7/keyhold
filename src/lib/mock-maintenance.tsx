@@ -376,6 +376,13 @@ function useStore() {
 
     /** Work order carries over everything from the request — no re-typing. */
     const createWorkOrder = (input: { requestId: string; vendorId: string | null; scheduledFor: string | null; notifyEmail: boolean; notifySms: boolean; actor: string; scopeOverride?: string }) => {
+      if (isDemo) {
+        toast.info("Simulation: Work order created. In demo mode, vendors are not really notified.");
+        // We still need to return a valid object for the UI to not crash if it expects it
+        const req = requests.find(r => r.id === input.requestId);
+        return { id: "WO-DEMO", requestId: input.requestId, title: req?.subcategory || "Repair" };
+      }
+
       const request = requests.find((r) => r.id === input.requestId);
       if (!request) return null;
       const id = `WO-${workOrders.length + 1}`;
