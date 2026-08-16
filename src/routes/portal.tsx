@@ -11,6 +11,8 @@ import {
   ShieldWarning,
 } from "@phosphor-icons/react";
 import { AskKeyhold } from "@/components/keyhold/ask-keyhold";
+import { InstallPrompt } from "@/components/keyhold/install-prompt";
+import { brandStyle, useBranding } from "@/lib/mock-branding";
 import { AccountMenu } from "@/components/keyhold/account-menu";
 import {
   PortalHome,
@@ -52,16 +54,27 @@ function Portal() {
   const scope = usePortalScope();
   const [tab, setTab] = useState<PortalTab>("home");
   const [sos, setSos] = useState(false);
+  const { branding } = useBranding();
 
   return (
-    <div className="min-h-screen bg-background pb-[calc(72px+env(safe-area-inset-bottom))]">
+    <div className="min-h-screen bg-background pb-[calc(72px+env(safe-area-inset-bottom))]" style={brandStyle(branding)}>
       <header className="sticky top-0 z-20 border-b border-border bg-sidebar px-4 py-3">
         <div className="mx-auto flex max-w-2xl items-center justify-between gap-3">
           <Link to="/" className="flex items-center gap-2.5 text-navy">
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-navy text-primary-foreground">
-              <Key weight="duotone" className="h-5 w-5" aria-hidden="true" />
-            </span>
-            <span className="font-display text-base font-extrabold">Keyhold</span>
+            {branding.logoDataUrl ? (
+              <img
+                src={branding.logoDataUrl}
+                alt={`${branding.companyName} home`}
+                className="max-h-10 max-w-[9.5rem] object-contain"
+              />
+            ) : (
+              <>
+                <span className="grid h-10 w-10 place-items-center rounded-xl bg-navy text-primary-foreground">
+                  <Key weight="duotone" className="h-5 w-5" aria-hidden="true" />
+                </span>
+                <span className="font-display text-base font-extrabold">{branding.companyName}</span>
+              </>
+            )}
           </Link>
           <div className="flex items-center gap-2">
             <button
@@ -90,6 +103,7 @@ function Portal() {
       </header>
 
       <main className="mx-auto max-w-2xl px-4 py-6">
+        <InstallPrompt audience="portal" />
         {tab === "home" && <PortalHome scope={scope} go={setTab} />}
         {tab === "rent" && <PortalRent scope={scope} />}
         {tab === "repairs" && <PortalRepairs scope={scope} />}
@@ -125,6 +139,9 @@ function Portal() {
       </nav>
 
       {sos && <PortalSos scope={scope} onClose={() => setSos(false)} />}
+      {branding.showPoweredBy && branding.companyName !== "Keyhold" && (
+        <p className="pb-2 text-center text-xs text-muted-foreground">Powered by Keyhold</p>
+      )}
       <AskKeyhold bottomClass="bottom-[calc(84px+env(safe-area-inset-bottom))] sm:bottom-[calc(84px+env(safe-area-inset-bottom))]" />
     </div>
   );
