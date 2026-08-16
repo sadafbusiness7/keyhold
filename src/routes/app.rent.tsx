@@ -345,7 +345,7 @@ function RentPageInner() {
         />
       )}
 
-      {tab === "credits" && <CreditsPanel setLedgerTenantId={setLedgerTenantId} />}
+      {tab === "credits" && <CreditsPanel setLedgerTenantId={setLedgerTenantId} setStatementTenantId={setStatementTenantId} />}
       {tab === "payouts" && <PayoutsPanel />}
       {tab === "arrears" && <ArrearsPanel />}
       {tab === "movedout" && <MovedOutPanel />}
@@ -363,7 +363,14 @@ function RentPageInner() {
   );
 }
 
-function CreditsPanel({ setLedgerTenantId }: { setLedgerTenantId: (id: string) => void }) {
+function CreditsPanel({ 
+  setLedgerTenantId, 
+  setStatementTenantId 
+}: { 
+  setLedgerTenantId: (id: string) => void;
+  setStatementTenantId: (id: string) => void;
+}) {
+
   const rent = useRent();
   return (
     <div className="space-y-4">
