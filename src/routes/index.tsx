@@ -1394,9 +1394,6 @@ function Home() {
               Canadian forms and provincial notice dates are built in, so nothing gets missed.
             </p>
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-
-              <Link
-                to="/signup"
               <Link
                 to="/signup"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-action px-7 text-base font-semibold text-primary-foreground hover:bg-action/90"
