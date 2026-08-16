@@ -1,50 +1,58 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Buildings, Check, X } from "@phosphor-icons/react";
+import { createFileRoute } from "@tanstack/react-router";
+import { MarketingShell } from "@/components/keyhold/marketing-shell";
+import { Check, X, WarningCircle } from "@phosphor-icons/react";
 
 export const Route = createFileRoute("/vs/buildium")({
+  head: () => ({
+    meta: [
+      { title: "Keyhold vs Buildium — Which is right for you?" },
+      { name: "description", content: "A fair comparison of Keyhold and Buildium for Canadian landlords. Simple vs Comprehensive." },
+    ],
+  }),
   component: VsBuildiumPage,
 });
 
 function VsBuildiumPage() {
   return (
-    <div className="min-h-screen bg-surface text-navy">
-       <header className="border-b border-border bg-white">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-navy text-white">
-              <Buildings weight="duotone" className="h-5 w-5" />
-            </span>
-            <span className="font-display text-lg font-extrabold text-navy">Keyhold</span>
-          </Link>
-        </nav>
-      </header>
-      
+    <MarketingShell>
       <main className="mx-auto max-w-4xl px-4 py-20">
-        <h1 className="font-display text-4xl font-extrabold">Keyhold vs Buildium</h1>
-        <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-          Buildium is a powerhouse for large-scale property management. If you manage 500 units, you probably need it. 
-          But for Canadian landlords with 2–20 units, it's often more than you need at a higher price than you'd like.
+        <h1 className="font-display text-4xl font-extrabold text-navy text-center">Keyhold vs Buildium</h1>
+        <p className="mt-6 text-xl text-muted-foreground leading-relaxed text-center max-w-2xl mx-auto">
+          Buildium is a powerhouse for large-scale property management. But for self-managing Canadian landlords, it's often more than you need.
         </p>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2">
-            <div className="card-soft p-8 bg-success-soft/30 border-success/20">
-                <h3 className="font-bold text-lg text-success flex items-center gap-2"><Check /> Where Buildium wins</h3>
-                <ul className="mt-4 space-y-3 text-sm">
-                    <li>Comprehensive trust accounting</li>
-                    <li>Integrated vendor marketplace</li>
-                    <li>Built-in commercial management</li>
+        <div className="mt-16 grid gap-8 sm:grid-cols-2">
+            <div className="card-soft p-10 bg-white border-2 border-success/10">
+                <h3 className="font-display text-2xl font-extrabold text-success flex items-center gap-2"><Check /> Where Buildium wins</h3>
+                <p className="mt-4 text-sm text-muted-foreground">Choose Buildium if you manage 100+ units or require:</p>
+                <ul className="mt-6 space-y-4 text-sm font-medium text-navy">
+                    <li className="flex items-start gap-3"><Check className="text-success shrink-0" /> Multi-entity trust accounting</li>
+                    <li className="flex items-start gap-3"><Check className="text-success shrink-0" /> Integrated vendor marketplace</li>
+                    <li className="flex items-start gap-3"><Check className="text-success shrink-0" /> Built-in commercial management</li>
+                    <li className="flex items-start gap-3"><Check className="text-success shrink-0" /> Community association features</li>
                 </ul>
             </div>
-            <div className="card-soft p-8 bg-action-soft/30 border-action/20">
-                <h3 className="font-bold text-lg text-action flex items-center gap-2"><Check /> Where Keyhold wins</h3>
-                <ul className="mt-4 space-y-3 text-sm">
-                    <li>Flat CA$4.99/mo pricing for small portfolios</li>
-                    <li>Native Ontario Standard Lease & LTB forms</li>
-                    <li>AI-assisted maintenance workflows</li>
+            <div className="card-soft p-10 bg-white border-2 border-action/10">
+                <h3 className="font-display text-2xl font-extrabold text-action flex items-center gap-2"><Check /> Where Keyhold wins</h3>
+                <p className="mt-4 text-sm text-muted-foreground">Choose Keyhold if you manage 2–20 units and value:</p>
+                <ul className="mt-6 space-y-4 text-sm font-medium text-navy">
+                    <li className="flex items-start gap-3"><Check className="text-action shrink-0" /> Native Ontario LTB Compliance</li>
+                    <li className="flex items-start gap-3"><Check className="text-action shrink-0" /> CA$4.99/mo flat price (No minimums)</li>
+                    <li className="flex items-start gap-3"><Check className="text-action shrink-0" /> Simple, mobile-friendly interface</li>
+                    <li className="flex items-start gap-3"><Check className="text-action shrink-0" /> AI-powered maintenance triage</li>
                 </ul>
             </div>
         </div>
+
+        <div className="mt-20 p-8 rounded-3xl bg-surface-sunk text-center border border-border">
+            <WarningCircle className="mx-auto h-8 w-8 text-muted-foreground" weight="duotone" />
+            <h4 className="mt-4 font-bold text-navy">Honest Assessment</h4>
+            <p className="mt-2 text-sm text-muted-foreground max-w-xl mx-auto">
+                Buildium is a enterprise-grade tool with a price tag to match. Keyhold is a focused tool built specifically 
+                to handle the unique regulations of the Canadian rental market.
+            </p>
+        </div>
       </main>
-    </div>
+    </MarketingShell>
   );
 }

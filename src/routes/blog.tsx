@@ -1,40 +1,65 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Buildings, BookOpen } from "@phosphor-icons/react";
+import { MarketingShell } from "@/components/keyhold/marketing-shell";
+import { ArrowRight } from "@phosphor-icons/react";
 
 export const Route = createFileRoute("/blog")({
+  head: () => ({
+    meta: [
+      { title: "Landlord Resources — Keyhold Blog" },
+      { name: "description", content: "Expert advice on Ontario property management, RTA compliance, and tax optimization for landlords." },
+    ],
+  }),
   component: BlogPage,
 });
 
 function BlogPage() {
   return (
-    <div className="min-h-screen bg-surface">
-      <header className="border-b border-border bg-white">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-navy text-white">
-              <Buildings weight="duotone" className="h-5 w-5" />
-            </span>
-            <span className="font-display text-lg font-extrabold text-navy">Keyhold</span>
-          </Link>
-        </nav>
-      </header>
+    <MarketingShell>
+      <div className="mx-auto max-w-6xl px-4 py-20">
+        <h1 className="font-display text-4xl font-extrabold text-navy">Landlord Resources</h1>
+        <p className="mt-6 text-lg text-muted-foreground max-w-2xl">
+            Guides, news, and insights to help you manage your properties more effectively in Canada.
+        </p>
 
-      <main className="mx-auto max-w-6xl px-4 py-20">
-        <h1 className="font-display text-3xl font-extrabold text-navy">Resources for Canadian Landlords</h1>
-        <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
             {[
-                { title: "Guide: The Ontario Standard Lease", date: "Aug 12, 2026" },
-                { title: "How to handle rent increases in 2026", date: "Aug 05, 2026" },
-                { title: "LTB filing guide for beginners", date: "Jul 28, 2026" },
+                { 
+                    title: "The Ultimate Guide to the Ontario Standard Lease", 
+                    category: "Compliance", 
+                    date: "Aug 12, 2026",
+                    desc: "Everything you need to know about the mandatory OSL and what clauses you can (and can't) add."
+                },
+                { 
+                    title: "How to Calculate Rent Increases in 2026", 
+                    category: "Financials", 
+                    date: "Aug 05, 2026",
+                    desc: "A breakdown of the 2.5% guideline and how to serve an N1 notice correctly."
+                },
+                { 
+                    title: "LTB Filing Guide for Self-Managing Landlords", 
+                    category: "Guides", 
+                    date: "Jul 28, 2026",
+                    desc: "Step-by-step instructions for filing N4 and L1 applications via the LTB portal."
+                },
             ].map(post => (
-                <div key={post.title} className="group cursor-pointer">
-                    <div className="aspect-[16/9] w-full rounded-2xl bg-navy-soft transition-transform group-hover:scale-[1.02]" />
-                    <p className="mt-4 text-xs font-bold text-action uppercase tracking-widest">{post.date}</p>
-                    <h3 className="mt-2 text-xl font-bold text-navy group-hover:underline">{post.title}</h3>
+                <div key={post.title} className="group cursor-pointer flex flex-col">
+                    <div className="aspect-[16/9] w-full rounded-3xl bg-navy-soft overflow-hidden">
+                        <div className="w-full h-full bg-gradient-to-br from-navy/5 to-navy/20 group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                    <div className="mt-6 flex items-center gap-3">
+                        <span className="text-xs font-bold text-action uppercase tracking-widest">{post.category}</span>
+                        <span className="text-xs text-muted-foreground">•</span>
+                        <span className="text-xs text-muted-foreground">{post.date}</span>
+                    </div>
+                    <h3 className="mt-3 text-2xl font-extrabold text-navy group-hover:underline leading-tight">{post.title}</h3>
+                    <p className="mt-4 text-muted-foreground text-sm flex-1 leading-relaxed">{post.desc}</p>
+                    <div className="mt-6 flex items-center gap-2 text-sm font-bold text-navy">
+                        Read more <ArrowRight weight="bold" />
+                    </div>
                 </div>
             ))}
         </div>
-      </main>
-    </div>
+      </div>
+    </MarketingShell>
   );
 }
