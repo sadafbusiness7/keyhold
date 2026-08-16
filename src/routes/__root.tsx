@@ -168,7 +168,9 @@ function RootComponent() {
       <LeasingProvider>
         <AccessProvider>
           <RentProvider>
+            <PortfolioProvider>
             <NoticesProvider>
+
               <MaintenanceProvider>
                 <OwnersProvider>
                   <CanadaProvider>
@@ -181,6 +183,8 @@ function RootComponent() {
                 </OwnersProvider>
               </MaintenanceProvider>
             </NoticesProvider>
+            </PortfolioProvider>
+
           </RentProvider>
         </AccessProvider>
       </LeasingProvider>
