@@ -10,10 +10,10 @@ export function useUnsavedChanges(isDirty: boolean, message = "You have unsaved 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (isDirty) {
         e.preventDefault();
-        e.returnValue = message;
-        return message;
+        return (e.returnValue = message);
       }
     };
+
 
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);

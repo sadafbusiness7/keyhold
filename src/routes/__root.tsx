@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import { Toaster } from "sonner";
 import { useRouterState } from "@tanstack/react-router";
+import { Warning, ArrowLeft } from "@phosphor-icons/react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -29,19 +30,26 @@ import { DemoBanner } from "../components/keyhold/demo-banner";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+    <div className="min-h-screen flex flex-col items-center justify-center p-8 text-center bg-surface">
+      <div className="texture-dots absolute inset-0 opacity-20" aria-hidden="true" />
+      <div className="relative z-10 card-soft max-w-md p-10">
+        <h1 className="font-display text-6xl font-extrabold text-navy">404</h1>
+        <h2 className="mt-4 font-display text-2xl font-extrabold text-navy">Page not found</h2>
+        <p className="mt-2 text-muted-foreground">
+          The property you're looking for doesn't seem to be in our records.
         </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+        <div className="mt-10 flex flex-col gap-3">
+          <Link 
+            to="/" 
+            className="inline-flex min-h-12 items-center justify-center rounded-full bg-navy px-8 text-sm font-semibold text-primary-foreground hover:bg-navy/90"
           >
-            Go home
+            Back to home
+          </Link>
+          <Link 
+            to="/help" 
+            className="text-sm font-semibold text-navy hover:underline"
+          >
+            Visit help centre
           </Link>
         </div>
       </div>
@@ -57,31 +65,30 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button
+    <div className="min-h-[50vh] flex flex-col items-center justify-center p-8 text-center bg-surface">
+      <div className="card-soft max-w-md p-8 shadow-2xl">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-maple-soft text-maple">
+          <Warning weight="duotone" className="h-8 w-8" />
+        </div>
+        <h2 className="mt-6 font-display text-2xl font-extrabold text-navy">Something went wrong</h2>
+        <p className="mt-2 text-muted-foreground">We've hit a small snag. Try reloading or heading back home.</p>
+        <div className="mt-8 flex flex-col gap-3">
+          <button 
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex min-h-12 items-center justify-center rounded-full bg-navy text-sm font-semibold text-primary-foreground hover:bg-navy/90"
           >
-            Try again
+            Reload page
           </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
-            Go home
-          </a>
+          <Link to="/" className="text-sm font-semibold text-navy hover:underline">Back to homepage</Link>
         </div>
+        {process.env.NODE_ENV === "development" && (
+          <pre className="mt-8 text-left text-[10px] overflow-auto max-h-40 p-4 bg-surface-sunk rounded-xl">
+            {error.message}
+          </pre>
+        )}
       </div>
     </div>
   );
@@ -187,4 +194,3 @@ function DemoGate() {
   if (!isDemo) return null;
   return <DemoBanner />;
 }
-
