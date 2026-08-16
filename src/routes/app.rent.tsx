@@ -84,6 +84,8 @@ function RentPageInner() {
   const [showMoveOut, setShowMoveOut] = useState(false);
   const [showAddDeposit, setShowAddDeposit] = useState(false);
   const [ledgerTenantId, setLedgerTenantId] = useState<string | null>(null);
+  const [statementTenantId, setStatementTenantId] = useState<string | null>(null);
+
 
   // Only invoices for units this person is allowed to see money for.
   const visibleUnitIds = useMemo(
@@ -355,7 +357,9 @@ function RentPageInner() {
       {showMoveOut && <MoveOutSheet onClose={() => setShowMoveOut(false)} />}
       {showAddDeposit && <AddDepositSheet onClose={() => setShowAddDeposit(false)} />}
       {ledgerTenantId && <DepositLedgerSheet tenantId={ledgerTenantId} onClose={() => setLedgerTenantId(null)} />}
+      {statementTenantId && <TenantStatementSheet tenantId={statementTenantId} onClose={() => setStatementTenantId(null)} />}
     </>
+
   );
 }
 
@@ -381,12 +385,21 @@ function CreditsPanel({ setLedgerTenantId }: { setLedgerTenantId: (id: string) =
                   <p className="font-display font-bold text-navy">{tenantById(l.tenantId)?.name}</p>
                   <p className="truncate text-xs text-muted-foreground">{unitAddress(l.unitId)}</p>
                 </div>
-                <button 
-                  onClick={() => setLedgerTenantId(l.tenantId)}
-                  className="inline-flex items-center gap-1 text-[10px] font-bold text-action hover:underline uppercase tracking-tight"
-                >
-                  Ledger <Calculator weight="duotone" className="h-3 w-3" />
-                </button>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => setLedgerTenantId(l.tenantId)}
+                    className="inline-flex items-center gap-1 text-[10px] font-bold text-action hover:underline uppercase tracking-tight"
+                  >
+                    Deposits <Bank weight="duotone" className="h-3 w-3" />
+                  </button>
+                  <button 
+                    onClick={() => setStatementTenantId(l.tenantId)}
+                    className="inline-flex items-center gap-1 text-[10px] font-bold text-action hover:underline uppercase tracking-tight"
+                  >
+                    Statement <Calculator weight="duotone" className="h-3 w-3" />
+                  </button>
+                </div>
+
               </div>
               <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
                 <div>
