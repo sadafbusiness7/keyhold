@@ -5,17 +5,10 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ * Keyhold design system.
+ * Locked tokens: navy #15324A, action blue #2563EB, maple red #D52B2B,
+ * success #2F855A, warning #D97706, warm off-white #FBF8F2, slate #1F2937.
+ * All colors expressed in oklch, driven through CSS variables.
  */
 
 @theme inline {
@@ -26,6 +19,10 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Manrope", "Inter", ui-sans-serif, system-ui, sans-serif;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -46,6 +43,20 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
+
+  --color-navy: var(--navy);
+  --color-navy-soft: var(--navy-soft);
+  --color-action: var(--action);
+  --color-action-soft: var(--action-soft);
+  --color-maple: var(--maple);
+  --color-maple-soft: var(--maple-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-surface: var(--surface);
+  --color-surface-sunk: var(--surface-sunk);
+
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -59,77 +70,155 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* ── Density pass ───────────────────────────────────────────────────────
+     Type scale one step down and slightly tighter spacing so more useful
+     information fits per screen. Body text never drops below 14px, and the
+     touch-target guards below keep every control at 44px. */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.05rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 0.9375rem;
+  --text-base--line-height: 1.4rem;
+  --text-lg: 1.0625rem;
+  --text-lg--line-height: 1.5rem;
+  --text-xl: 1.15rem;
+  --text-xl--line-height: 1.6rem;
+  --text-2xl: 1.375rem;
+  --text-2xl--line-height: 1.8rem;
+  --text-3xl: 1.625rem;
+  --text-3xl--line-height: 2rem;
+  --text-4xl: 1.95rem;
+  --text-4xl--line-height: 2.25rem;
+
+  --spacing: 0.235rem;
+
+  --breakpoint-xs: 400px;
 }
 
+/* Density must never shrink a control: touch targets stay at 44px+ and
+   icon buttons keep their square hit area. */
+.min-h-11 { min-height: 2.75rem; }
+.min-h-12 { min-height: 3rem; }
+.h-11 { height: 2.75rem; }
+.w-11 { width: 2.75rem; }
+.h-12 { height: 3rem; }
+.w-12 { width: 3rem; }
+
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --radius: 0.875rem;
+
+  --navy: oklch(0.335 0.055 244.5);
+  --navy-soft: oklch(0.96 0.015 244.5);
+  --action: oklch(0.546 0.215 263.4); /* Cyan/Blue */
+  --action-soft: oklch(0.96 0.03 263.4);
+  --maple: oklch(0.545 0.203 26.8); /* Red/Magenta */
+  --maple-soft: oklch(0.96 0.03 26.8);
+  --success: oklch(0.514 0.099 158.5); /* Green */
+  --success-soft: oklch(0.96 0.03 158.5);
+  --warning: oklch(0.632 0.152 58.3); /* Orange */
+  --warning-soft: oklch(0.96 0.04 70);
+
+  --surface: oklch(0.995 0 0);
+  --surface-sunk: oklch(0.966 0.002 259);
+
+  /* cool canvas: pure white -> soft grey */
+  --canvas-top: oklch(1 0 0);
+  --canvas-mid: oklch(0.972 0.002 259);
+  --canvas-bottom: oklch(0.938 0.004 259);
+  --canvas-glow: oklch(1 0 0);
+  --heading: var(--navy);
+  --hilite: oklch(1 0 0 / 55%);
+
+  --background: oklch(0.995 0 0);
+  --foreground: oklch(0.277 0.026 259);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
+  --card-foreground: oklch(0.277 0.026 259);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --popover-foreground: oklch(0.277 0.026 259);
+  --primary: oklch(0.335 0.055 244.5);
+  --primary-foreground: oklch(0.995 0 0);
+  --secondary: oklch(0.966 0.002 259);
+  --secondary-foreground: oklch(0.335 0.055 244.5);
+  --muted: oklch(0.966 0.002 259);
+  --muted-foreground: oklch(0.505 0.024 259);
+  --accent: oklch(0.94 0.018 244.5);
+  --accent-foreground: oklch(0.335 0.055 244.5);
+  --destructive: oklch(0.545 0.203 26.8);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.912 0.003 259);
+  --input: oklch(0.912 0.003 259);
+  --ring: oklch(0.546 0.215 263.4);
+  --chart-1: oklch(0.546 0.215 263.4);
+  --chart-2: oklch(0.514 0.099 158.5);
+  --chart-3: oklch(0.632 0.152 58.3);
+  --chart-4: oklch(0.545 0.203 26.8);
+  --chart-5: oklch(0.335 0.055 244.5);
+  --sidebar: oklch(0.995 0 0);
+  --sidebar-foreground: oklch(0.335 0.055 244.5);
+  --sidebar-primary: oklch(0.335 0.055 244.5);
+  --sidebar-primary-foreground: oklch(0.995 0 0);
+  --sidebar-accent: oklch(0.94 0.018 244.5);
+  --sidebar-accent-foreground: oklch(0.335 0.055 244.5);
+  --sidebar-border: oklch(0.912 0.003 259);
+  --sidebar-ring: oklch(0.546 0.215 263.4);
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --navy: oklch(0.72 0.06 244.5);
+  --navy-soft: oklch(0.28 0.03 244.5);
+  --action: oklch(0.66 0.17 263.4);
+  --action-soft: oklch(0.28 0.06 263.4);
+  --maple: oklch(0.66 0.17 26.8);
+  --maple-soft: oklch(0.28 0.06 26.8);
+  --success: oklch(0.68 0.11 158.5);
+  --success-soft: oklch(0.26 0.05 158.5);
+  --warning: oklch(0.76 0.13 70);
+  --warning-soft: oklch(0.28 0.05 70);
+
+  --surface: oklch(0.22 0.018 259);
+  --surface-sunk: oklch(0.19 0.016 259);
+
+  --canvas-top: oklch(0.21 0.017 259);
+  --canvas-mid: oklch(0.195 0.016 259);
+  --canvas-bottom: oklch(0.165 0.015 259);
+  --canvas-glow: oklch(0.28 0.025 259);
+  --heading: oklch(0.98 0.005 259);
+  --hilite: oklch(1 0 0 / 8%);
+
+  --background: oklch(0.19 0.016 259);
+  --foreground: oklch(0.96 0.008 84.6);
+  --card: oklch(0.24 0.018 259);
+  --card-foreground: oklch(0.96 0.008 84.6);
+  --popover: oklch(0.24 0.018 259);
+  --popover-foreground: oklch(0.96 0.008 84.6);
+  --primary: oklch(0.72 0.06 244.5);
+  --primary-foreground: oklch(0.19 0.016 259);
+  --secondary: oklch(0.27 0.02 259);
+  --secondary-foreground: oklch(0.96 0.008 84.6);
+  --muted: oklch(0.27 0.02 259);
+  --muted-foreground: oklch(0.735 0.018 259);
+  --accent: oklch(0.3 0.03 244.5);
+  --accent-foreground: oklch(0.96 0.008 84.6);
+  --destructive: oklch(0.66 0.17 26.8);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(1 0 0 / 14%);
+  --input: oklch(1 0 0 / 18%);
+  --ring: oklch(0.66 0.17 263.4);
+  --chart-1: oklch(0.68 0.16 263.4);
+  --chart-2: oklch(0.7 0.12 158.5);
+  --chart-3: oklch(0.78 0.13 70);
+  --chart-4: oklch(0.68 0.16 26.8);
+  --chart-5: oklch(0.78 0.06 244.5);
+  --sidebar: oklch(0.22 0.018 259);
+  --sidebar-foreground: oklch(0.96 0.008 84.6);
+  --sidebar-primary: oklch(0.72 0.06 244.5);
+  --sidebar-primary-foreground: oklch(0.19 0.016 259);
+  --sidebar-accent: oklch(0.3 0.03 244.5);
+  --sidebar-accent-foreground: oklch(0.96 0.008 84.6);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.66 0.17 263.4);
 }
 
 @layer base {
@@ -137,8 +226,493 @@
     border-color: var(--color-border);
   }
 
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+  html {
+    background-color: var(--background);
   }
+
+  body {
+    background-color: var(--background);
+    background-image:
+      radial-gradient(60% 40% at 50% 0%, var(--canvas-glow) 0%, transparent 70%),
+      linear-gradient(170deg, var(--canvas-top) 0%, var(--canvas-mid) 45%, var(--canvas-bottom) 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100dvh;
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--heading);
+    letter-spacing: -0.015em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--action);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* ── Signature icon treatment ───────────────────────────────────────────
+     Phosphor duotone is our single icon set. The primary layer inherits the
+     brand navy (or whatever brand tone the element sets); the duotone
+     secondary layer is re-tinted to a soft brand wash instead of the stock
+     flat 20% currentColor, so icons read custom rather than default. */
+  svg path[opacity="0.2"] {
+    fill: color-mix(in oklab, currentColor 55%, var(--navy) 45%);
+    opacity: 0.24;
+  }
+
+  .text-primary-foreground svg path[opacity="0.2"],
+  .bg-navy svg path[opacity="0.2"] {
+    fill: currentColor;
+    opacity: 0.35;
+  }
+}
+
+/* ── Motion: one curve and two durations for the whole product ──────────── */
+@theme {
+  --ease-kh: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-kh: 220ms;
+  --duration-kh-slow: 420ms;
+}
+
+/* Standard entrance for panels, popovers and result rows. */
+@utility kh-enter {
+  animation: kh-enter var(--duration-kh) var(--ease-kh) both;
+}
+
+@keyframes kh-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Default icon colour: brand navy unless a tone class overrides it */
+@utility icon-brand {
+  color: var(--navy);
+}
+
+
+/* Tabular numerals for every money value */
+@utility money {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: -0.02em;
+}
+
+@utility tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+@utility card-soft {
+  background-color: var(--card);
+  border: 1px solid color-mix(in oklab, var(--navy) 7%, transparent);
+  border-radius: 20px;
+  box-shadow:
+    0 1px 1px oklch(0.335 0.055 244.5 / 0.03),
+    0 10px 24px -12px oklch(0.335 0.055 244.5 / 0.10),
+    0 28px 64px -32px oklch(0.335 0.055 244.5 / 0.16);
+}
+
+@utility card-solid-action {
+  background-color: var(--action-soft);
+  border: 1.5px solid color-mix(in oklch, var(--action) 35%, transparent);
+  border-radius: 28px;
+  box-shadow: 0 4px 20px -8px color-mix(in oklch, var(--action) 25%, transparent);
+}
+
+@utility card-solid-success {
+  background-color: var(--success-soft);
+  border: 1.5px solid color-mix(in oklch, var(--success) 35%, transparent);
+  border-radius: 28px;
+  box-shadow: 0 4px 20px -8px color-mix(in oklch, var(--success) 25%, transparent);
+}
+
+@utility card-solid-navy {
+  background-color: var(--navy-soft);
+  border: 1.5px solid color-mix(in oklch, var(--navy) 35%, transparent);
+  border-radius: 28px;
+  box-shadow: 0 4px 20px -8px color-mix(in oklch, var(--navy) 25%, transparent);
+}
+
+@utility card-solid-maple {
+  background-color: var(--maple-soft);
+  border: 1.5px solid color-mix(in oklch, var(--maple) 35%, transparent);
+  border-radius: 28px;
+  box-shadow: 0 4px 20px -8px color-mix(in oklch, var(--maple) 25%, transparent);
+}
+
+@utility card-solid-warning {
+  background-color: var(--warning-soft);
+  border: 1.5px solid color-mix(in oklch, var(--warning) 35%, transparent);
+  border-radius: 28px;
+  box-shadow: 0 4px 20px -8px color-mix(in oklch, var(--warning) 25%, transparent);
+}
+
+/* Nested surfaces inside a floating card: no harsh border */
+@utility card-inner {
+  background-color: var(--card);
+  border: 1px solid color-mix(in oklab, var(--navy) 6%, transparent);
+  border-radius: 14px;
+}
+
+/* ── Tinted cards ────────────────────────────────────────────────────────
+   Coloured surfaces so panels stop reading as a wall of white. Each tint is
+   a soft brand wash with a matching hairline and tone-matched shadow. */
+@utility card-tint {
+  border-radius: 20px;
+  border: 1px solid color-mix(in oklab, var(--tint, var(--navy)) 18%, transparent);
+  background-image:
+    linear-gradient(160deg,
+      color-mix(in oklab, var(--tint, var(--navy)) 12%, var(--card)) 0%,
+      color-mix(in oklab, var(--tint, var(--navy)) 4%, var(--card)) 55%,
+      var(--card) 100%);
+  box-shadow:
+    0 1px 1px color-mix(in oklab, var(--tint, var(--navy)) 12%, transparent),
+    0 18px 40px -24px color-mix(in oklab, var(--tint, var(--navy)) 45%, transparent);
+}
+
+@utility tint-action { --tint: var(--action); }
+@utility tint-success { --tint: var(--success); }
+@utility tint-warning { --tint: var(--warning); }
+@utility tint-maple { --tint: var(--maple); }
+@utility tint-navy { --tint: var(--navy); }
+
+/* ── Signature status tag ────────────────────────────────────────────────
+   Not the stock rounded-full pastel pill: a squared-off, tracked-out label
+   with a tone bar, tone dot and a fine inner highlight. */
+@utility kh-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  position: relative;
+  padding: 0.22rem 0.55rem 0.22rem 0.5rem;
+  border-radius: 7px;
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in oklab, var(--tint, var(--navy)) 82%, var(--foreground));
+  background: color-mix(in oklab, var(--tint, var(--navy)) 12%, var(--card));
+  border: 1px solid color-mix(in oklab, var(--tint, var(--navy)) 30%, transparent);
+  box-shadow: inset 0 1px 0 var(--hilite);
+
+  &::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 2px;
+    flex: none;
+    background: var(--tint, var(--navy));
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--tint, var(--navy)) 18%, transparent);
+  }
+}
+
+/* Sweeping highlight across screenshot cards */
+@utility shine-sweep {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      110deg,
+      transparent 35%,
+      var(--hilite) 48%,
+      transparent 62%
+    );
+    transform: translateX(-120%);
+    animation: kh-shine 6.5s ease-in-out infinite;
+  }
+}
+
+@keyframes kh-shine {
+  0%, 65% { transform: translateX(-120%); }
+  100% { transform: translateX(120%); }
+}
+
+/* Display scale — Manrope, tightly tracked */
+@utility display-hero {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.03;
+  font-size: clamp(2.5rem, 5.6vw, 4rem);
+}
+
+@utility display-2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.028em;
+  line-height: 1.1;
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+}
+
+@utility section-air {
+  padding-block: clamp(4rem, 8vw, 7rem);
+}
+
+/* ── Branded texture ──────────────────────────────────────────────────────
+   Faint warm dot-grid for blank areas, and a soft brand bloom for section
+   backgrounds. Both are decorative and sit behind content. */
+@utility texture-dots {
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--navy) 16%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 14px 14px;
+  background-position: 0 0;
+}
+
+@utility texture-bloom {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -12% 0 auto 0;
+    height: 120%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(38% 60% at 12% 18%, color-mix(in oklab, var(--action) 12%, transparent), transparent 70%),
+      radial-gradient(34% 56% at 88% 8%, color-mix(in oklab, var(--success) 12%, transparent), transparent 70%);
+    filter: blur(28px);
+  }
+}
+
+/* Blank-area panel: warm dot-grid fading out toward the edges */
+@utility texture-panel {
+  position: relative;
+  overflow: hidden;
+  background-color: color-mix(in oklab, var(--surface-sunk) 70%, transparent);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(
+      color-mix(in oklab, var(--navy) 20%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 14px 14px;
+    -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 100%);
+    mask-image: radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 100%);
+  }
+}
+
+
+
+/* Frosted warm surface — scoped to the marketing top nav and its docked CTA bar.
+   Solid fallback first; the translucent+blur treatment only for browsers that
+   actually support backdrop-filter. */
+@utility glass-surface {
+  background: var(--surface);
+  border-color: color-mix(in oklch, var(--navy) 10%, transparent);
+}
+
+@supports (backdrop-filter: blur(4px)) {
+  .glass-surface {
+    background: color-mix(in oklch, var(--surface) 72%, transparent);
+    backdrop-filter: blur(18px) saturate(150%);
+  }
+}
+
+
+/* Smooth crossfade when the homepage dark-mode zone flips the theme. */
+/* ── Hero: animated overlays + widget marquee ─────────────────────────── */
+@utility hero-aurora {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -20% -10% auto -10%;
+    height: 140%;
+    z-index: -2;
+    pointer-events: none;
+    background:
+      radial-gradient(42% 48% at 18% 22%, color-mix(in oklab, var(--action) 22%, transparent), transparent 70%),
+      radial-gradient(38% 44% at 82% 12%, color-mix(in oklab, var(--success) 18%, transparent), transparent 70%),
+      radial-gradient(46% 42% at 55% 88%, color-mix(in oklab, var(--navy) 14%, transparent), transparent 72%);
+    filter: blur(60px);
+    animation: kh-aurora 18s ease-in-out infinite alternate;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--navy) 7%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--navy) 7%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(80% 60% at 50% 30%, #000 0%, transparent 100%);
+    mask-image: radial-gradient(80% 60% at 50% 30%, #000 0%, transparent 100%);
+  }
+}
+
+@keyframes kh-aurora {
+  0% { transform: translate3d(-2%, -1%, 0) scale(1); }
+  50% { transform: translate3d(2%, 2%, 0) scale(1.08); }
+  100% { transform: translate3d(-1%, 1%, 0) scale(1.03); }
+}
+
+@keyframes kh-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes kh-marquee-reverse {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+@utility marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+@utility marquee-track {
+  display: flex;
+  width: max-content;
+  animation: kh-marquee var(--marquee-duration, 46s) linear infinite;
+}
+
+@utility marquee-track-reverse {
+  display: flex;
+  width: max-content;
+  animation: kh-marquee-reverse var(--marquee-duration, 58s) linear infinite;
+}
+
+.marquee-mask:hover .marquee-track,
+.marquee-mask:hover .marquee-track-reverse {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .marquee-track-reverse {
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html,
+  body,
+  header,
+  section,
+  nav,
+  div,
+  li,
+  span,
+  p,
+  a,
+  h1,
+  h2,
+  h3 {
+    transition:
+      background-color 420ms ease,
+      border-color 420ms ease,
+      color 420ms ease,
+      fill 420ms ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Pricing calculator slider ───────────────────────────────────────────
+   Large, satisfying drag target with a brand-tinted filled track. */
+@utility kh-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 44px;
+  background: transparent;
+  cursor: grab;
+  touch-action: pan-y;
+
+  &:active { cursor: grabbing; }
+
+  &::-webkit-slider-runnable-track {
+    height: 14px;
+    border-radius: 999px;
+    background:
+      linear-gradient(90deg, var(--action) 0%, color-mix(in oklab, var(--action) 65%, var(--success)) var(--kh-fill, 0%),
+        color-mix(in oklab, var(--navy) 10%, var(--card)) var(--kh-fill, 0%));
+    border: 1px solid color-mix(in oklab, var(--navy) 10%, transparent);
+  }
+  &::-moz-range-track {
+    height: 14px;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--navy) 10%, var(--card));
+    border: 1px solid color-mix(in oklab, var(--navy) 10%, transparent);
+  }
+  &::-moz-range-progress {
+    height: 14px;
+    border-radius: 999px;
+    background: var(--action);
+  }
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 30px;
+    width: 30px;
+    margin-top: -9px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 4px solid var(--action);
+    box-shadow: 0 6px 18px -6px color-mix(in oklab, var(--action) 70%, transparent);
+    transition: transform 0.15s ease;
+  }
+  &::-moz-range-thumb {
+    height: 30px;
+    width: 30px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 4px solid var(--action);
+    box-shadow: 0 6px 18px -6px color-mix(in oklab, var(--action) 70%, transparent);
+  }
+  &:active::-webkit-slider-thumb { transform: scale(1.12); }
+  &:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--navy); outline-offset: 2px; }
+}
+
+/* Toast used for controls that are rendered but not wired to logic yet. */
+.kh-toast-pending {
+  border-left: 4px solid var(--action) !important;
+  background: var(--action-soft) !important;
+  color: var(--navy) !important;
 }
