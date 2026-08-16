@@ -157,6 +157,7 @@ export const properties: Property[] = [
   {
     id: "p6",
     ownerId: "u_owner",
+    portfolioId: "vancouver",
     name: "Mount Pleasant Lofts",
     address: "185 E 8th Ave",
     city: "Vancouver",
@@ -164,6 +165,7 @@ export const properties: Property[] = [
     postalCode: "V5T 1R8",
     kind: "Loft building",
   },
+
 ];
 
 // MOCK: generated units so the demo portfolio is ~40 doors across two regions.
