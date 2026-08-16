@@ -151,8 +151,33 @@ function TenantDetailPage() {
                 </div>
               </div>
             </DetailSection>
+            <DetailSection title="Financial Recovery">
+              {rent.paymentPlanForTenant(id) ? (
+                <div className="card-soft p-5 border-l-4 border-success">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Active Payment Plan</p>
+                      <p className="mt-1 text-sm font-bold text-navy">
+                        {money(rent.paymentPlanForTenant(id)!.totalOwedCents)} total · {rent.paymentPlanForTenant(id)!.status === "on-track" ? "On track" : "Behind"}
+                      </p>
+                    </div>
+                    <StatusLabel status={rent.paymentPlanForTenant(id)!.status === "on-track" ? "paid" : "overdue"} />
+                  </div>
+                  <div className="mt-4 h-1.5 w-full bg-navy-soft rounded-full overflow-hidden">
+                    <div className="h-full bg-success w-[65%]" />
+                  </div>
+                  <p className="mt-2 text-[10px] text-muted-foreground font-bold uppercase">65% of agreed schedule paid</p>
+                </div>
+              ) : (
+                <div className="card-soft p-5 opacity-60">
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Payment Plan</p>
+                  <p className="mt-1 text-sm text-muted-foreground italic">No recovery plan active.</p>
+                </div>
+              )}
+            </DetailSection>
           </div>
         )}
+
 
         {tab === "leases" && (
           <DetailSection>
