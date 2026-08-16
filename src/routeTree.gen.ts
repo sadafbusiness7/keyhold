@@ -10,9 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as OwnerRouteImport } from './routes/owner'
 import { Route as PortalRouteImport } from './routes/portal'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AppIndexRouteImport } from './routes/app.index'
@@ -72,9 +75,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OwnerRoute = OwnerRouteImport.update({
@@ -85,6 +98,11 @@ const OwnerRoute = OwnerRouteImport.update({
 const PortalRoute = PortalRouteImport.update({
   id: '/portal',
   path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SigninRoute = SigninRouteImport.update({
@@ -356,9 +374,12 @@ const AppLeasesWizardProspectIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/app': typeof AppRouteWithChildren
+  '/contact': typeof ContactRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
+  '/pricing': typeof PricingRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/app/add-tenant': typeof AppAddTenantRoute
@@ -415,8 +436,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
+  '/pricing': typeof PricingRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/app/add-tenant': typeof AppAddTenantRoute
@@ -472,9 +496,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/app': typeof AppRouteWithChildren
+  '/contact': typeof ContactRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
+  '/pricing': typeof PricingRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/app/add-tenant': typeof AppAddTenantRoute
@@ -533,9 +560,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/app'
+    | '/contact'
     | '/owner'
     | '/portal'
+    | '/pricing'
     | '/signin'
     | '/signup'
     | '/app/add-tenant'
@@ -592,8 +622,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
+    | '/contact'
     | '/owner'
     | '/portal'
+    | '/pricing'
     | '/signin'
     | '/signup'
     | '/app/add-tenant'
@@ -648,9 +681,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/app'
+    | '/contact'
     | '/owner'
     | '/portal'
+    | '/pricing'
     | '/signin'
     | '/signup'
     | '/app/add-tenant'
@@ -708,9 +744,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AppRoute: typeof AppRouteWithChildren
+  ContactRoute: typeof ContactRoute
   OwnerRoute: typeof OwnerRoute
   PortalRoute: typeof PortalRoute
+  PricingRoute: typeof PricingRoute
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
   ApplySlugRoute: typeof ApplySlugRoute
@@ -734,11 +773,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/owner': {
@@ -753,6 +806,13 @@ declare module '@tanstack/react-router' {
       path: '/portal'
       fullPath: '/portal'
       preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signin': {
@@ -1251,9 +1311,12 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AppRoute: AppRouteWithChildren,
+  ContactRoute: ContactRoute,
   OwnerRoute: OwnerRoute,
   PortalRoute: PortalRoute,
+  PricingRoute: PricingRoute,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
   ApplySlugRoute: ApplySlugRoute,
