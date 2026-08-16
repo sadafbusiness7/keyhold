@@ -420,6 +420,12 @@ function useStore() {
     };
 
     const setWorkOrderStatus = (id: string, status: WorkOrderStatus, actor: string, note = "") => {
+      if (isDemo) {
+        toast.info(`Simulation: Work order status changed to ${status}.`, {
+          description: note || undefined,
+        });
+        return;
+      }
       setWorkOrders((prev) =>
         prev.map((w) =>
           w.id === id
