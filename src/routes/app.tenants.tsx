@@ -126,7 +126,8 @@ function TenantsPageInner() {
           },
         ]}
         rowActions={[
-          { key: "view", label: "View tenant", Icon: Eye },
+          { key: "view", label: "View tenant", Icon: Eye, onSelect: (t) => navigate({ to: `/app/tenants/${t.id}` as any }) },
+
           { key: "edit", label: "Edit details", Icon: PencilSimple },
           { key: "notice", label: "Serve a notice", Icon: Stamp, onSelect: () => toast.success("Opening the notice builder…") },
           { key: "archive", label: "Archive", Icon: Archive },

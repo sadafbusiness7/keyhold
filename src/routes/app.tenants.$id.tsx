@@ -204,6 +204,7 @@ function TenantDetailPage() {
                   { key: "balance", label: "Balance", align: "right", value: r => r.balance, render: r => <span className={r.balance > 0 ? "text-maple font-bold" : ""}>{money(r.balance)}</span> },
                 ]}
               />
+
             </DetailSection>
           </div>
         )}
