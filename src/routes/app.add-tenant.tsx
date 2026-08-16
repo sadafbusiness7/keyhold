@@ -90,7 +90,7 @@ function AddTenantPage() {
               hits={dupes}
               noun="tenant"
               acknowledged={ackDuplicate}
-              onUseExisting={(hit) => navigate({ to: "/app/tenants/$tenantId", params: { tenantId: hit.record.id } })}
+              onUseExisting={(hit) => navigate({ to: "/app/tenants/$id", params: { id: hit.record.id } })}
               onCreateAnyway={() => setAckDuplicate(true)}
             />
           </div>
