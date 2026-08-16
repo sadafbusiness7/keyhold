@@ -17,6 +17,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as HelpRouteImport } from './routes/help'
+import { Route as OfflineRouteImport } from './routes/offline'
 import { Route as OwnerRouteImport } from './routes/owner'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PricingRouteImport } from './routes/pricing'
@@ -126,6 +127,11 @@ const FeaturesRoute = FeaturesRouteImport.update({
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfflineRoute = OfflineRouteImport.update({
+  id: '/offline',
+  path: '/offline',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OwnerRoute = OwnerRouteImport.update({
@@ -489,6 +495,7 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRoute
   '/features': typeof FeaturesRouteWithChildren
   '/help': typeof HelpRoute
+  '/offline': typeof OfflineRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
   '/pricing': typeof PricingRoute
@@ -568,6 +575,7 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRoute
   '/features': typeof FeaturesRouteWithChildren
   '/help': typeof HelpRoute
+  '/offline': typeof OfflineRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
   '/pricing': typeof PricingRoute
@@ -647,6 +655,7 @@ export interface FileRoutesById {
   '/demo': typeof DemoRoute
   '/features': typeof FeaturesRouteWithChildren
   '/help': typeof HelpRoute
+  '/offline': typeof OfflineRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
   '/pricing': typeof PricingRoute
@@ -729,6 +738,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/features'
     | '/help'
+    | '/offline'
     | '/owner'
     | '/portal'
     | '/pricing'
@@ -808,6 +818,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/features'
     | '/help'
+    | '/offline'
     | '/owner'
     | '/portal'
     | '/pricing'
@@ -886,6 +897,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/features'
     | '/help'
+    | '/offline'
     | '/owner'
     | '/portal'
     | '/pricing'
@@ -967,6 +979,7 @@ export interface RootRouteChildren {
   DemoRoute: typeof DemoRoute
   FeaturesRoute: typeof FeaturesRouteWithChildren
   HelpRoute: typeof HelpRoute
+  OfflineRoute: typeof OfflineRoute
   OwnerRoute: typeof OwnerRoute
   PortalRoute: typeof PortalRoute
   PricingRoute: typeof PricingRoute
@@ -1045,6 +1058,13 @@ declare module '@tanstack/react-router' {
       path: '/help'
       fullPath: '/help'
       preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/offline': {
+      id: '/offline'
+      path: '/offline'
+      fullPath: '/offline'
+      preLoaderRoute: typeof OfflineRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/owner': {
@@ -1717,6 +1737,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRoute: DemoRoute,
   FeaturesRoute: FeaturesRouteWithChildren,
   HelpRoute: HelpRoute,
+  OfflineRoute: OfflineRoute,
   OwnerRoute: OwnerRoute,
   PortalRoute: PortalRoute,
   PricingRoute: PricingRoute,
