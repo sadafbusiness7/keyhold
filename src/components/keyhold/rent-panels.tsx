@@ -4,7 +4,7 @@
  * All arithmetic comes from rent-engine.ts — nothing is computed inline here.
  */
 import { useState, type ReactNode } from "react";
-import { X, Receipt, ArrowUUpLeft, PencilSimple, Coins, SignOut, PaperPlaneTilt, Prohibit } from "@phosphor-icons/react";
+import { X, Receipt, ArrowUUpLeft, PencilSimple, Coins, SignOut, PaperPlaneTilt, Prohibit, Bank, Calculator, Info } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { optimistic, settle } from "@/lib/optimistic";
 import { ActivityFeed } from "./activity-feed";
