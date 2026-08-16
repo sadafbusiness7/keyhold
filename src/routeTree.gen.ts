@@ -55,6 +55,8 @@ import { Route as AppTaxRouteImport } from './routes/app.tax'
 import { Route as AppTeamRouteImport } from './routes/app.team'
 import { Route as AppTenantsRouteImport } from './routes/app.tenants'
 import { Route as ApplySlugRouteImport } from './routes/apply.$slug'
+import { Route as FeaturesMaintenanceRouteImport } from './routes/features.maintenance'
+import { Route as FeaturesRentRouteImport } from './routes/features.rent'
 import { Route as LegalIndexRouteImport } from './routes/legal.index'
 import { Route as LegalAccessibilityRouteImport } from './routes/legal.accessibility'
 import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
@@ -308,6 +310,16 @@ const ApplySlugRoute = ApplySlugRouteImport.update({
   path: '/apply/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeaturesMaintenanceRoute = FeaturesMaintenanceRouteImport.update({
+  id: '/maintenance',
+  path: '/maintenance',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesRentRoute = FeaturesRentRouteImport.update({
+  id: '/rent',
+  path: '/rent',
+  getParentRoute: () => FeaturesRoute,
+} as any)
 const LegalIndexRoute = LegalIndexRouteImport.update({
   id: '/legal/',
   path: '/legal/',
@@ -426,7 +438,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
-  '/features': typeof FeaturesRoute
+  '/features': typeof FeaturesRouteWithChildren
   '/help': typeof HelpRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
@@ -466,6 +478,8 @@ export interface FileRoutesByFullPath {
   '/app/team': typeof AppTeamRoute
   '/app/tenants': typeof AppTenantsRoute
   '/apply/$slug': typeof ApplySlugRoute
+  '/features/maintenance': typeof FeaturesMaintenanceRoute
+  '/features/rent': typeof FeaturesRentRoute
   '/legal/accessibility': typeof LegalAccessibilityRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
@@ -495,7 +509,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
-  '/features': typeof FeaturesRoute
+  '/features': typeof FeaturesRouteWithChildren
   '/help': typeof HelpRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
@@ -533,6 +547,8 @@ export interface FileRoutesByTo {
   '/app/team': typeof AppTeamRoute
   '/app/tenants': typeof AppTenantsRoute
   '/apply/$slug': typeof ApplySlugRoute
+  '/features/maintenance': typeof FeaturesMaintenanceRoute
+  '/features/rent': typeof FeaturesRentRoute
   '/legal/accessibility': typeof LegalAccessibilityRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
@@ -564,7 +580,7 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
-  '/features': typeof FeaturesRoute
+  '/features': typeof FeaturesRouteWithChildren
   '/help': typeof HelpRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
@@ -604,6 +620,8 @@ export interface FileRoutesById {
   '/app/team': typeof AppTeamRoute
   '/app/tenants': typeof AppTenantsRoute
   '/apply/$slug': typeof ApplySlugRoute
+  '/features/maintenance': typeof FeaturesMaintenanceRoute
+  '/features/rent': typeof FeaturesRentRoute
   '/legal/accessibility': typeof LegalAccessibilityRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
@@ -676,6 +694,8 @@ export interface FileRouteTypes {
     | '/app/team'
     | '/app/tenants'
     | '/apply/$slug'
+    | '/features/maintenance'
+    | '/features/rent'
     | '/legal/accessibility'
     | '/legal/cookies'
     | '/legal/privacy'
@@ -743,6 +763,8 @@ export interface FileRouteTypes {
     | '/app/team'
     | '/app/tenants'
     | '/apply/$slug'
+    | '/features/maintenance'
+    | '/features/rent'
     | '/legal/accessibility'
     | '/legal/cookies'
     | '/legal/privacy'
@@ -813,6 +835,8 @@ export interface FileRouteTypes {
     | '/app/team'
     | '/app/tenants'
     | '/apply/$slug'
+    | '/features/maintenance'
+    | '/features/rent'
     | '/legal/accessibility'
     | '/legal/cookies'
     | '/legal/privacy'
@@ -844,7 +868,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
-  FeaturesRoute: typeof FeaturesRoute
+  FeaturesRoute: typeof FeaturesRouteWithChildren
   HelpRoute: typeof HelpRoute
   OwnerRoute: typeof OwnerRoute
   PortalRoute: typeof PortalRoute
@@ -1192,6 +1216,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/features/maintenance': {
+      id: '/features/maintenance'
+      path: '/maintenance'
+      fullPath: '/features/maintenance'
+      preLoaderRoute: typeof FeaturesMaintenanceRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/rent': {
+      id: '/features/rent'
+      path: '/rent'
+      fullPath: '/features/rent'
+      preLoaderRoute: typeof FeaturesRentRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
     '/legal/': {
       id: '/legal/'
       path: '/legal'
@@ -1469,13 +1507,27 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface FeaturesRouteChildren {
+  FeaturesMaintenanceRoute: typeof FeaturesMaintenanceRoute
+  FeaturesRentRoute: typeof FeaturesRentRoute
+}
+
+const FeaturesRouteChildren: FeaturesRouteChildren = {
+  FeaturesMaintenanceRoute: FeaturesMaintenanceRoute,
+  FeaturesRentRoute: FeaturesRentRoute,
+}
+
+const FeaturesRouteWithChildren = FeaturesRoute._addFileChildren(
+  FeaturesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AppRoute: AppRouteWithChildren,
   BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
-  FeaturesRoute: FeaturesRoute,
+  FeaturesRoute: FeaturesRouteWithChildren,
   HelpRoute: HelpRoute,
   OwnerRoute: OwnerRoute,
   PortalRoute: PortalRoute,
