@@ -381,7 +381,39 @@ type Ctx = {
   t: (key: StringKey) => string;
   /** Translate a plain English sentence used in the interface. */
   tx: (text?: string) => string | undefined;
+  /** Locale-aware Canadian currency. Cents in, formatted string out. */
+  fmtMoney: (cents: number, opts?: { cents?: boolean }) => string;
+  fmtNumber: (value: number, opts?: Intl.NumberFormatOptions) => string;
+  fmtPercent: (fraction: number, digits?: number) => string;
+  /** ISO date (yyyy-mm-dd) or Date in, long locale date out. */
+  fmtDate: (value: string | Date, style?: "long" | "medium" | "short") => string;
+  bcp47: string;
 };
+
+const BCP47: Record<Locale, string> = { en: "en-CA", fr: "fr-CA" };
+
+function makeFormatters(locale: Locale) {
+  const tag = BCP47[locale];
+  return {
+    bcp47: tag,
+    fmtMoney: (cents: number, opts?: { cents?: boolean }) =>
+      new Intl.NumberFormat(tag, {
+        style: "currency",
+        currency: "CAD",
+        currencyDisplay: "narrowSymbol",
+        minimumFractionDigits: opts?.cents === false ? 0 : 2,
+        maximumFractionDigits: opts?.cents === false ? 0 : 2,
+      }).format(cents / 100),
+    fmtNumber: (value: number, opts?: Intl.NumberFormatOptions) => new Intl.NumberFormat(tag, opts).format(value),
+    fmtPercent: (fraction: number, digits = 1) =>
+      new Intl.NumberFormat(tag, { style: "percent", minimumFractionDigits: digits, maximumFractionDigits: digits }).format(fraction),
+    fmtDate: (value: string | Date, style: "long" | "medium" | "short" = "long") => {
+      const date = typeof value === "string" ? new Date(`${value}T12:00:00`) : value;
+      if (Number.isNaN(date.getTime())) return String(value);
+      return new Intl.DateTimeFormat(tag, { dateStyle: style }).format(date);
+    },
+  };
+}
 
 const I18nContext = createContext<Ctx | null>(null);
 
@@ -416,6 +448,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
       setLocale,
       t: (key: StringKey) => dict[key] ?? en[key] ?? String(key),
       tx: (text?: string) => (french && text ? (frPhrases[text] ?? text) : text),
+      ...makeFormatters(locale),
     };
   }, [locale, setLocale]);
 
@@ -432,6 +465,7 @@ export function useI18n(): Ctx {
       setLocale: () => {},
       t: (key: StringKey) => en[key] ?? String(key),
       tx: (text?: string) => text,
+      ...makeFormatters("en"),
     };
   }
   return ctx;

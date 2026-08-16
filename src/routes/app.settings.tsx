@@ -9,6 +9,8 @@ import {
   ChatText,
   EnvelopeSimple,
   ShieldCheck,
+  Palette,
+  Translate,
 
   ClockCounterClockwise,
   Handshake,
@@ -32,6 +34,7 @@ import {
   TemplatesPanel,
 } from "@/components/keyhold/settings-panels";
 import { AuditLogPanel } from "@/components/keyhold/audit-panels";
+import { BrandingPanel, LanguagePanel } from "@/components/keyhold/branding-panel";
 import { ConsentPanel, PrivacyRightsPanel, RetentionPanel, SecurityExtrasPanel } from "@/components/keyhold/privacy-panels";
 
 export const Route = createFileRoute("/app/settings")({
@@ -56,6 +59,8 @@ const SECTIONS = [
   { key: "tax", label: "Tax settings", Icon: Receipt },
   { key: "templates", label: "Templates", Icon: ChatText },
   { key: "emails", label: "Email Gallery", Icon: EnvelopeSimple },
+  { key: "branding", label: "Branding", Icon: Palette },
+  { key: "language", label: "Language & region", Icon: Translate },
 
   { key: "security", label: "Security", Icon: ShieldCheck },
   { key: "audit", label: "Audit log", Icon: ClockCounterClockwise },
@@ -117,6 +122,8 @@ function SettingsPage() {
           {section === "lease" && <LeasePanel />}
           {section === "tax" && <TaxPanel />}
           {section === "templates" && <TemplatesPanel />}
+          {section === "branding" && <BrandingPanel />}
+          {section === "language" && <LanguagePanel />}
           {section === "emails" && (
             <div className="card-soft overflow-hidden h-[800px]">
               <iframe 

@@ -26,6 +26,8 @@ import { ConsentProvider } from "../lib/mock-consent";
 import { ThemeProvider, themeBootScript } from "../lib/theme";
 import { PortfolioProvider } from "../lib/mock-portfolio";
 import { I18nProvider } from "../lib/i18n";
+import { BrandingProvider } from "../lib/mock-branding";
+import { registerServiceWorker } from "../lib/pwa";
 
 import { DemoBanner } from "../components/keyhold/demo-banner";
 
@@ -108,6 +110,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Keyhold is calm rental software for Canadian landlords with 2–20 units. See who paid, what's overdue and what needs repair. CA$4.99/month.",
       },
       { name: "author", content: "Keyhold" },
+      { name: "theme-color", content: "#121C2D" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-title", content: "Keyhold" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
       { property: "og:title", content: "Keyhold — Rental management built for Canadian landlords" },
       {
         property: "og:description",
@@ -126,7 +132,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -161,10 +169,15 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  useEffect(() => {
+    registerServiceWorker();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
       <I18nProvider>
+      <BrandingProvider>
       <PortfolioProvider>
       <LeasingProvider>
         <AccessProvider>
@@ -188,6 +201,7 @@ function RootComponent() {
         </AccessProvider>
       </LeasingProvider>
       </PortfolioProvider>
+      </BrandingProvider>
       </I18nProvider>
       </ThemeProvider>
     </QueryClientProvider>

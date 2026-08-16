@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { DuplicateWarning } from "@/components/keyhold/duplicate-warning";
+import { findTenantDuplicates } from "@/lib/duplicate-detection";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/keyhold/app-shell";
@@ -32,6 +34,11 @@ function AddTenantPage() {
   const options = units.filter((u) => u.propertyId === propertyId);
   const [unitId, setUnitId] = useState(options[0]?.id ?? "");
   const [leaseFile, setLeaseFile] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [ackDuplicate, setAckDuplicate] = useState(false);
+  const dupes = findTenantDuplicates({ name, email, phone });
 
   return (
     <>
@@ -42,6 +49,10 @@ function AddTenantPage() {
           e.preventDefault();
           const f = new FormData(e.currentTarget);
           if (!unitId) { toast.error("Pick the unit they live in."); return; }
+          if (dupes.length && !ackDuplicate) {
+            toast.error("This tenant may already exist — choose “Use existing” or confirm “Create anyway”.");
+            return;
+          }
           const inv = addExistingTenant({
             propertyId,
             unitId,
@@ -70,9 +81,20 @@ function AddTenantPage() {
             {options.map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
           </select>
         </div>
-        <div><label className="text-sm font-medium" htmlFor="name">Tenant name</label><input required id="name" name="name" className={field} /></div>
-        <div><label className="text-sm font-medium" htmlFor="email">Email</label><input required id="email" name="email" type="email" className={field} /></div>
-        <div><label className="text-sm font-medium" htmlFor="phone">Phone</label><input id="phone" name="phone" className={field} /></div>
+        <div><label className="text-sm font-medium" htmlFor="name">Tenant name</label><input required id="name" name="name" className={field} value={name} onChange={(e) => { setName(e.target.value); setAckDuplicate(false); }} /></div>
+        <div><label className="text-sm font-medium" htmlFor="email">Email</label><input required id="email" name="email" type="email" className={field} value={email} onChange={(e) => { setEmail(e.target.value); setAckDuplicate(false); }} /></div>
+        <div><label className="text-sm font-medium" htmlFor="phone">Phone</label><input id="phone" name="phone" className={field} value={phone} onChange={(e) => { setPhone(e.target.value); setAckDuplicate(false); }} /></div>
+        {dupes.length > 0 && (
+          <div className="sm:col-span-2">
+            <DuplicateWarning
+              hits={dupes}
+              noun="tenant"
+              acknowledged={ackDuplicate}
+              onUseExisting={(hit) => navigate({ to: "/app/tenants/$id", params: { id: hit.record.id }, search: { tab: "overview" } })}
+              onCreateAnyway={() => setAckDuplicate(true)}
+            />
+          </div>
+        )}
         <div><label className="text-sm font-medium" htmlFor="rent">Monthly rent (CAD)</label><input id="rent" name="rent" inputMode="decimal" defaultValue="1800" className={`${field} tnum`} /></div>
         <div><label className="text-sm font-medium" htmlFor="deposit">Deposit held (CAD)</label><input id="deposit" name="deposit" inputMode="decimal" defaultValue="1800" className={`${field} tnum`} /></div>
         <div><label className="text-sm font-medium" htmlFor="start">Lease start</label><input id="start" name="start" type="date" defaultValue="2025-09-01" className={field} /></div>

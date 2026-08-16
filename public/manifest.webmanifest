@@ -1,0 +1,23 @@
+{
+  "name": "Keyhold — Rental management",
+  "short_name": "Keyhold",
+  "description": "Rent, repairs, leases and receipts for Canadian landlords and their tenants.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FBF8F4",
+  "theme_color": "#121C2D",
+  "lang": "en-CA",
+  "categories": ["business", "finance", "productivity"],
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Tenant portal", "url": "/portal" },
+    { "name": "Rent", "url": "/app/rent" },
+    { "name": "Maintenance", "url": "/app/maintenance" }
+  ]
+}
