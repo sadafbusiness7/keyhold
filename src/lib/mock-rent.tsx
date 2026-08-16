@@ -134,6 +134,17 @@ function useRentStore() {
   const [autopayConfigs, setAutopayConfigs] = useState<AutopayStatus[]>([
     { leaseId: "l3", tenantId: "t3", enabled: true, methodId: "sm1" },
   ]);
+  const [deposits, setDeposits] = useState<Deposit[]>(() => 
+    allLeases.map(l => ({
+      id: `dep-${l.id}`,
+      tenantId: l.tenantId,
+      leaseId: l.id,
+      kind: "last-month",
+      amountCents: toCents(l.depositHeld),
+      receivedOn: l.start,
+    }))
+  );
+  const [interestPayments, setInterestPayments] = useState<InterestPayment[]>([]);
 
 
   const uid = (p: string) => `${p}-${Math.random().toString(36).slice(2, 9)}`;
