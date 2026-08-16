@@ -17,13 +17,15 @@ import {
   DownloadSimple
 } from "@phosphor-icons/react";
 import { DetailBreadcrumbs, DetailHeader, DetailTabs, DetailSection } from "@/components/keyhold/detail-layout";
-import { propertyById, units as allUnits, tenants as allTenants, cad } from "@/lib/mock-data";
+import { propertyById, units as allUnits, tenants as allTenants, cad, type Unit, type UnitStatus } from "@/lib/mock-data";
 import { ActivityFeed } from "@/components/keyhold/activity-feed";
 import { StatusLabel } from "@/components/keyhold/status";
 import { DataList } from "@/components/keyhold/data-list";
 import { useRent } from "@/lib/mock-rent";
 import { useMaintenance } from "@/lib/mock-maintenance";
 import { money, invoiceStatus, balanceCents, paidCents } from "@/lib/rent-engine";
+import { TurnoverWorkflow } from "@/components/keyhold/turnover-workflow";
+
 
 export const Route = createFileRoute("/app/properties/$id")({
   component: PropertyDetailPage,
