@@ -32,8 +32,12 @@ export type Unit = {
   leaseEnd: string | null;
   status?: UnitStatus;
   turnoverDays?: number; // Days vacant during turnover
-  turnoverCost?: number; // Total cost of make-ready
+  turnoverCostCents?: number; // Total cost of make-ready in cents
+  turnoverStartedOn?: string;
+  turnoverCompletedOn?: string;
+  turnoverTasks?: { id: string; label: string; status: "todo" | "done"; assignee?: string }[];
 };
+
 
 
 export type Tenant = {
