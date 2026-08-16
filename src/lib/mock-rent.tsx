@@ -343,6 +343,8 @@ function useRentStore() {
       moveOuts,
       savedMethods,
       autopayConfigs,
+      deposits,
+      interestPayments,
       nextRun,
       nextRunPeriod,
       nextRunLabel: periodLabel(nextRunPeriod),
@@ -352,6 +354,8 @@ function useRentStore() {
       isMovedOut: (tenantId: string) => moveOuts.some((m) => m.tenantId === tenantId),
       methodsForTenant: (tenantId: string) => savedMethods.filter(m => m.tenantId === tenantId),
       autopayForLease: (leaseId: string) => autopayConfigs.find(a => a.leaseId === leaseId),
+      depositsForTenant: (tenantId: string) => deposits.filter(d => d.tenantId === tenantId),
+      interestForDeposit: (depositId: string) => interestPayments.filter(p => p.depositId === depositId),
       setSettings,
       runInvoicing,
       addManualInvoice,
@@ -366,9 +370,29 @@ function useRentStore() {
       toggleAutopay,
       addPaymentMethod,
       removePaymentMethod,
+      addDeposit: (deposit: Omit<Deposit, "id">) => {
+        const id = uid("dep");
+        setDeposits(prev => [...prev, { ...deposit, id }]);
+      },
+      recordInterestPaid: (depositId: string, amountCents: number, method: "applied" | "paid") => {
+        const deposit = deposits.find(d => d.id === depositId);
+        if (!deposit) return;
+        const id = uid("int");
+        setInterestPayments(prev => [...prev, { id, depositId, amountCents, paidOn: TODAY, method }]);
+        if (method === "applied") {
+          setCredits(prev => [...prev, {
+            id: uid("cr"),
+            tenantId: deposit.tenantId,
+            amountCents,
+            reason: `Interest applied from ${deposit.kind} deposit`,
+            date: TODAY,
+            kind: "interest"
+          }]);
+        }
+      },
     };
 
-  }, [invoices, payments, credits, settings, moveOuts]);
+  }, [invoices, payments, credits, settings, moveOuts, deposits, interestPayments, savedMethods, autopayConfigs]);
 }
 
 export function RentProvider({ children }: { children: ReactNode }) {
