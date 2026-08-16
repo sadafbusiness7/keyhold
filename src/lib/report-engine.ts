@@ -297,7 +297,7 @@ export function depositLedger(args: {
 /* Vacancy & Turnover                                                 */
 /* ------------------------------------------------------------------ */
 
-export type VacancyRow = {
+export type TurnoverRow = {
   propertyId: string;
   property: string;
   unit: string;
@@ -310,7 +310,7 @@ export type VacancyRow = {
 export function turnoverAnalysis(args: {
   units: Unit[];
   properties: Property[];
-}): VacancyRow[] {
+}): TurnoverRow[] {
   return args.units
     .filter((u) => u.status === "vacant" || u.status === "turnover" || u.status === "listing" || (u.turnoverDays ?? 0) > 0)
     .map((unit) => {
@@ -328,6 +328,7 @@ export function turnoverAnalysis(args: {
     })
     .sort((a, b) => b.daysVacant - a.daysVacant);
 }
+
 
 /* ------------------------------------------------------------------ */
 /* Trends                                                              */
