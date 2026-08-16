@@ -135,7 +135,9 @@ function receiptText(scope: ReturnType<typeof usePortalScope>, invoice: Invoice)
 
 /* ————————————————————————— 1. home ————————————————————————— */
 export function PortalHome({ scope, go }: { scope: ReturnType<typeof usePortalScope>; go: (tab: PortalTab) => void }) {
+  const [showPayment, setShowPayment] = useState(false);
   const { hero, rent, requests, thread, lease } = scope;
+
   const openRequests = requests.filter((r) => r.status !== "resolved" && r.status !== "cancelled");
   const heroStatus = hero ? statusOf(hero, rent) : "paid";
   const heroBalance = hero ? balanceCents(hero, rent.payments) : 0;
@@ -166,9 +168,10 @@ export function PortalHome({ scope, go }: { scope: ReturnType<typeof usePortalSc
         )}
         <div className="mt-4 flex flex-col gap-2 sm:flex-row">
           {heroBalance > 0 ? (
-            <button type="button" className={primaryBtn} onClick={() => toast.success("Payment instructions sent to your email.")}>
+            <button type="button" className={primaryBtn} onClick={() => setShowPayment(true)}>
               Pay rent
             </button>
+
           ) : (
             <button
               type="button"
@@ -232,7 +235,16 @@ export function PortalHome({ scope, go }: { scope: ReturnType<typeof usePortalSc
       </div>
 
       <PortalCreditCard />
+
+      {showPayment && hero && (
+        <PortalPaymentFlow
+          invoice={hero}
+          scope={scope}
+          onClose={() => setShowPayment(false)}
+        />
+      )}
     </div>
+
   );
 }
 
