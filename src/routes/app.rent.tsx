@@ -344,6 +344,8 @@ function RentPageInner() {
       {openInvoice && <InvoiceSheet invoice={openInvoice} onClose={() => setOpenInvoice(null)} />}
       {showCharge && <ManualChargeSheet onClose={() => setShowCharge(false)} />}
       {showMoveOut && <MoveOutSheet onClose={() => setShowMoveOut(false)} />}
+      {showAddDeposit && <AddDepositSheet onClose={() => setShowAddDeposit(false)} />}
+      {ledgerTenantId && <DepositLedgerSheet tenantId={ledgerTenantId} onClose={() => setLedgerTenantId(null)} />}
     </>
   );
 }
