@@ -73,15 +73,15 @@ export const Route = createFileRoute("/")({
 /* ---------------------------------- data --------------------------------- */
 
 const navLinks = [
-  { label: "What it answers", href: "#answers" },
-  { label: "A look inside", href: "#showcase" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Features", href: "/features" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "About", href: "/about" },
 ];
 
 /** Shown in the top bar only — the docked pill has no room for these. */
 const topOnlyLinks = [
-  { label: "Reviews", href: "#reviews" },
-  { label: "About", href: "#about" },
+  { label: "Roadmap", href: "/roadmap" },
+  { label: "Resources", href: "/blog" },
 ];
 
 const testimonials = [
@@ -1726,15 +1726,28 @@ function Home() {
           <div>
             <p className="font-display text-sm font-bold text-navy">Product</p>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-              <li><a href="#features" className="hover:text-navy">Features</a></li>
-              <li><a href="#pricing" className="hover:text-navy">Pricing</a></li>
-              <li><Link to="/portal" className="hover:text-navy">Tenant portal</Link></li>
+              <li><Link to="/features" className="hover:text-navy">Features</Link></li>
+              <li><Link to="/pricing" className="hover:text-navy">Pricing</Link></li>
+              <li><Link to="/roadmap" className="hover:text-navy">Roadmap</Link></li>
+              <li><Link to="/help" className="hover:text-navy">Help centre</Link></li>
             </ul>
           </div>
           <div>
-            <p className="font-display text-sm font-bold text-navy">Company</p>
+            <p className="font-display text-sm font-bold text-navy">Comparisons</p>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/app/support" className="hover:text-navy">Support</Link></li>
+              <li><Link to="/vs/buildium" className="hover:text-navy">vs Buildium</Link></li>
+              <li><Link to="/vs/doorloop" className="hover:text-navy">vs DoorLoop</Link></li>
+              <li><Link to="/vs/spreadsheets" className="hover:text-navy">vs Spreadsheets</Link></li>
+            </ul>
+          </div>
+          <div>
+            <p className="font-display text-sm font-bold text-navy">Resources</p>
+            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+              <li><Link to="/blog" className="hover:text-navy">Blog</Link></li>
+              <li><Link to="/provinces/ontario" className="hover:text-navy">Ontario Guide</Link></li>
+              <li><Link to="/about" className="hover:text-navy">About Us</Link></li>
+              <li><Link to="/contact" className="hover:text-navy">Contact</Link></li>
+            </ul>
               <li><Link to="/signin" className="hover:text-navy">Sign in</Link></li>
               <li><Link to="/legal/privacy" className="hover:text-navy">Privacy (PIPEDA)</Link></li>
               <li><Link to="/legal/terms" className="hover:text-navy">Terms</Link></li>
