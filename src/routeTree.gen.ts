@@ -76,6 +76,7 @@ import { Route as AppLeasesIndexRouteImport } from './routes/app.leases.index'
 import { Route as AppLeasesLeaseIdRouteImport } from './routes/app.leases.$leaseId'
 import { Route as AppLeasesNewRouteImport } from './routes/app.leases.new'
 import { Route as AppLeasesSignRouteImport } from './routes/app.leases.sign'
+import { Route as AppPropertiesIdRouteImport } from './routes/app.properties.$id'
 import { Route as AppProspectsIndexRouteImport } from './routes/app.prospects.index'
 import { Route as AppProspectsProspectIdRouteImport } from './routes/app.prospects.$prospectId'
 import { Route as AppSettingsEmailsRouteImport } from './routes/app.settings.emails'
@@ -419,6 +420,11 @@ const AppLeasesSignRoute = AppLeasesSignRouteImport.update({
   path: '/sign',
   getParentRoute: () => AppLeasesRoute,
 } as any)
+const AppPropertiesIdRoute = AppPropertiesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AppPropertiesRoute,
+} as any)
 const AppProspectsIndexRoute = AppProspectsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -491,7 +497,7 @@ export interface FileRoutesByFullPath {
   '/app/notices': typeof AppNoticesRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/onboarding': typeof AppOnboardingRoute
-  '/app/properties': typeof AppPropertiesRoute
+  '/app/properties': typeof AppPropertiesRouteWithChildren
   '/app/prospects': typeof AppProspectsRouteWithChildren
   '/app/renewals': typeof AppRenewalsRoute
   '/app/rent': typeof AppRentRoute
@@ -523,6 +529,7 @@ export interface FileRoutesByFullPath {
   '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
   '/app/leases/new': typeof AppLeasesNewRoute
   '/app/leases/sign': typeof AppLeasesSignRoute
+  '/app/properties/$id': typeof AppPropertiesIdRoute
   '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
   '/app/settings/emails': typeof AppSettingsEmailsRoute
   '/app/leases/': typeof AppLeasesIndexRoute
@@ -565,7 +572,7 @@ export interface FileRoutesByTo {
   '/app/notices': typeof AppNoticesRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/onboarding': typeof AppOnboardingRoute
-  '/app/properties': typeof AppPropertiesRoute
+  '/app/properties': typeof AppPropertiesRouteWithChildren
   '/app/renewals': typeof AppRenewalsRoute
   '/app/rent': typeof AppRentRoute
   '/app/rent-increases': typeof AppRentIncreasesRoute
@@ -596,6 +603,7 @@ export interface FileRoutesByTo {
   '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
   '/app/leases/new': typeof AppLeasesNewRoute
   '/app/leases/sign': typeof AppLeasesSignRoute
+  '/app/properties/$id': typeof AppPropertiesIdRoute
   '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
   '/app/settings/emails': typeof AppSettingsEmailsRoute
   '/app/leases': typeof AppLeasesIndexRoute
@@ -641,7 +649,7 @@ export interface FileRoutesById {
   '/app/notices': typeof AppNoticesRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/onboarding': typeof AppOnboardingRoute
-  '/app/properties': typeof AppPropertiesRoute
+  '/app/properties': typeof AppPropertiesRouteWithChildren
   '/app/prospects': typeof AppProspectsRouteWithChildren
   '/app/renewals': typeof AppRenewalsRoute
   '/app/rent': typeof AppRentRoute
@@ -673,6 +681,7 @@ export interface FileRoutesById {
   '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
   '/app/leases/new': typeof AppLeasesNewRoute
   '/app/leases/sign': typeof AppLeasesSignRoute
+  '/app/properties/$id': typeof AppPropertiesIdRoute
   '/app/prospects/$prospectId': typeof AppProspectsProspectIdRoute
   '/app/settings/emails': typeof AppSettingsEmailsRoute
   '/app/leases/': typeof AppLeasesIndexRoute
@@ -751,6 +760,7 @@ export interface FileRouteTypes {
     | '/app/leases/$leaseId'
     | '/app/leases/new'
     | '/app/leases/sign'
+    | '/app/properties/$id'
     | '/app/prospects/$prospectId'
     | '/app/settings/emails'
     | '/app/leases/'
@@ -824,6 +834,7 @@ export interface FileRouteTypes {
     | '/app/leases/$leaseId'
     | '/app/leases/new'
     | '/app/leases/sign'
+    | '/app/properties/$id'
     | '/app/prospects/$prospectId'
     | '/app/settings/emails'
     | '/app/leases'
@@ -900,6 +911,7 @@ export interface FileRouteTypes {
     | '/app/leases/$leaseId'
     | '/app/leases/new'
     | '/app/leases/sign'
+    | '/app/properties/$id'
     | '/app/prospects/$prospectId'
     | '/app/settings/emails'
     | '/app/leases/'
@@ -1412,6 +1424,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeasesSignRouteImport
       parentRoute: typeof AppLeasesRoute
     }
+    '/app/properties/$id': {
+      id: '/app/properties/$id'
+      path: '/$id'
+      fullPath: '/app/properties/$id'
+      preLoaderRoute: typeof AppPropertiesIdRouteImport
+      parentRoute: typeof AppPropertiesRoute
+    }
     '/app/prospects/': {
       id: '/app/prospects/'
       path: '/'
@@ -1486,6 +1505,18 @@ const AppLeasesRouteWithChildren = AppLeasesRoute._addFileChildren(
   AppLeasesRouteChildren,
 )
 
+interface AppPropertiesRouteChildren {
+  AppPropertiesIdRoute: typeof AppPropertiesIdRoute
+}
+
+const AppPropertiesRouteChildren: AppPropertiesRouteChildren = {
+  AppPropertiesIdRoute: AppPropertiesIdRoute,
+}
+
+const AppPropertiesRouteWithChildren = AppPropertiesRoute._addFileChildren(
+  AppPropertiesRouteChildren,
+)
+
 interface AppProspectsRouteChildren {
   AppProspectsProspectIdRoute: typeof AppProspectsProspectIdRoute
   AppProspectsIndexRoute: typeof AppProspectsIndexRoute
@@ -1533,7 +1564,7 @@ interface AppRouteChildren {
   AppNoticesRoute: typeof AppNoticesRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
   AppOnboardingRoute: typeof AppOnboardingRoute
-  AppPropertiesRoute: typeof AppPropertiesRoute
+  AppPropertiesRoute: typeof AppPropertiesRouteWithChildren
   AppProspectsRoute: typeof AppProspectsRouteWithChildren
   AppRenewalsRoute: typeof AppRenewalsRoute
   AppRentRoute: typeof AppRentRoute
@@ -1568,7 +1599,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppNoticesRoute: AppNoticesRoute,
   AppNotificationsRoute: AppNotificationsRoute,
   AppOnboardingRoute: AppOnboardingRoute,
-  AppPropertiesRoute: AppPropertiesRoute,
+  AppPropertiesRoute: AppPropertiesRouteWithChildren,
   AppProspectsRoute: AppProspectsRouteWithChildren,
   AppRenewalsRoute: AppRenewalsRoute,
   AppRentRoute: AppRentRoute,

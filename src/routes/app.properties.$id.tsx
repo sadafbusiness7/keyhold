@@ -6,7 +6,7 @@ import { ActivityFeed } from "@/components/keyhold/activity-feed";
 export const Route = createFileRoute("/app/properties/$id")({
   component: PropertyDetailPage,
   validateSearch: (search: Record<string, unknown>) => ({
-    tab: (search.tab as string) || "overview",
+    tab: (search["tab"] as string) || "overview",
   }),
 });
 
