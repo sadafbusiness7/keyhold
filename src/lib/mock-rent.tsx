@@ -1,13 +1,11 @@
 /**
  * MOCK RENT STORE — prototype state only, NOT a backend.
- * ------------------------------------------------------
- * Holds invoices, payments, the tenant credit ledger, move-outs and rent
- * settings in React state. Every number it reports is computed by the pure
- * functions in `rent-engine.ts`; this file only stores rows and dispatches
- * actions. Swap the seeds for Supabase queries and keep the same API.
  */
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { toast } from "sonner";
+import { usePermissions } from "@/lib/mock-access";
 import { leases as allLeases, unitById } from "@/lib/mock-data";
+
 import {
   addMonths,
   balanceCents,
@@ -121,10 +119,12 @@ type RentCtx = ReturnType<typeof useRentStore>;
 const Ctx = createContext<RentCtx | null>(null);
 
 function useRentStore() {
+  const { isDemo } = usePermissions();
   const seededInvoices = useMemo(seedInvoices, []);
   const [invoices, setInvoices] = useState<Invoice[]>(seededInvoices);
   const [payments, setPayments] = useState<Payment[]>(() => seedPayments(seededInvoices));
   const [credits, setCredits] = useState<CreditEntry[]>(seedCredits);
+
   const [settings, setSettings] = useState<RentSettings>(defaultSettings);
   const [moveOuts, setMoveOuts] = useState<MoveOut[]>([]);
   const [savedMethods, setSavedMethods] = useState<SavedPaymentMethod[]>([
@@ -219,7 +219,15 @@ function useRentStore() {
         status: "succeeded",
       };
 
+      if (isDemo) {
+        toast.info("Simulation: Payment recorded. In demo mode, no real transaction occurs.", {
+          description: `Amount: CA$${(input.amountCents / 100).toFixed(2)} via ${input.method}`,
+        });
+        return { payment, overpaymentCents: over };
+      }
+
       setPayments((prev) => [...prev, payment]);
+
       if (over > 0) {
         setCredits((prev) => [
           ...prev,
