@@ -45,7 +45,7 @@ function DemoMode() {
     if (selectedRole === "t3") {
       navigate({ to: "/portal" });
     } else {
-      navigate({ to: "/app" });
+      navigate({ to: "/app", search: { tour: "start" } });
     }
   };
 
