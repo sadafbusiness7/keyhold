@@ -10,9 +10,16 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FeaturesRouteImport } from './routes/features'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as OwnerRouteImport } from './routes/owner'
 import { Route as PortalRouteImport } from './routes/portal'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AppIndexRouteImport } from './routes/app.index'
@@ -48,6 +55,11 @@ import { Route as AppTaxRouteImport } from './routes/app.tax'
 import { Route as AppTeamRouteImport } from './routes/app.team'
 import { Route as AppTenantsRouteImport } from './routes/app.tenants'
 import { Route as ApplySlugRouteImport } from './routes/apply.$slug'
+import { Route as FeaturesLeasesRouteImport } from './routes/features.leases'
+import { Route as FeaturesMaintenanceRouteImport } from './routes/features.maintenance'
+import { Route as FeaturesPortalRouteImport } from './routes/features.portal'
+import { Route as FeaturesRentRouteImport } from './routes/features.rent'
+import { Route as FeaturesReportsRouteImport } from './routes/features.reports'
 import { Route as LegalIndexRouteImport } from './routes/legal.index'
 import { Route as LegalAccessibilityRouteImport } from './routes/legal.accessibility'
 import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
@@ -55,6 +67,10 @@ import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as LegalSecurityRouteImport } from './routes/legal.security'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as ListingSlugRouteImport } from './routes/listing.$slug'
+import { Route as ProvincesOntarioRouteImport } from './routes/provinces.ontario'
+import { Route as VsBuildiumRouteImport } from './routes/vs.buildium'
+import { Route as VsDoorloopRouteImport } from './routes/vs.doorloop'
+import { Route as VsSpreadsheetsRouteImport } from './routes/vs.spreadsheets'
 import { Route as AppLeasesIndexRouteImport } from './routes/app.leases.index'
 import { Route as AppLeasesLeaseIdRouteImport } from './routes/app.leases.$leaseId'
 import { Route as AppLeasesNewRouteImport } from './routes/app.leases.new'
@@ -72,9 +88,34 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesRoute = FeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OwnerRoute = OwnerRouteImport.update({
@@ -85,6 +126,16 @@ const OwnerRoute = OwnerRouteImport.update({
 const PortalRoute = PortalRouteImport.update({
   id: '/portal',
   path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoadmapRoute = RoadmapRouteImport.update({
+  id: '/roadmap',
+  path: '/roadmap',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SigninRoute = SigninRouteImport.update({
@@ -262,6 +313,31 @@ const ApplySlugRoute = ApplySlugRouteImport.update({
   path: '/apply/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeaturesLeasesRoute = FeaturesLeasesRouteImport.update({
+  id: '/leases',
+  path: '/leases',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesMaintenanceRoute = FeaturesMaintenanceRouteImport.update({
+  id: '/maintenance',
+  path: '/maintenance',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesPortalRoute = FeaturesPortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesRentRoute = FeaturesRentRouteImport.update({
+  id: '/rent',
+  path: '/rent',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesReportsRoute = FeaturesReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => FeaturesRoute,
+} as any)
 const LegalIndexRoute = LegalIndexRouteImport.update({
   id: '/legal/',
   path: '/legal/',
@@ -295,6 +371,26 @@ const LegalTermsRoute = LegalTermsRouteImport.update({
 const ListingSlugRoute = ListingSlugRouteImport.update({
   id: '/listing/$slug',
   path: '/listing/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProvincesOntarioRoute = ProvincesOntarioRouteImport.update({
+  id: '/provinces/ontario',
+  path: '/provinces/ontario',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VsBuildiumRoute = VsBuildiumRouteImport.update({
+  id: '/vs/buildium',
+  path: '/vs/buildium',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VsDoorloopRoute = VsDoorloopRouteImport.update({
+  id: '/vs/doorloop',
+  path: '/vs/doorloop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VsSpreadsheetsRoute = VsSpreadsheetsRouteImport.update({
+  id: '/vs/spreadsheets',
+  path: '/vs/spreadsheets',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppLeasesIndexRoute = AppLeasesIndexRouteImport.update({
@@ -356,9 +452,16 @@ const AppLeasesWizardProspectIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/app': typeof AppRouteWithChildren
+  '/blog': typeof BlogRoute
+  '/contact': typeof ContactRoute
+  '/features': typeof FeaturesRouteWithChildren
+  '/help': typeof HelpRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
+  '/pricing': typeof PricingRoute
+  '/roadmap': typeof RoadmapRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/app/add-tenant': typeof AppAddTenantRoute
@@ -393,12 +496,21 @@ export interface FileRoutesByFullPath {
   '/app/team': typeof AppTeamRoute
   '/app/tenants': typeof AppTenantsRoute
   '/apply/$slug': typeof ApplySlugRoute
+  '/features/leases': typeof FeaturesLeasesRoute
+  '/features/maintenance': typeof FeaturesMaintenanceRoute
+  '/features/portal': typeof FeaturesPortalRoute
+  '/features/rent': typeof FeaturesRentRoute
+  '/features/reports': typeof FeaturesReportsRoute
   '/legal/accessibility': typeof LegalAccessibilityRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/security': typeof LegalSecurityRoute
   '/legal/terms': typeof LegalTermsRoute
   '/listing/$slug': typeof ListingSlugRoute
+  '/provinces/ontario': typeof ProvincesOntarioRoute
+  '/vs/buildium': typeof VsBuildiumRoute
+  '/vs/doorloop': typeof VsDoorloopRoute
+  '/vs/spreadsheets': typeof VsSpreadsheetsRoute
   '/app/': typeof AppIndexRoute
   '/legal/': typeof LegalIndexRoute
   '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
@@ -415,8 +527,15 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/blog': typeof BlogRoute
+  '/contact': typeof ContactRoute
+  '/features': typeof FeaturesRouteWithChildren
+  '/help': typeof HelpRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
+  '/pricing': typeof PricingRoute
+  '/roadmap': typeof RoadmapRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/app/add-tenant': typeof AppAddTenantRoute
@@ -449,12 +568,21 @@ export interface FileRoutesByTo {
   '/app/team': typeof AppTeamRoute
   '/app/tenants': typeof AppTenantsRoute
   '/apply/$slug': typeof ApplySlugRoute
+  '/features/leases': typeof FeaturesLeasesRoute
+  '/features/maintenance': typeof FeaturesMaintenanceRoute
+  '/features/portal': typeof FeaturesPortalRoute
+  '/features/rent': typeof FeaturesRentRoute
+  '/features/reports': typeof FeaturesReportsRoute
   '/legal/accessibility': typeof LegalAccessibilityRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/security': typeof LegalSecurityRoute
   '/legal/terms': typeof LegalTermsRoute
   '/listing/$slug': typeof ListingSlugRoute
+  '/provinces/ontario': typeof ProvincesOntarioRoute
+  '/vs/buildium': typeof VsBuildiumRoute
+  '/vs/doorloop': typeof VsDoorloopRoute
+  '/vs/spreadsheets': typeof VsSpreadsheetsRoute
   '/app': typeof AppIndexRoute
   '/legal': typeof LegalIndexRoute
   '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
@@ -472,9 +600,16 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/app': typeof AppRouteWithChildren
+  '/blog': typeof BlogRoute
+  '/contact': typeof ContactRoute
+  '/features': typeof FeaturesRouteWithChildren
+  '/help': typeof HelpRoute
   '/owner': typeof OwnerRoute
   '/portal': typeof PortalRoute
+  '/pricing': typeof PricingRoute
+  '/roadmap': typeof RoadmapRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/app/add-tenant': typeof AppAddTenantRoute
@@ -509,12 +644,21 @@ export interface FileRoutesById {
   '/app/team': typeof AppTeamRoute
   '/app/tenants': typeof AppTenantsRoute
   '/apply/$slug': typeof ApplySlugRoute
+  '/features/leases': typeof FeaturesLeasesRoute
+  '/features/maintenance': typeof FeaturesMaintenanceRoute
+  '/features/portal': typeof FeaturesPortalRoute
+  '/features/rent': typeof FeaturesRentRoute
+  '/features/reports': typeof FeaturesReportsRoute
   '/legal/accessibility': typeof LegalAccessibilityRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/security': typeof LegalSecurityRoute
   '/legal/terms': typeof LegalTermsRoute
   '/listing/$slug': typeof ListingSlugRoute
+  '/provinces/ontario': typeof ProvincesOntarioRoute
+  '/vs/buildium': typeof VsBuildiumRoute
+  '/vs/doorloop': typeof VsDoorloopRoute
+  '/vs/spreadsheets': typeof VsSpreadsheetsRoute
   '/app/': typeof AppIndexRoute
   '/legal/': typeof LegalIndexRoute
   '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
@@ -533,9 +677,16 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/app'
+    | '/blog'
+    | '/contact'
+    | '/features'
+    | '/help'
     | '/owner'
     | '/portal'
+    | '/pricing'
+    | '/roadmap'
     | '/signin'
     | '/signup'
     | '/app/add-tenant'
@@ -570,12 +721,21 @@ export interface FileRouteTypes {
     | '/app/team'
     | '/app/tenants'
     | '/apply/$slug'
+    | '/features/leases'
+    | '/features/maintenance'
+    | '/features/portal'
+    | '/features/rent'
+    | '/features/reports'
     | '/legal/accessibility'
     | '/legal/cookies'
     | '/legal/privacy'
     | '/legal/security'
     | '/legal/terms'
     | '/listing/$slug'
+    | '/provinces/ontario'
+    | '/vs/buildium'
+    | '/vs/doorloop'
+    | '/vs/spreadsheets'
     | '/app/'
     | '/legal/'
     | '/app/leases/$leaseId'
@@ -592,8 +752,15 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
+    | '/blog'
+    | '/contact'
+    | '/features'
+    | '/help'
     | '/owner'
     | '/portal'
+    | '/pricing'
+    | '/roadmap'
     | '/signin'
     | '/signup'
     | '/app/add-tenant'
@@ -626,12 +793,21 @@ export interface FileRouteTypes {
     | '/app/team'
     | '/app/tenants'
     | '/apply/$slug'
+    | '/features/leases'
+    | '/features/maintenance'
+    | '/features/portal'
+    | '/features/rent'
+    | '/features/reports'
     | '/legal/accessibility'
     | '/legal/cookies'
     | '/legal/privacy'
     | '/legal/security'
     | '/legal/terms'
     | '/listing/$slug'
+    | '/provinces/ontario'
+    | '/vs/buildium'
+    | '/vs/doorloop'
+    | '/vs/spreadsheets'
     | '/app'
     | '/legal'
     | '/app/leases/$leaseId'
@@ -648,9 +824,16 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/app'
+    | '/blog'
+    | '/contact'
+    | '/features'
+    | '/help'
     | '/owner'
     | '/portal'
+    | '/pricing'
+    | '/roadmap'
     | '/signin'
     | '/signup'
     | '/app/add-tenant'
@@ -685,12 +868,21 @@ export interface FileRouteTypes {
     | '/app/team'
     | '/app/tenants'
     | '/apply/$slug'
+    | '/features/leases'
+    | '/features/maintenance'
+    | '/features/portal'
+    | '/features/rent'
+    | '/features/reports'
     | '/legal/accessibility'
     | '/legal/cookies'
     | '/legal/privacy'
     | '/legal/security'
     | '/legal/terms'
     | '/listing/$slug'
+    | '/provinces/ontario'
+    | '/vs/buildium'
+    | '/vs/doorloop'
+    | '/vs/spreadsheets'
     | '/app/'
     | '/legal/'
     | '/app/leases/$leaseId'
@@ -708,9 +900,16 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AppRoute: typeof AppRouteWithChildren
+  BlogRoute: typeof BlogRoute
+  ContactRoute: typeof ContactRoute
+  FeaturesRoute: typeof FeaturesRouteWithChildren
+  HelpRoute: typeof HelpRoute
   OwnerRoute: typeof OwnerRoute
   PortalRoute: typeof PortalRoute
+  PricingRoute: typeof PricingRoute
+  RoadmapRoute: typeof RoadmapRoute
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
   ApplySlugRoute: typeof ApplySlugRoute
@@ -720,6 +919,10 @@ export interface RootRouteChildren {
   LegalSecurityRoute: typeof LegalSecurityRoute
   LegalTermsRoute: typeof LegalTermsRoute
   ListingSlugRoute: typeof ListingSlugRoute
+  ProvincesOntarioRoute: typeof ProvincesOntarioRoute
+  VsBuildiumRoute: typeof VsBuildiumRoute
+  VsDoorloopRoute: typeof VsDoorloopRoute
+  VsSpreadsheetsRoute: typeof VsSpreadsheetsRoute
   LegalIndexRoute: typeof LegalIndexRoute
   ApiPublicCalendarFeedRoute: typeof ApiPublicCalendarFeedRoute
   ApiPublicEmailInboundRoute: typeof ApiPublicEmailInboundRoute
@@ -734,11 +937,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features': {
+      id: '/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof FeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/owner': {
@@ -753,6 +991,20 @@ declare module '@tanstack/react-router' {
       path: '/portal'
       fullPath: '/portal'
       preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/roadmap': {
+      id: '/roadmap'
+      path: '/roadmap'
+      fullPath: '/roadmap'
+      preLoaderRoute: typeof RoadmapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signin': {
@@ -1000,6 +1252,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/features/leases': {
+      id: '/features/leases'
+      path: '/leases'
+      fullPath: '/features/leases'
+      preLoaderRoute: typeof FeaturesLeasesRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/maintenance': {
+      id: '/features/maintenance'
+      path: '/maintenance'
+      fullPath: '/features/maintenance'
+      preLoaderRoute: typeof FeaturesMaintenanceRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/portal': {
+      id: '/features/portal'
+      path: '/portal'
+      fullPath: '/features/portal'
+      preLoaderRoute: typeof FeaturesPortalRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/rent': {
+      id: '/features/rent'
+      path: '/rent'
+      fullPath: '/features/rent'
+      preLoaderRoute: typeof FeaturesRentRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/reports': {
+      id: '/features/reports'
+      path: '/reports'
+      fullPath: '/features/reports'
+      preLoaderRoute: typeof FeaturesReportsRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
     '/legal/': {
       id: '/legal/'
       path: '/legal'
@@ -1047,6 +1334,34 @@ declare module '@tanstack/react-router' {
       path: '/listing/$slug'
       fullPath: '/listing/$slug'
       preLoaderRoute: typeof ListingSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/provinces/ontario': {
+      id: '/provinces/ontario'
+      path: '/provinces/ontario'
+      fullPath: '/provinces/ontario'
+      preLoaderRoute: typeof ProvincesOntarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vs/buildium': {
+      id: '/vs/buildium'
+      path: '/vs/buildium'
+      fullPath: '/vs/buildium'
+      preLoaderRoute: typeof VsBuildiumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vs/doorloop': {
+      id: '/vs/doorloop'
+      path: '/vs/doorloop'
+      fullPath: '/vs/doorloop'
+      preLoaderRoute: typeof VsDoorloopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vs/spreadsheets': {
+      id: '/vs/spreadsheets'
+      path: '/vs/spreadsheets'
+      fullPath: '/vs/spreadsheets'
+      preLoaderRoute: typeof VsSpreadsheetsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/leases/': {
@@ -1249,11 +1564,38 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface FeaturesRouteChildren {
+  FeaturesLeasesRoute: typeof FeaturesLeasesRoute
+  FeaturesMaintenanceRoute: typeof FeaturesMaintenanceRoute
+  FeaturesPortalRoute: typeof FeaturesPortalRoute
+  FeaturesRentRoute: typeof FeaturesRentRoute
+  FeaturesReportsRoute: typeof FeaturesReportsRoute
+}
+
+const FeaturesRouteChildren: FeaturesRouteChildren = {
+  FeaturesLeasesRoute: FeaturesLeasesRoute,
+  FeaturesMaintenanceRoute: FeaturesMaintenanceRoute,
+  FeaturesPortalRoute: FeaturesPortalRoute,
+  FeaturesRentRoute: FeaturesRentRoute,
+  FeaturesReportsRoute: FeaturesReportsRoute,
+}
+
+const FeaturesRouteWithChildren = FeaturesRoute._addFileChildren(
+  FeaturesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AppRoute: AppRouteWithChildren,
+  BlogRoute: BlogRoute,
+  ContactRoute: ContactRoute,
+  FeaturesRoute: FeaturesRouteWithChildren,
+  HelpRoute: HelpRoute,
   OwnerRoute: OwnerRoute,
   PortalRoute: PortalRoute,
+  PricingRoute: PricingRoute,
+  RoadmapRoute: RoadmapRoute,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
   ApplySlugRoute: ApplySlugRoute,
@@ -1263,6 +1605,10 @@ const rootRouteChildren: RootRouteChildren = {
   LegalSecurityRoute: LegalSecurityRoute,
   LegalTermsRoute: LegalTermsRoute,
   ListingSlugRoute: ListingSlugRoute,
+  ProvincesOntarioRoute: ProvincesOntarioRoute,
+  VsBuildiumRoute: VsBuildiumRoute,
+  VsDoorloopRoute: VsDoorloopRoute,
+  VsSpreadsheetsRoute: VsSpreadsheetsRoute,
   LegalIndexRoute: LegalIndexRoute,
   ApiPublicCalendarFeedRoute: ApiPublicCalendarFeedRoute,
   ApiPublicEmailInboundRoute: ApiPublicEmailInboundRoute,
