@@ -55,8 +55,11 @@ import { Route as AppTaxRouteImport } from './routes/app.tax'
 import { Route as AppTeamRouteImport } from './routes/app.team'
 import { Route as AppTenantsRouteImport } from './routes/app.tenants'
 import { Route as ApplySlugRouteImport } from './routes/apply.$slug'
+import { Route as FeaturesLeasesRouteImport } from './routes/features.leases'
 import { Route as FeaturesMaintenanceRouteImport } from './routes/features.maintenance'
+import { Route as FeaturesPortalRouteImport } from './routes/features.portal'
 import { Route as FeaturesRentRouteImport } from './routes/features.rent'
+import { Route as FeaturesReportsRouteImport } from './routes/features.reports'
 import { Route as LegalIndexRouteImport } from './routes/legal.index'
 import { Route as LegalAccessibilityRouteImport } from './routes/legal.accessibility'
 import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
@@ -310,14 +313,29 @@ const ApplySlugRoute = ApplySlugRouteImport.update({
   path: '/apply/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeaturesLeasesRoute = FeaturesLeasesRouteImport.update({
+  id: '/leases',
+  path: '/leases',
+  getParentRoute: () => FeaturesRoute,
+} as any)
 const FeaturesMaintenanceRoute = FeaturesMaintenanceRouteImport.update({
   id: '/maintenance',
   path: '/maintenance',
   getParentRoute: () => FeaturesRoute,
 } as any)
+const FeaturesPortalRoute = FeaturesPortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => FeaturesRoute,
+} as any)
 const FeaturesRentRoute = FeaturesRentRouteImport.update({
   id: '/rent',
   path: '/rent',
+  getParentRoute: () => FeaturesRoute,
+} as any)
+const FeaturesReportsRoute = FeaturesReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
   getParentRoute: () => FeaturesRoute,
 } as any)
 const LegalIndexRoute = LegalIndexRouteImport.update({
@@ -478,8 +496,11 @@ export interface FileRoutesByFullPath {
   '/app/team': typeof AppTeamRoute
   '/app/tenants': typeof AppTenantsRoute
   '/apply/$slug': typeof ApplySlugRoute
+  '/features/leases': typeof FeaturesLeasesRoute
   '/features/maintenance': typeof FeaturesMaintenanceRoute
+  '/features/portal': typeof FeaturesPortalRoute
   '/features/rent': typeof FeaturesRentRoute
+  '/features/reports': typeof FeaturesReportsRoute
   '/legal/accessibility': typeof LegalAccessibilityRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
@@ -547,8 +568,11 @@ export interface FileRoutesByTo {
   '/app/team': typeof AppTeamRoute
   '/app/tenants': typeof AppTenantsRoute
   '/apply/$slug': typeof ApplySlugRoute
+  '/features/leases': typeof FeaturesLeasesRoute
   '/features/maintenance': typeof FeaturesMaintenanceRoute
+  '/features/portal': typeof FeaturesPortalRoute
   '/features/rent': typeof FeaturesRentRoute
+  '/features/reports': typeof FeaturesReportsRoute
   '/legal/accessibility': typeof LegalAccessibilityRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
@@ -620,8 +644,11 @@ export interface FileRoutesById {
   '/app/team': typeof AppTeamRoute
   '/app/tenants': typeof AppTenantsRoute
   '/apply/$slug': typeof ApplySlugRoute
+  '/features/leases': typeof FeaturesLeasesRoute
   '/features/maintenance': typeof FeaturesMaintenanceRoute
+  '/features/portal': typeof FeaturesPortalRoute
   '/features/rent': typeof FeaturesRentRoute
+  '/features/reports': typeof FeaturesReportsRoute
   '/legal/accessibility': typeof LegalAccessibilityRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
@@ -694,8 +721,11 @@ export interface FileRouteTypes {
     | '/app/team'
     | '/app/tenants'
     | '/apply/$slug'
+    | '/features/leases'
     | '/features/maintenance'
+    | '/features/portal'
     | '/features/rent'
+    | '/features/reports'
     | '/legal/accessibility'
     | '/legal/cookies'
     | '/legal/privacy'
@@ -763,8 +793,11 @@ export interface FileRouteTypes {
     | '/app/team'
     | '/app/tenants'
     | '/apply/$slug'
+    | '/features/leases'
     | '/features/maintenance'
+    | '/features/portal'
     | '/features/rent'
+    | '/features/reports'
     | '/legal/accessibility'
     | '/legal/cookies'
     | '/legal/privacy'
@@ -835,8 +868,11 @@ export interface FileRouteTypes {
     | '/app/team'
     | '/app/tenants'
     | '/apply/$slug'
+    | '/features/leases'
     | '/features/maintenance'
+    | '/features/portal'
     | '/features/rent'
+    | '/features/reports'
     | '/legal/accessibility'
     | '/legal/cookies'
     | '/legal/privacy'
@@ -1216,6 +1252,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/features/leases': {
+      id: '/features/leases'
+      path: '/leases'
+      fullPath: '/features/leases'
+      preLoaderRoute: typeof FeaturesLeasesRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
     '/features/maintenance': {
       id: '/features/maintenance'
       path: '/maintenance'
@@ -1223,11 +1266,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesMaintenanceRouteImport
       parentRoute: typeof FeaturesRoute
     }
+    '/features/portal': {
+      id: '/features/portal'
+      path: '/portal'
+      fullPath: '/features/portal'
+      preLoaderRoute: typeof FeaturesPortalRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
     '/features/rent': {
       id: '/features/rent'
       path: '/rent'
       fullPath: '/features/rent'
       preLoaderRoute: typeof FeaturesRentRouteImport
+      parentRoute: typeof FeaturesRoute
+    }
+    '/features/reports': {
+      id: '/features/reports'
+      path: '/reports'
+      fullPath: '/features/reports'
+      preLoaderRoute: typeof FeaturesReportsRouteImport
       parentRoute: typeof FeaturesRoute
     }
     '/legal/': {
@@ -1508,13 +1565,19 @@ const AppRouteChildren: AppRouteChildren = {
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface FeaturesRouteChildren {
+  FeaturesLeasesRoute: typeof FeaturesLeasesRoute
   FeaturesMaintenanceRoute: typeof FeaturesMaintenanceRoute
+  FeaturesPortalRoute: typeof FeaturesPortalRoute
   FeaturesRentRoute: typeof FeaturesRentRoute
+  FeaturesReportsRoute: typeof FeaturesReportsRoute
 }
 
 const FeaturesRouteChildren: FeaturesRouteChildren = {
+  FeaturesLeasesRoute: FeaturesLeasesRoute,
   FeaturesMaintenanceRoute: FeaturesMaintenanceRoute,
+  FeaturesPortalRoute: FeaturesPortalRoute,
   FeaturesRentRoute: FeaturesRentRoute,
+  FeaturesReportsRoute: FeaturesReportsRoute,
 }
 
 const FeaturesRouteWithChildren = FeaturesRoute._addFileChildren(

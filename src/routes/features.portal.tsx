@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MarketingShell } from "@/components/keyhold/marketing-shell";
-import { Monitor, CheckCircle, Smartphone, ShieldCheck } from "@phosphor-icons/react";
+import { Monitor, CheckCircle, DeviceMobile, ShieldCheck } from "@phosphor-icons/react";
 
 export const Route = createFileRoute("/features/portal")({
   head: () => ({
@@ -39,7 +39,7 @@ function PortalFeaturePage() {
                             </div>
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="card-soft p-3 bg-surface-sunk text-center">
-                                    <Smartphone className="mx-auto h-5 w-5 text-navy" />
+                                    <DeviceMobile className="mx-auto h-5 w-5 text-navy" />
                                     <p className="mt-2 text-[8px] font-bold text-navy uppercase">Support</p>
                                 </div>
                                 <div className="card-soft p-3 bg-surface-sunk text-center">
