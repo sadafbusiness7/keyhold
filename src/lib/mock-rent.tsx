@@ -226,7 +226,15 @@ function useRentStore() {
         return { payment, overpaymentCents: over };
       }
 
+      if (isDemo) {
+        toast.info("Simulation: Payment recorded. In demo mode, no real transaction occurs.", {
+          description: `Amount: CA$${(input.amountCents / 100).toFixed(2)} via ${input.method}`,
+        });
+        return { payment, overpaymentCents: over };
+      }
+
       setPayments((prev) => [...prev, payment]);
+
 
       if (over > 0) {
         setCredits((prev) => [
