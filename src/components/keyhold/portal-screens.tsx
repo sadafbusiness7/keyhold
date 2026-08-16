@@ -1025,3 +1025,241 @@ export function PortalSos({ scope, onClose }: { scope: ReturnType<typeof usePort
 }
 
 export type PortalTab = "home" | "rent" | "repairs" | "docs" | "messages" | "profile";
+
+/* ————————————————————————— 7. payment flow ————————————————————————— */
+import { Bank, CreditCard, CaretRight, X } from "@phosphor-icons/react";
+import type { SavedPaymentMethod } from "@/lib/rent-engine";
+
+export function PortalPaymentFlow({
+  invoice,
+  scope,
+  onClose,
+}: {
+  invoice: Invoice;
+  scope: ReturnType<typeof usePortalScope>;
+  onClose: () => void;
+}) {
+  const [step, setStep] = useState<"review" | "method" | "confirm" | "success">("review");
+  const [method, setMethod] = useState<SavedPaymentMethod | null>(
+    scope.rent.methodsForTenant(scope.tenant.id).find((m) => m.isDefault) || null
+  );
+
+  const balance = balanceCents(invoice, scope.rent.payments);
+  const credit = Math.min(balance, scope.creditCents);
+  const subtotal = balance - credit;
+
+  const getFee = (m: SavedPaymentMethod | null) => {
+    if (!m) return 0;
+    if (m.type === "bank") return 0; // CAD standard: no PAD fees for tenants
+    return Math.round(subtotal * 0.0275); // 2.75% for cards
+  };
+
+  const fee = getFee(method);
+  const total = subtotal + fee;
+
+  const handlePay = () => {
+    if (!method) return;
+    toast.promise(
+      new Promise((resolve) => setTimeout(resolve, 1500)).then(() => {
+        scope.rent.recordPayment({
+          invoiceId: invoice.id,
+          amountCents: subtotal,
+          method: method.type === "bank" ? "Bank account" : "Credit card",
+          receivedOn: scope.today,
+          reference: `Live-Demo-${Math.random().toString(36).slice(2, 7).toUpperCase()}`,
+          feeCents: fee,
+        });
+        setStep("success");
+      }),
+      {
+        loading: "Contacting bank...",
+        success: "Payment received.",
+        error: "Payment failed.",
+      }
+    );
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col bg-background sm:mx-auto sm:max-w-2xl sm:border-x sm:border-border">
+      {/* Demo Watermark */}
+      <div className="bg-navy px-4 py-1 text-center text-[10px] font-bold uppercase tracking-widest text-primary-foreground/50">
+        Demo Mode — No real money will be moved
+      </div>
+
+      <header className="flex items-center justify-between border-b border-border px-4 py-3">
+        <h2 className="font-display text-lg font-bold text-navy">
+          {step === "success" ? "Payment complete" : "Pay rent"}
+        </h2>
+        {step !== "success" && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="grid h-10 w-10 place-items-center rounded-full hover:bg-navy-soft"
+          >
+            <X weight="duotone" className="h-5 w-5" />
+          </button>
+        )}
+      </header>
+
+      <div className="flex-1 overflow-y-auto px-4 py-6">
+        {step === "review" && (
+          <div className="space-y-6">
+            <RailCard status="due-soon" className="p-5">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Amount due</p>
+              <p className="money mt-1 text-4xl font-extrabold text-navy">{money(balance)}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{invoice.description}</p>
+            </RailCard>
+
+            <div className="space-y-3">
+              <SectionTitle>Summary</SectionTitle>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Rent balance</span>
+                  <span className="money font-medium text-navy">{money(balance)}</span>
+                </div>
+                {credit > 0 && (
+                  <div className="flex justify-between text-success">
+                    <span>Credit on file</span>
+                    <span className="money font-medium">- {money(credit)}</span>
+                  </div>
+                )}
+                <div className="border-t border-border pt-2 flex justify-between font-bold text-navy">
+                  <span>Subtotal</span>
+                  <span className="money">{money(subtotal)}</span>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" className={primaryBtn} onClick={() => setStep("method")}>
+              Next: Payment method <CaretRight className="ml-2 h-4 w-4" />
+            </button>
+          </div>
+        )}
+
+        {step === "method" && (
+          <div className="space-y-6">
+            <SectionTitle>Select payment method</SectionTitle>
+            <div className="space-y-3">
+              {scope.rent.methodsForTenant(scope.tenant.id).map((m) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => {
+                    setMethod(m);
+                    setStep("confirm");
+                  }}
+                  className={`flex w-full items-center gap-4 rounded-2xl border p-4 text-left transition-colors ${
+                    method?.id === m.id ? "border-action bg-action/5" : "border-border hover:border-action/50"
+                  }`}
+                >
+                  <div className="grid h-10 w-10 place-items-center rounded-full bg-navy-soft text-navy">
+                    {m.type === "bank" ? <Bank weight="duotone" className="h-6 w-6" /> : <CreditCard weight="duotone" className="h-6 w-6" />}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-bold text-navy">{m.label}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {m.brand} •••• {m.last4}
+                    </p>
+                  </div>
+                  {m.type === "card" && (
+                    <span className="rounded-lg bg-navy-soft px-2 py-0.5 text-[10px] font-bold text-navy">
+                      2.75% fee
+                    </span>
+                  )}
+                  <CaretRight className="h-5 w-5 text-muted-foreground" />
+                </button>
+              ))}
+              <button
+                type="button"
+                className={quietBtn}
+                onClick={() => toast.info("In a real app, this would open a bank/Stripe connection.")}
+              >
+                + Add new method
+              </button>
+            </div>
+            <button type="button" className={quietBtn} onClick={() => setStep("review")}>
+              Back
+            </button>
+          </div>
+        )}
+
+        {step === "confirm" && method && (
+          <div className="space-y-6">
+            <div className="card-soft p-5 space-y-4">
+              <div className="flex items-center gap-3 border-b border-border pb-4">
+                <div className="grid h-10 w-10 place-items-center rounded-full bg-navy-soft text-navy">
+                  {method.type === "bank" ? <Bank weight="duotone" className="h-6 w-6" /> : <CreditCard weight="duotone" className="h-6 w-6" />}
+                </div>
+                <div className="flex-1">
+                  <p className="text-xs text-muted-foreground">Paying with</p>
+                  <p className="font-bold text-navy">{method.label} (•••• {method.last4})</p>
+                </div>
+                <button type="button" className="text-xs font-bold text-action" onClick={() => setStep("method")}>
+                  Change
+                </button>
+              </div>
+
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="money font-medium text-navy">{money(subtotal)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Processing fee</span>
+                  <span className={`money font-medium ${fee > 0 ? "text-navy" : "text-success"}`}>
+                    {fee > 0 ? money(fee) : "CAbash.00"}
+                  </span>
+                </div>
+                <div className="border-t border-border pt-3 flex justify-between items-baseline">
+                  <span className="font-bold text-navy text-lg">Total</span>
+                  <span className="money font-extrabold text-navy text-2xl">{money(total)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-xl bg-navy-soft p-4 space-y-2">
+              <p className="text-xs font-bold uppercase tracking-wider text-navy">Fee Disclosure</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {method.type === "bank"
+                  ? "Standard bank transfers (PAD) have no processing fees on Keyhold. The amount will be debited from your account within 1-3 business days."
+                  : "Credit card payments incur a 2.75% processing fee. This fee is non-refundable and goes directly to the payment processor."}
+              </p>
+            </div>
+
+            <button type="button" className={primaryBtn} onClick={handlePay}>
+              Confirm & Pay {money(total)}
+            </button>
+            <button type="button" className={quietBtn} onClick={() => setStep("method")}>
+              Back
+            </button>
+          </div>
+        )}
+
+        {step === "success" && (
+          <div className="flex flex-col items-center justify-center py-12 text-center space-y-6">
+            <div className="grid h-20 w-20 place-items-center rounded-full bg-success text-primary-foreground shadow-lg shadow-success/20">
+              <CheckCircle weight="fill" className="h-12 w-12" />
+            </div>
+            <div>
+              <h3 className="font-display text-2xl font-extrabold text-navy">Success!</h3>
+              <p className="mt-2 text-muted-foreground">
+                Your payment of {money(total)} has been received.
+              </p>
+            </div>
+            <div className="card-soft w-full p-4 text-left space-y-2">
+              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Next steps</p>
+              <p className="text-sm text-navy">
+                • You will receive a confirmation email shortly.<br />
+                • The rent balance will update in your portal in a few moments.<br />
+                • A receipt is now available in your history.
+              </p>
+            </div>
+            <button type="button" className={primaryBtn} onClick={onClose}>
+              Done
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
