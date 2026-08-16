@@ -334,7 +334,7 @@ function ReportsPage() {
     <>
       <PageHeader
         title="Report library"
-        subtitle="Eleven reports, every figure computed from your own records. All amounts in Canadian dollars."
+        subtitle="Twelve reports, every figure computed from your own records. All amounts in Canadian dollars."
         action={
           <div className="col-span-full flex flex-wrap gap-2 sm:col-auto">
             <Link
