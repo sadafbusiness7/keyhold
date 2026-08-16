@@ -13,6 +13,8 @@
  */
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import { properties as allProperties, units as allUnits, tenants as allTenants, leases as allLeases, rentRows as allRentRows, tickets as allTickets } from "@/lib/mock-data";
+import { usePortfolio } from "./mock-portfolio";
+
 
 /** "owner" is the account holder. "owner-client" is a property owner the manager reports to. */
 export type AccountType = "owner" | "pm" | "tenant" | "owner-client";
