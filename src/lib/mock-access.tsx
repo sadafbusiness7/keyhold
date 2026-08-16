@@ -499,8 +499,6 @@ export function usePermissions() {
     currentUser,
     assignments,
     users,
-    // isDemo is a constant for now, no need in deps
-
     accessLog,
     invitePm,
     resendInvite,
@@ -513,6 +511,8 @@ export function usePermissions() {
     inviteOwner,
     setOwnerAccess,
     removeOwnerAccess,
-
+    activeScope,
+    scopedPropertyIds,
   ]);
 }
+
