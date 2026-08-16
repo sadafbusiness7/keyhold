@@ -380,7 +380,26 @@ function useStore() {
         toast.info("Simulation: Work order created. In demo mode, vendors are not really notified.");
         // We still need to return a valid object for the UI to not crash if it expects it
         const req = requests.find(r => r.id === input.requestId);
-        return { id: "WO-DEMO", requestId: input.requestId, title: req?.subcategory || "Repair" };
+        return { 
+          id: "WO-DEMO", 
+          requestId: input.requestId, 
+          title: req?.subcategory || "Repair",
+          status: "assigned",
+          propertyId: req?.propertyId || "",
+          unitId: req?.unitId || "",
+          tenantId: req?.tenantId || null,
+          scope: req?.description || "",
+          photos: req?.photos || [],
+          accessInstructions: req?.accessInstructions || "",
+          vendorId: input.vendorId,
+          scheduledFor: input.scheduledFor,
+          notifyEmail: input.notifyEmail,
+          notifySms: input.notifySms,
+          createdOn: TODAY,
+          completedOn: null,
+          completionNote: "",
+          log: []
+        } as WorkOrder;
       }
 
       const request = requests.find((r) => r.id === input.requestId);
