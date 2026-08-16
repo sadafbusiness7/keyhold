@@ -19,6 +19,7 @@ import {
   WifiHigh,
   Clock,
   TrendUp,
+  ArrowSquareOut,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { RailCard, StatusLabel } from "@/components/keyhold/status";
