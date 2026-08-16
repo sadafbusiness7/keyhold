@@ -124,13 +124,15 @@ function PropertyDetailPage() {
               getId={(u) => u.id}
               columns={[
                 { key: "label", label: "Unit", locked: true, value: u => u.label, render: u => (
-                  <Link to={`/app/units/${u.id}`} className="font-display font-bold text-navy hover:underline">{u.label}</Link>
+                  <Link to={`/app/units/${u.id}` as any} className="font-display font-bold text-navy hover:underline">{u.label}</Link>
+
                 )},
                 { key: "kind", label: "Type", value: u => u.kind },
                 { key: "tenant", label: "Tenant", value: u => allTenants.find(t => t.id === u.tenantId)?.name ?? "Vacant", render: u => {
                   const t = allTenants.find(t => t.id === u.tenantId);
                   return t ? (
-                    <Link to={`/app/tenants/${t.id}`} className="text-navy hover:underline">{t.name}</Link>
+                    <Link to={`/app/tenants/${t.id}` as any} className="text-navy hover:underline">{t.name}</Link>
+
                   ) : <span className="text-muted-foreground italic">Vacant</span>;
                 }},
                 { key: "rent", label: "Rent", align: "right", value: u => u.rent, render: u => <span className="money font-bold text-navy">{cad(u.rent)}</span> },
