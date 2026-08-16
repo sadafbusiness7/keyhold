@@ -33,7 +33,7 @@ function LeaseDetailPage() {
       <DetailHeader 
         title={`Lease ${lease.id}`} 
         subtitle={`${lease.type} · ${lease.start} to ${lease.end}`}
-        status={<StatusLabel status="paid" />}
+        status={<StatusLabel status="active" />}
         stats={[
           { label: "Monthly Rent", value: cad(lease.rent) },
           { label: "Deposit Held", value: cad(lease.depositHeld) },
