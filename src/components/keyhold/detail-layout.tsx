@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useSearch } from "@tanstack/react-router";
 import { CaretRight, House } from "@phosphor-icons/react";
 
 export type BreadcrumbItem = {
@@ -103,5 +103,19 @@ export function DetailHeader({
         </div>
       )}
     </div>
+  );
+}
+
+export function DetailSection({ title, children, actions }: { title?: string; children: ReactNode; actions?: ReactNode }) {
+  return (
+    <section className="space-y-4">
+      {(title || actions) && (
+        <div className="flex items-center justify-between gap-4">
+          {title && <h3 className="font-display text-lg font-bold text-navy">{title}</h3>}
+          {actions}
+        </div>
+      )}
+      {children}
+    </section>
   );
 }
