@@ -1748,14 +1748,6 @@ function Home() {
               <li><Link to="/about" className="hover:text-navy">About Us</Link></li>
               <li><Link to="/contact" className="hover:text-navy">Contact</Link></li>
             </ul>
-              <li><Link to="/signin" className="hover:text-navy">Sign in</Link></li>
-              <li><Link to="/legal/privacy" className="hover:text-navy">Privacy (PIPEDA)</Link></li>
-              <li><Link to="/legal/terms" className="hover:text-navy">Terms</Link></li>
-              <li><Link to="/legal/security" className="hover:text-navy">Security</Link></li>
-              <li><Link to="/legal/accessibility" className="hover:text-navy">Accessibility</Link></li>
-              <li><Link to="/legal/cookies" className="hover:text-navy">Cookies</Link></li>
-              <li className="flex items-center gap-1.5"><Receipt weight="duotone" className="h-4 w-4" aria-hidden="true" />CA$4.99/month</li>
-            </ul>
           </div>
         </div>
         <div className="border-t border-border">
