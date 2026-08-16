@@ -332,7 +332,120 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
 }
 
 
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { properties as allPropsSeed } from "@/lib/mock-data";
+
+function PortfolioSelector({ className = "" }: { className?: string }) {
+  const { portfolios, activeScope, setActiveScope, scopeLabel } = usePortfolio();
+  const perms = usePermissions();
+  
+  const accessibleProperties = perms.isOwner 
+    ? allPropsSeed 
+    : allPropsSeed.filter(p => perms.canSee(p.id));
+
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          className={`flex min-h-11 items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-navy shadow-sm transition-colors hover:bg-navy-soft ${className}`}
+        >
+          <Buildings weight="duotone" className="h-4 w-4 text-action" />
+          <span className="max-w-[140px] truncate">{scopeLabel}</span>
+          <CaretDown weight="bold" className="ml-1 h-3 w-3 text-muted-foreground" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="w-64 p-0" align="start">
+        <div className="flex items-center justify-between border-b border-border p-3">
+          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Switch Scope</span>
+          <Link to="/app/settings" className="text-xs text-action hover:underline" onClick={() => setOpen(false)}>
+            Manage
+          </Link>
+        </div>
+        <ScrollArea className="h-[320px]">
+          <div className="p-2">
+            <button
+              onClick={() => {
+                setActiveScope("all");
+                setOpen(false);
+              }}
+              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                activeScope === "all" ? "bg-navy text-primary-foreground" : "text-navy hover:bg-navy-soft"
+              }`}
+            >
+              <Globe weight="duotone" className="h-4 w-4" />
+              <span className="flex-1 font-medium">All Properties</span>
+              {activeScope === "all" && <Check weight="bold" className="h-3 w-3" />}
+            </button>
+
+            {portfolios.length > 0 && (
+              <>
+                <div className="my-2 border-t border-border px-3 pt-2">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Portfolios</span>
+                </div>
+                {portfolios.map((pf) => (
+                  <button
+                    key={pf.id}
+                    onClick={() => {
+                      setActiveScope(`portfolio-${pf.id}`);
+                      setOpen(false);
+                    }}
+                    className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                      activeScope === `portfolio-${pf.id}`
+                        ? "bg-navy text-primary-foreground"
+                        : "text-navy hover:bg-navy-soft"
+                    }`}
+                  >
+                    <Folders weight="duotone" className="h-4 w-4" />
+                    <span className="flex-1 truncate font-medium">{pf.name}</span>
+                    {activeScope === `portfolio-${pf.id}` && <Check weight="bold" className="h-3 w-3" />}
+                  </button>
+                ))}
+              </>
+            )}
+
+            <div className="my-2 border-t border-border px-3 pt-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Properties</span>
+            </div>
+            {accessibleProperties.map((p) => (
+              <button
+                key={p.id}
+                onClick={() => {
+                  setActiveScope(`p-${p.id}`);
+                  setOpen(false);
+                }}
+                className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                  activeScope === `p-${p.id}` ? "bg-navy text-primary-foreground" : "text-navy hover:bg-navy-soft"
+                }`}
+              >
+                <Buildings weight="duotone" className="h-4 w-4" />
+                <div className="flex-1 min-w-0">
+                  <p className="truncate font-medium">{p.name}</p>
+                  <p className={`truncate text-[10px] ${activeScope === `p-${p.id}` ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                    {p.city}, {p.province}
+                  </p>
+                </div>
+                {activeScope === `p-${p.id}` && <Check weight="bold" className="h-3 w-3" />}
+              </button>
+            ))}
+          </div>
+        </ScrollArea>
+        <div className="border-t border-border p-2">
+          <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium text-action hover:bg-navy-soft">
+            <Plus weight="bold" className="h-3 w-3" />
+            Create group...
+          </button>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 export function PageHeader({
+
   title,
   subtitle,
   action,
