@@ -9,6 +9,7 @@ export type Property = {
   id: string;
   /** MOCK: which owner account this property belongs to. */
   ownerId: string;
+  portfolioId?: string; // Link to a regional group
   name: string;
   address: string;
   city: string;
@@ -16,6 +17,7 @@ export type Property = {
   postalCode: string;
   kind: string;
 };
+
 
 export type Unit = {
   id: string;
