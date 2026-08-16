@@ -39,8 +39,9 @@ const rentOf = (t: Tenant) => rentRows.find((r) => r.tenantId === t.id);
 function TenantsPageInner() {
   const navigate = Route.useNavigate();
   const { noticesForTenant } = useNotices();
-
+  const perms = usePermissions();
   const rent = useRent();
+
 
 
   const columns: Column<Tenant>[] = [
