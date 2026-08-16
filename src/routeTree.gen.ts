@@ -62,6 +62,10 @@ import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as LegalSecurityRouteImport } from './routes/legal.security'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as ListingSlugRouteImport } from './routes/listing.$slug'
+import { Route as ProvincesOntarioRouteImport } from './routes/provinces.ontario'
+import { Route as VsBuildiumRouteImport } from './routes/vs.buildium'
+import { Route as VsDoorloopRouteImport } from './routes/vs.doorloop'
+import { Route as VsSpreadsheetsRouteImport } from './routes/vs.spreadsheets'
 import { Route as AppLeasesIndexRouteImport } from './routes/app.leases.index'
 import { Route as AppLeasesLeaseIdRouteImport } from './routes/app.leases.$leaseId'
 import { Route as AppLeasesNewRouteImport } from './routes/app.leases.new'
@@ -339,6 +343,26 @@ const ListingSlugRoute = ListingSlugRouteImport.update({
   path: '/listing/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProvincesOntarioRoute = ProvincesOntarioRouteImport.update({
+  id: '/provinces/ontario',
+  path: '/provinces/ontario',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VsBuildiumRoute = VsBuildiumRouteImport.update({
+  id: '/vs/buildium',
+  path: '/vs/buildium',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VsDoorloopRoute = VsDoorloopRouteImport.update({
+  id: '/vs/doorloop',
+  path: '/vs/doorloop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VsSpreadsheetsRoute = VsSpreadsheetsRouteImport.update({
+  id: '/vs/spreadsheets',
+  path: '/vs/spreadsheets',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppLeasesIndexRoute = AppLeasesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -448,6 +472,10 @@ export interface FileRoutesByFullPath {
   '/legal/security': typeof LegalSecurityRoute
   '/legal/terms': typeof LegalTermsRoute
   '/listing/$slug': typeof ListingSlugRoute
+  '/provinces/ontario': typeof ProvincesOntarioRoute
+  '/vs/buildium': typeof VsBuildiumRoute
+  '/vs/doorloop': typeof VsDoorloopRoute
+  '/vs/spreadsheets': typeof VsSpreadsheetsRoute
   '/app/': typeof AppIndexRoute
   '/legal/': typeof LegalIndexRoute
   '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
@@ -511,6 +539,10 @@ export interface FileRoutesByTo {
   '/legal/security': typeof LegalSecurityRoute
   '/legal/terms': typeof LegalTermsRoute
   '/listing/$slug': typeof ListingSlugRoute
+  '/provinces/ontario': typeof ProvincesOntarioRoute
+  '/vs/buildium': typeof VsBuildiumRoute
+  '/vs/doorloop': typeof VsDoorloopRoute
+  '/vs/spreadsheets': typeof VsSpreadsheetsRoute
   '/app': typeof AppIndexRoute
   '/legal': typeof LegalIndexRoute
   '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
@@ -578,6 +610,10 @@ export interface FileRoutesById {
   '/legal/security': typeof LegalSecurityRoute
   '/legal/terms': typeof LegalTermsRoute
   '/listing/$slug': typeof ListingSlugRoute
+  '/provinces/ontario': typeof ProvincesOntarioRoute
+  '/vs/buildium': typeof VsBuildiumRoute
+  '/vs/doorloop': typeof VsDoorloopRoute
+  '/vs/spreadsheets': typeof VsSpreadsheetsRoute
   '/app/': typeof AppIndexRoute
   '/legal/': typeof LegalIndexRoute
   '/app/leases/$leaseId': typeof AppLeasesLeaseIdRoute
@@ -646,6 +682,10 @@ export interface FileRouteTypes {
     | '/legal/security'
     | '/legal/terms'
     | '/listing/$slug'
+    | '/provinces/ontario'
+    | '/vs/buildium'
+    | '/vs/doorloop'
+    | '/vs/spreadsheets'
     | '/app/'
     | '/legal/'
     | '/app/leases/$leaseId'
@@ -709,6 +749,10 @@ export interface FileRouteTypes {
     | '/legal/security'
     | '/legal/terms'
     | '/listing/$slug'
+    | '/provinces/ontario'
+    | '/vs/buildium'
+    | '/vs/doorloop'
+    | '/vs/spreadsheets'
     | '/app'
     | '/legal'
     | '/app/leases/$leaseId'
@@ -775,6 +819,10 @@ export interface FileRouteTypes {
     | '/legal/security'
     | '/legal/terms'
     | '/listing/$slug'
+    | '/provinces/ontario'
+    | '/vs/buildium'
+    | '/vs/doorloop'
+    | '/vs/spreadsheets'
     | '/app/'
     | '/legal/'
     | '/app/leases/$leaseId'
@@ -811,6 +859,10 @@ export interface RootRouteChildren {
   LegalSecurityRoute: typeof LegalSecurityRoute
   LegalTermsRoute: typeof LegalTermsRoute
   ListingSlugRoute: typeof ListingSlugRoute
+  ProvincesOntarioRoute: typeof ProvincesOntarioRoute
+  VsBuildiumRoute: typeof VsBuildiumRoute
+  VsDoorloopRoute: typeof VsDoorloopRoute
+  VsSpreadsheetsRoute: typeof VsSpreadsheetsRoute
   LegalIndexRoute: typeof LegalIndexRoute
   ApiPublicCalendarFeedRoute: typeof ApiPublicCalendarFeedRoute
   ApiPublicEmailInboundRoute: typeof ApiPublicEmailInboundRoute
@@ -1189,6 +1241,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ListingSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/provinces/ontario': {
+      id: '/provinces/ontario'
+      path: '/provinces/ontario'
+      fullPath: '/provinces/ontario'
+      preLoaderRoute: typeof ProvincesOntarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vs/buildium': {
+      id: '/vs/buildium'
+      path: '/vs/buildium'
+      fullPath: '/vs/buildium'
+      preLoaderRoute: typeof VsBuildiumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vs/doorloop': {
+      id: '/vs/doorloop'
+      path: '/vs/doorloop'
+      fullPath: '/vs/doorloop'
+      preLoaderRoute: typeof VsDoorloopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vs/spreadsheets': {
+      id: '/vs/spreadsheets'
+      path: '/vs/spreadsheets'
+      fullPath: '/vs/spreadsheets'
+      preLoaderRoute: typeof VsSpreadsheetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/leases/': {
       id: '/app/leases/'
       path: '/'
@@ -1410,6 +1490,10 @@ const rootRouteChildren: RootRouteChildren = {
   LegalSecurityRoute: LegalSecurityRoute,
   LegalTermsRoute: LegalTermsRoute,
   ListingSlugRoute: ListingSlugRoute,
+  ProvincesOntarioRoute: ProvincesOntarioRoute,
+  VsBuildiumRoute: VsBuildiumRoute,
+  VsDoorloopRoute: VsDoorloopRoute,
+  VsSpreadsheetsRoute: VsSpreadsheetsRoute,
   LegalIndexRoute: LegalIndexRoute,
   ApiPublicCalendarFeedRoute: ApiPublicCalendarFeedRoute,
   ApiPublicEmailInboundRoute: ApiPublicEmailInboundRoute,
