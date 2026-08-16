@@ -70,16 +70,20 @@ export function DemoTour() {
     }
   }, [isDemo, search.tour]);
 
-  if (!isVisible || !step) return null;
+  if (!isVisible) return null;
+
+  const step = STEPS[currentStep];
+  if (!step) return null;
 
   const Icon = step.icon;
 
-
   const next = () => {
     if (currentStep < STEPS.length - 1) {
+      const nextStep = STEPS[currentStep + 1];
       setCurrentStep(s => s + 1);
-      // Scroll to target
-      document.getElementById(step.target)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (nextStep) {
+        document.getElementById(nextStep.target)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     } else {
       setIsVisible(false);
     }
