@@ -7,7 +7,9 @@
  * Swap the seed arrays below for queries and keep the same helper API.
  */
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { toast } from "sonner";
 import { tenants as allTenants, unitAddress, unitById, propertyById } from "@/lib/mock-data";
+
 
 export type ContactKind = "tenant" | "vendor" | "team";
 export type DeliveryStatus = "sent" | "delivered" | "opened" | "failed";
@@ -30,7 +32,9 @@ export type Message = {
   conversationId: string;
   /** "you" is the signed-in manager in this prototype */
   senderId: string;
+  senderEmail?: string;
   body: string;
+
   /** ISO datetime */
   at: string;
   status?: DeliveryStatus;
@@ -241,7 +245,9 @@ type Ctx = {
   toggleMute: (conversationId: string) => void;
   deleteConversation: (conversationId: string) => void;
   deleteMessage: (conversationId: string, messageId: string) => void;
+  receiveEmail: (input: { from: string; subject: string; body: string }) => void;
 };
+
 
 const MessagesContext = createContext<Ctx | null>(null);
 
@@ -309,8 +315,55 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
             c.id === conversationId ? { ...c, messages: c.messages.filter((m) => m.id !== messageId) } : c,
           ),
         ),
+      receiveEmail: ({ from, subject, body }) => {
+        // 1. Find matching contact by email
+        const sender = contacts.find(c => c.email.toLowerCase() === from.toLowerCase());
+        
+        if (!sender) {
+          toast.error(`Quarantined message from unknown sender: ${from}`);
+          console.warn("Graceful quarantine: unknown sender", from);
+          return;
+        }
+
+        // 2. Find existing conversation or start new one
+        const existing = conversations.find(c => 
+          c.participantIds.includes(sender.id) && 
+          (c.subject.toLowerCase().includes(subject.toLowerCase()) || subject.toLowerCase().includes(c.subject.toLowerCase()))
+        );
+
+        if (existing) {
+          appendMessage(existing.id, {
+            id: uid("m"),
+            conversationId: existing.id,
+            senderId: sender.id,
+            senderEmail: from,
+            body,
+            at: nowIso(),
+            attachments: [],
+          });
+          setConversations(prev => prev.map(c => c.id === existing.id ? { ...c, unread: true } : c));
+          toast.info(`New reply from ${sender.name}`);
+        } else {
+          const id = uid("c");
+          const conversation: Conversation = {
+            id,
+            participantIds: [sender.id],
+            subject: subject || "New Message",
+            unitId: sender.unitId ?? null,
+            unread: true,
+            archived: false,
+            muted: false,
+            messages: [
+              { id: uid("m"), conversationId: id, senderId: sender.id, senderEmail: from, body, at: nowIso(), attachments: [] },
+            ],
+          };
+          setConversations(prev => [conversation, ...prev]);
+          toast.info(`New conversation from ${sender.name}`);
+        }
+      },
     };
   }, [conversations, templates]);
+
 
   return <MessagesContext.Provider value={value}>{children}</MessagesContext.Provider>;
 }

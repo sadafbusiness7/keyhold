@@ -171,11 +171,89 @@ function MessagesPage() {
           openConversation(id);
         }}
       />
+      <DemoEmailTrigger />
+    </>
+
+  );
+}
+
+function DemoEmailTrigger() {
+  const { receiveEmail } = useMessages();
+  const [open, setOpen] = useState(false);
+  const [from, setFrom] = useState("grace.okafor@example.ca");
+  const [subject, setSubject] = useState("Re: Hot water is out");
+  const [body, setBody] = useState("The plumber was great! Everything is fixed now.");
+
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="fixed bottom-4 right-20 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-navy text-primary-foreground shadow-lg transition-transform hover:scale-110 active:scale-95"
+        title="Simulate inbound email reply"
+      >
+        <ChatCircleDots weight="bold" className="h-6 w-6" />
+      </button>
+
+      {open && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-navy/40 p-4">
+          <div className="w-full max-w-md rounded-2xl bg-card p-6 shadow-xl">
+            <h3 className="font-display text-lg font-bold text-navy">Simulate Inbound Email</h3>
+            <p className="mt-1 text-sm text-muted-foreground">This simulates a tenant replying to a notification email.</p>
+            
+            <div className="mt-4 space-y-3">
+              <div>
+                <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">From</label>
+                <input 
+                  value={from} 
+                  onChange={e => setFrom(e.target.value)}
+                  className="mt-1 block w-full rounded-xl border border-input bg-background px-4 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Subject</label>
+                <input 
+                  value={subject} 
+                  onChange={e => setSubject(e.target.value)}
+                  className="mt-1 block w-full rounded-xl border border-input bg-background px-4 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Message</label>
+                <textarea 
+                  rows={3}
+                  value={body} 
+                  onChange={e => setBody(e.target.value)}
+                  className="mt-1 block w-full rounded-xl border border-input bg-background px-4 py-2 text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="mt-6 flex gap-3">
+              <button
+                onClick={() => {
+                  receiveEmail({ from, subject, body });
+                  setOpen(false);
+                }}
+                className="flex-1 rounded-full bg-action py-2.5 text-sm font-bold text-primary-foreground hover:bg-action/90"
+              >
+                Trigger simulation
+              </button>
+              <button
+                onClick={() => setOpen(false)}
+                className="flex-1 rounded-full border border-border py-2.5 text-sm font-bold text-navy hover:bg-navy-soft"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
 
 function MessagesHeader({ onCompose }: { onCompose: () => void }) {
+
   return (
     <PageHeader
       title="Messages"

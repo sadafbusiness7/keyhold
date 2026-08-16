@@ -357,8 +357,9 @@ export function ThreadView({
               return (
                 <article key={m.id} className={`group flex flex-col ${mine ? "items-end" : "items-start"}`}>
                   <p className="text-[11px] font-semibold text-muted-foreground">
-                    {mine ? "You" : sender?.name ?? "Unknown"} · {timeLabel(m.at)}
+                    {mine ? "You" : sender?.name ?? "Unknown"} {m.senderEmail ? `(${m.senderEmail})` : ""} · {timeLabel(m.at)}
                   </p>
+
                   <div
                     className={`mt-1 max-w-[85%] rounded-2xl px-3 py-2 text-sm ${
                       mine ? "bg-action text-primary-foreground" : "bg-surface-sunk text-foreground"
