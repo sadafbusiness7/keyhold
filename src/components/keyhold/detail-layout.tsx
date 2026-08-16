@@ -18,7 +18,7 @@ export function DetailBreadcrumbs({ items }: { items: BreadcrumbItem[] }) {
         <div key={i} className="flex items-center gap-2">
           <CaretRight weight="bold" className="h-2 w-2" />
           {item.to ? (
-            <Link to={item.to as any} params={item.params} className="hover:text-navy">
+            <Link to={item.to as any} className="hover:text-navy">
               {item.label}
             </Link>
           ) : (
