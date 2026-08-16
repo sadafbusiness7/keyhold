@@ -233,7 +233,8 @@ function RentPageInner() {
           dateOf={(r) => r.invoice.dueDate}
           columns={[
             { key: "tenant", label: "Tenant", locked: true, value: (r) => r.tenant,
-              render: (r) => <span className="font-display font-bold text-navy">{r.tenant}</span> },
+              render: (r) => <Link to={`/app/tenants/${r.invoice.tenantId}` as any} className="font-display font-bold text-navy hover:underline">{r.tenant}</Link> },
+
             { key: "home", label: "Home", value: (r) => r.home },
             { key: "charge", label: "For", value: (r) => r.invoice.description },
             { key: "amount", label: "Amount", align: "right", value: (r) => r.invoice.amountCents,
