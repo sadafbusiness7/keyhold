@@ -1693,16 +1693,16 @@ function Home() {
             </p>
             <div className="flex flex-col justify-center gap-3 sm:flex-row">
               <Link
-                to="/signup"
+                to="/demo"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-action px-7 text-base font-semibold text-primary-foreground hover:bg-action/90"
               >
-                Start free <ArrowRight weight="duotone" className="h-5 w-5" aria-hidden="true" />
+                View demo <ArrowRight weight="duotone" className="h-5 w-5" aria-hidden="true" />
               </Link>
               <Link
-                to="/signin"
+                to="/signup"
                 className="inline-flex min-h-12 items-center justify-center rounded-full border border-border bg-card px-7 text-base font-semibold text-navy hover:bg-navy-soft"
               >
-                Sign in
+                Start free
               </Link>
             </div>
           </div>

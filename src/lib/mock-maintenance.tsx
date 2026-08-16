@@ -1,13 +1,12 @@
 /**
  * MOCK MAINTENANCE STORE — prototype state only, NOT a backend.
- * -------------------------------------------------------------
- * Holds requests, work orders, vendors, bills and recurring rules in React
- * state, and appends an action LOG to every record so the history is
- * defensible. All arithmetic lives in maintenance-engine.ts.
  */
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { toast } from "sonner";
+import { usePermissions } from "@/lib/mock-access";
 import { TODAY } from "@/lib/mock-rent";
 import { tenantById, unitById, units as allUnits } from "@/lib/mock-data";
+
 import {
   addMonthsToDate,
   makeLog,
@@ -289,11 +288,13 @@ type Ctx = ReturnType<typeof useStore>;
 const MaintenanceContext = createContext<Ctx | null>(null);
 
 function useStore() {
+  const { isDemo } = usePermissions();
   const [requests, setRequests] = useState<MaintenanceRequest[]>(seedRequests);
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>(seedWorkOrders);
   const [vendors, setVendors] = useState<Vendor[]>(seedVendors);
   const [bills, setBills] = useState<Bill[]>(seedBills);
   const [rules, setRules] = useState<RecurringRule[]>(seedRules);
+
 
   return useMemo(() => {
     const pushRequestLog = (id: string, entry: LogEntry) =>
@@ -347,6 +348,14 @@ function useStore() {
           log("assignment", "Keyhold", `Assigned to ${manager.name}.`),
         ],
       };
+
+      if (isDemo) {
+        toast.info("Simulation: Request received. In demo mode, notifications are simulated.", {
+          description: `${manager.name} would be notified by ${channel}.`,
+        });
+        return { request, manager, channel };
+      }
+
       setRequests((prev) => [request, ...prev]);
       return { request, manager, channel };
     };
