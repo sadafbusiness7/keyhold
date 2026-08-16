@@ -12,7 +12,7 @@
  *   credits   -> tenant_credits (ledger, never mutated in place)
  */
 
-export type InvoiceKind = "rent" | "utilities" | "damage" | "nsf" | "deposit" | "interest" | "other";
+export type InvoiceKind = "rent" | "utilities" | "damage" | "nsf" | "deposit" | "interest" | "adjustment" | "other";
 export type InvoiceStatus = "paid" | "partial" | "overdue" | "due-soon" | "void" | "pending" | "failed";
 export type PaymentMethod = "e-Transfer" | "Cheque" | "Cash" | "Pre-authorized debit" | "Bank account" | "Credit card";
 
@@ -102,7 +102,7 @@ export type CreditEntry = {
   amountCents: number;
   reason: string;
   date: string;
-  kind: "overpayment" | "applied" | "last-month" | "interest" | "manual";
+  kind: "overpayment" | "applied" | "last-month" | "interest" | "manual" | "adjustment";
 };
 
 export type RentSettings = {
@@ -221,6 +221,39 @@ export function annualInterestOwing(deposit: Deposit): number {
 
 export const LEGAL_DISCLAIMER = "General information only, not legal advice. Rates and requirements vary by province.";
 export const LTB_SOURCE_URL = "https://www.ontario.ca/page/rent-increase-guideline";
+
+export type RecurringCharge = {
+  id: string;
+  leaseId: string;
+  tenantId: string;
+  description: string;
+  amountCents: number;
+  frequency: "monthly" | "yearly";
+  startDate: string;
+  endDate?: string;
+  taxable: boolean;
+};
+
+export type PaymentPlan = {
+  id: string;
+  tenantId: string;
+  totalOwedCents: number;
+  startDate: string;
+  schedule: { date: string; amountCents: number }[];
+  status: "on-track" | "behind" | "completed";
+};
+
+export type LedgerEntry = {
+  id: string;
+  date: string;
+  description: string;
+  type: "charge" | "payment" | "credit" | "adjustment";
+  amountCents: number; // positive for charges, negative for payments/credits/adjustments
+  balanceCents: number;
+  referenceId: string;
+  referenceType: "invoice" | "payment" | "credit";
+};
+
 
 // ——— generation ———
 

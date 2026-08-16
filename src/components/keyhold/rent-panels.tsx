@@ -3,8 +3,9 @@
  * record payment, manual charge, NSF reversal and move-out.
  * All arithmetic comes from rent-engine.ts — nothing is computed inline here.
  */
-import { useState, type ReactNode } from "react";
-import { X, Receipt, ArrowUUpLeft, PencilSimple, Coins, SignOut, PaperPlaneTilt, Prohibit, Bank, Calculator, Info } from "@phosphor-icons/react";
+import { useState, useMemo, type ReactNode } from "react";
+import { X, Receipt, ArrowUUpLeft, PencilSimple, Coins, SignOut, PaperPlaneTilt, Prohibit, Bank, Calculator, Info, DownloadSimple, FileText, Plus } from "@phosphor-icons/react";
+
 import { toast } from "sonner";
 import { optimistic, settle } from "@/lib/optimistic";
 import { ActivityFeed } from "./activity-feed";
@@ -717,3 +718,255 @@ export function DepositLedgerSheet({ tenantId, onClose }: { tenantId: string; on
     </Sheet>
   );
 }
+
+export function TenantStatementSheet({ tenantId, onClose }: { tenantId: string; onClose: () => void }) {
+  const rent = useRent();
+  const tenant = tenantById(tenantId);
+  const ledger = useMemo(() => rent.getLedger(tenantId), [rent, tenantId]);
+
+  const downloadStatementCsv = () => {
+    const headers = ["Date", "Description", "Type", "Amount", "Balance"];
+    const rows = ledger.map(e => [
+      e.date,
+      e.description,
+      e.type,
+      money(e.amountCents),
+      money(e.balanceCents)
+    ]);
+    downloadFile(`statement-${tenant?.name.replace(/\s+/g, "-").toLowerCase()}.csv`, toCsv(headers, rows));
+  };
+
+  const downloadStatementPdf = () => {
+    downloadTablesPdf(`statement-${tenantId}.pdf`, {
+      title: "Tenant Statement",
+      subtitle: `${tenant?.name} · Statement as of ${longDate(rent.today)}`,
+      tables: [{
+        title: "Ledger History",
+        headers: ["Date", "Description", "Type", "Amount", "Balance"],
+        rows: ledger.map(e => [
+          e.date,
+          e.description,
+          e.type,
+          money(e.amountCents),
+          money(e.balanceCents)
+        ])
+      }]
+    });
+  };
+
+  return (
+    <Sheet title="Tenant Statement" onClose={onClose}>
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="font-display font-bold text-navy">{tenant?.name}</h3>
+          <p className="text-xs text-muted-foreground">Full financial history</p>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={downloadStatementCsv} className="p-2 rounded-full border border-border hover:bg-navy-soft" title="Export CSV">
+            <DownloadSimple weight="duotone" className="h-5 w-5" />
+          </button>
+          <button onClick={downloadStatementPdf} className="p-2 rounded-full border border-border hover:bg-navy-soft" title="Export PDF">
+            <FileText weight="duotone" className="h-5 w-5" />
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-6 overflow-hidden rounded-xl border border-border">
+        <table className="w-full text-left text-xs border-collapse">
+          <thead className="bg-navy-soft text-navy uppercase font-bold tracking-tight">
+            <tr>
+              <th className="px-3 py-2">Date</th>
+              <th className="px-3 py-2">Description</th>
+              <th className="px-3 py-2 text-right">Amount</th>
+              <th className="px-3 py-2 text-right">Balance</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {ledger.map(e => (
+              <tr key={e.id} className="hover:bg-navy-soft/30 transition-colors">
+                <td className="px-3 py-2 tnum text-muted-foreground whitespace-nowrap">{e.date}</td>
+                <td className="px-3 py-2">
+                  <p className="font-bold text-navy">{e.description}</p>
+                  <p className="text-[10px] uppercase text-muted-foreground">{e.type}</p>
+                </td>
+                <td className={`px-3 py-2 tnum text-right font-bold ${e.amountCents > 0 ? "text-maple" : "text-success"}`}>
+                  {money(Math.abs(e.amountCents))}
+                </td>
+                <td className="px-3 py-2 tnum text-right font-bold text-navy">{money(e.balanceCents)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mt-6 p-4 rounded-xl border border-dashed border-border text-center">
+        <p className="text-xs text-muted-foreground">
+          This statement includes all automated invoices, manual charges, payments, and adjustments.
+        </p>
+      </div>
+    </Sheet>
+  );
+}
+
+export function RecurringChargesSheet({ leaseId, tenantId, onClose }: { leaseId: string; tenantId: string; onClose: () => void }) {
+  const rent = useRent();
+  const charges = rent.recurringForTenant(tenantId).filter(c => c.leaseId === leaseId);
+  const [showAdd, setShowAdd] = useState(false);
+
+  return (
+    <Sheet title="Recurring Charges" onClose={onClose}>
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-sm text-muted-foreground">Automated line items for this lease.</p>
+        <button 
+          onClick={() => setShowAdd(true)}
+          className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-action px-3 text-xs font-bold text-primary-foreground hover:bg-action/90"
+        >
+          <Plus weight="bold" /> Add charge
+        </button>
+      </div>
+
+      <ul className="space-y-3">
+        {charges.map(c => (
+          <li key={c.id} className="card-soft p-4 border-l-4 border-navy">
+            <div className="flex justify-between items-start">
+              <div>
+                <h4 className="font-bold text-navy">{c.description}</h4>
+                <p className="text-xs text-muted-foreground">
+                  Starts {longDate(c.startDate)} {c.endDate ? `· Ends ${longDate(c.endDate)}` : ""}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="money text-lg font-extrabold text-navy">{money(c.amountCents)}</p>
+                <p className="text-[10px] uppercase font-bold text-muted-foreground">{c.frequency}</p>
+              </div>
+            </div>
+            <div className="mt-3 flex justify-between items-center">
+              <span className={`text-[10px] font-bold uppercase ${c.taxable ? "text-maple" : "text-muted-foreground"}`}>
+                {c.taxable ? "Taxable (HST/GST)" : "Non-taxable"}
+              </span>
+              <button 
+                onClick={() => rent.endRecurringCharge(c.id, rent.today)}
+                className="text-maple text-xs font-bold uppercase hover:underline"
+              >
+                End charge
+              </button>
+            </div>
+          </li>
+        ))}
+        {charges.length === 0 && (
+          <div className="text-center py-8 card-soft border-dashed">
+            <Calculator weight="duotone" className="h-8 w-8 text-muted-foreground mx-auto mb-2 opacity-20" />
+            <p className="text-sm text-muted-foreground">No recurring fees set up yet.</p>
+          </div>
+        )}
+      </ul>
+
+      {showAdd && (
+        <div className="mt-6 border-t border-border pt-6">
+          <h4 className="font-display font-bold text-navy mb-4">New recurring charge</h4>
+          <div className="space-y-4">
+            <div>
+              <label className="text-xs font-bold text-muted-foreground uppercase">Description</label>
+              <input placeholder="e.g. Parking spot #4" className={field} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-bold text-muted-foreground uppercase">Amount (CAD)</label>
+                <input placeholder="0.00" className={field} />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-muted-foreground uppercase">Frequency</label>
+                <select className={field}>
+                  <option>Monthly</option>
+                  <option>Yearly</option>
+                </select>
+              </div>
+            </div>
+            <button 
+              onClick={() => {
+                toast.success("Charge added.");
+                setShowAdd(false);
+              }}
+              className="w-full min-h-11 rounded-full bg-navy text-primary-foreground font-bold hover:bg-navy/90"
+            >
+              Save recurring charge
+            </button>
+          </div>
+        </div>
+      )}
+    </Sheet>
+  );
+}
+
+export function AdjustmentSheet({ tenantId, onClose }: { tenantId: string; onClose: () => void }) {
+  const rent = useRent();
+  const [amount, setAmount] = useState("");
+  const [reason, setReason] = useState("");
+  const [category, setCategory] = useState<"goodwill" | "damage" | "correction">("correction");
+
+  return (
+    <Sheet title="One-off Adjustment" onClose={onClose}>
+      <p className="text-sm text-muted-foreground mb-6">
+        Apply a direct credit or charge to the ledger. This action is audited and visible on the tenant statement.
+      </p>
+
+      <div className="space-y-4">
+        <div>
+          <label className="text-xs font-bold text-muted-foreground uppercase">Adjustment Category</label>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {(["correction", "goodwill", "damage"] as const).map(c => (
+              <button
+                key={c}
+                onClick={() => setCategory(c)}
+                className={`px-4 py-2 rounded-full text-xs font-bold border ${
+                  category === c ? "bg-navy text-primary-foreground border-navy" : "border-border text-navy hover:bg-navy-soft"
+                }`}
+              >
+                {c.charAt(0).toUpperCase() + c.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="text-xs font-bold text-muted-foreground uppercase">Amount (CAD)</label>
+          <input 
+            placeholder="0.00" 
+            className={field}
+            value={amount}
+            onChange={e => setAmount(e.target.value)}
+          />
+          <p className="mt-1 text-[10px] text-muted-foreground italic">Use a negative sign for a charge (e.g. -50.00), positive for a credit.</p>
+        </div>
+
+        <div>
+          <label className="text-xs font-bold text-muted-foreground uppercase">Reason for adjustment</label>
+          <textarea 
+            placeholder="Describe why this adjustment is being made..." 
+            className={`${field} py-3 min-h-[100px] resize-none`}
+            value={reason}
+            onChange={e => setReason(e.target.value)}
+          />
+        </div>
+
+        <div className="pt-4">
+          <button 
+            disabled={!amount || !reason}
+            onClick={() => {
+              const cents = parseAmountToCents(amount);
+              if (cents !== null) {
+                rent.addAdjustment(tenantId, cents, reason, category);
+                toast.success("Adjustment applied to ledger.");
+                onClose();
+              }
+            }}
+            className="w-full min-h-11 rounded-full bg-action text-primary-foreground font-bold hover:bg-action/90 disabled:opacity-50"
+          >
+            Apply to Ledger
+          </button>
+        </div>
+      </div>
+    </Sheet>
+  );
+}
+

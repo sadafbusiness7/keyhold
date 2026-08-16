@@ -27,7 +27,11 @@ import {
   type AutopayStatus,
   type Deposit,
   type InterestPayment,
+  type RecurringCharge,
+  type PaymentPlan,
+  type LedgerEntry,
 } from "@/lib/rent-engine";
+
 
 
 /** MOCK: the demo "today". A backend would use the server clock. */
@@ -145,6 +149,9 @@ function useRentStore() {
     }))
   );
   const [interestPayments, setInterestPayments] = useState<InterestPayment[]>([]);
+  const [recurringCharges, setRecurringCharges] = useState<RecurringCharge[]>([]);
+  const [paymentPlans, setPaymentPlans] = useState<PaymentPlan[]>([]);
+
 
 
   const uid = (p: string) => `${p}-${Math.random().toString(36).slice(2, 9)}`;
@@ -361,6 +368,9 @@ function useRentStore() {
       autopayConfigs,
       deposits,
       interestPayments,
+      recurringCharges,
+      paymentPlans,
+
       nextRun,
       nextRunPeriod,
       nextRunLabel: periodLabel(nextRunPeriod),
@@ -372,6 +382,9 @@ function useRentStore() {
       autopayForLease: (leaseId: string) => autopayConfigs.find(a => a.leaseId === leaseId),
       depositsForTenant: (tenantId: string) => deposits.filter(d => d.tenantId === tenantId),
       interestForDeposit: (depositId: string) => interestPayments.filter(p => p.depositId === depositId),
+      recurringForTenant: (tenantId: string) => recurringCharges.filter(c => c.tenantId === tenantId),
+      paymentPlanForTenant: (tenantId: string) => paymentPlans.find(p => p.tenantId === tenantId),
+
       setSettings,
       runInvoicing,
       addManualInvoice,
@@ -406,9 +419,87 @@ function useRentStore() {
           }]);
         }
       },
+      addRecurringCharge: (charge: Omit<RecurringCharge, "id">) => {
+        const id = uid("rc");
+        setRecurringCharges(prev => [...prev, { ...charge, id }]);
+      },
+      endRecurringCharge: (id: string, endDate: string) => {
+        setRecurringCharges(prev => prev.map(c => c.id === id ? { ...c, endDate } : c));
+      },
+      addAdjustment: (tenantId: string, amountCents: number, reason: string, category: "goodwill" | "damage" | "correction") => {
+        const id = uid("cr");
+        setCredits(prev => [...prev, {
+          id,
+          tenantId,
+          amountCents,
+          reason: `${category.charAt(0).toUpperCase() + category.slice(1)}: ${reason}`,
+          date: TODAY,
+          kind: "adjustment"
+        }]);
+      },
+      createPaymentPlan: (plan: Omit<PaymentPlan, "id">) => {
+        const id = uid("pp");
+        setPaymentPlans(prev => [...prev.filter(p => p.tenantId !== plan.tenantId), { ...plan, id }]);
+      },
+      getLedger: (tenantId: string): LedgerEntry[] => {
+        const tenantInvoices = invoices.filter(i => i.tenantId === tenantId);
+        const tenantPayments = payments.filter(p => p.tenantId === tenantId);
+        const tenantCredits = credits.filter(c => c.tenantId === tenantId);
+        
+        const entries: Omit<LedgerEntry, "balanceCents">[] = [];
+        
+        tenantInvoices.forEach(i => {
+          if (!i.voidedOn) {
+            entries.push({
+              id: i.id,
+              date: i.issuedOn,
+              description: i.description,
+              type: "charge",
+              amountCents: i.amountCents,
+              referenceId: i.id,
+              referenceType: "invoice"
+            });
+          }
+        });
+        
+        tenantPayments.forEach(p => {
+          if (!p.reversedOn) {
+            entries.push({
+              id: p.id,
+              date: p.receivedOn,
+              description: `Payment - ${p.method}`,
+              type: "payment",
+              amountCents: -p.amountCents,
+              referenceId: p.id,
+              referenceType: "payment"
+            });
+          }
+        });
+        
+        tenantCredits.forEach(c => {
+          entries.push({
+            id: c.id,
+            date: c.date,
+            description: c.reason,
+            type: c.amountCents < 0 ? "charge" : "credit",
+            amountCents: -c.amountCents,
+            referenceId: c.id,
+            referenceType: "credit"
+          });
+        });
+        
+        entries.sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
+        
+        let runningBalance = 0;
+        return entries.map(e => {
+          runningBalance += e.amountCents;
+          return { ...e, balanceCents: runningBalance };
+        });
+      },
+
     };
 
-  }, [invoices, payments, credits, settings, moveOuts, deposits, interestPayments, savedMethods, autopayConfigs]);
+  }, [invoices, payments, credits, settings, moveOuts, deposits, interestPayments, savedMethods, autopayConfigs, recurringCharges, paymentPlans]);
 }
 
 export function RentProvider({ children }: { children: ReactNode }) {

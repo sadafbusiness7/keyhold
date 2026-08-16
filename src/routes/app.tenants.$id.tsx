@@ -29,7 +29,9 @@ import { DataList } from "@/components/keyhold/data-list";
 import { useRent } from "@/lib/mock-rent";
 import { useMaintenance } from "@/lib/mock-maintenance";
 import { useMessages } from "@/lib/mock-messages";
-import { money, invoiceStatus, balanceCents, paidCents } from "@/lib/rent-engine";
+import { money, invoiceStatus, balanceCents, paidCents, type LedgerEntry } from "@/lib/rent-engine";
+import { TenantStatementSheet, RecurringChargesSheet, AdjustmentSheet } from "@/components/keyhold/rent-panels";
+
 
 
 export const Route = createFileRoute("/app/tenants/$id")({
@@ -46,6 +48,10 @@ function TenantDetailPage() {
   const rent = useRent();
   const maintenance = useMaintenance();
   const messages = useMessages();
+  const [showStatement, setShowStatement] = useState(false);
+  const [showRecurring, setShowRecurring] = useState(false);
+  const [showAdjustment, setShowAdjustment] = useState(false);
+
 
   const tenant = useMemo(() => allTenants.find(t => t.id === id), [id]);
   const unit = useMemo(() => tenant ? allUnits.find(u => u.id === tenant.unitId) : null, [tenant]);
@@ -145,8 +151,33 @@ function TenantDetailPage() {
                 </div>
               </div>
             </DetailSection>
+            <DetailSection title="Financial Recovery">
+              {rent.paymentPlanForTenant(id) ? (
+                <div className="card-soft p-5 border-l-4 border-success">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Active Payment Plan</p>
+                      <p className="mt-1 text-sm font-bold text-navy">
+                        {money(rent.paymentPlanForTenant(id)!.totalOwedCents)} total · {rent.paymentPlanForTenant(id)!.status === "on-track" ? "On track" : "Behind"}
+                      </p>
+                    </div>
+                    <StatusLabel status={rent.paymentPlanForTenant(id)!.status === "on-track" ? "paid" : "overdue"} />
+                  </div>
+                  <div className="mt-4 h-1.5 w-full bg-navy-soft rounded-full overflow-hidden">
+                    <div className="h-full bg-success w-[65%]" />
+                  </div>
+                  <p className="mt-2 text-[10px] text-muted-foreground font-bold uppercase">65% of agreed schedule paid</p>
+                </div>
+              ) : (
+                <div className="card-soft p-5 opacity-60">
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Payment Plan</p>
+                  <p className="mt-1 text-sm text-muted-foreground italic">No recovery plan active.</p>
+                </div>
+              )}
+            </DetailSection>
           </div>
         )}
+
 
         {tab === "leases" && (
           <DetailSection>
@@ -172,7 +203,7 @@ function TenantDetailPage() {
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="card-soft p-5">
                 <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Outstanding Balance</p>
-                <p className="mt-1 text-2xl font-extrabold text-maple">{money(rent.creditFor(id) < 0 ? Math.abs(rent.creditFor(id)) : 0)}</p>
+                <p className="mt-1 text-2xl font-extrabold text-maple">{money(Math.max(0, -rent.creditFor(id)))}</p>
               </div>
               <div className="card-soft p-5">
                 <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Credit on File</p>
@@ -186,26 +217,54 @@ function TenantDetailPage() {
               </div>
             </div>
 
-            <DetailSection title="Full Financial Statement">
+            <DetailSection 
+              title="Full Financial Statement"
+              actions={
+                <div className="flex gap-2">
+                  <button onClick={() => setShowAdjustment(true)} className="text-xs font-bold text-action uppercase hover:underline">One-off adjustment</button>
+                  <button onClick={() => setShowStatement(true)} className="text-xs font-bold text-action uppercase hover:underline">View statement</button>
+                </div>
+              }
+            >
               <DataList
                 name="Ledger"
-                items={tenantInvoices.map(i => ({
-                  invoice: i,
-                  status: invoiceStatus(i, rent.payments, rent.today),
-                  paid: paidCents(i, rent.payments),
-                  balance: balanceCents(i, rent.payments)
-                }))}
-                getId={r => r.invoice.id}
+                items={rent.getLedger(id).slice(-5).reverse()}
+                getId={(e: LedgerEntry) => e.id}
                 columns={[
-                  { key: "date", label: "Date", value: r => r.invoice.dueDate },
-                  { key: "desc", label: "Description", value: r => r.invoice.description },
-                  { key: "amount", label: "Amount", align: "right", value: r => r.invoice.amountCents, render: r => money(r.invoice.amountCents) },
-                  { key: "paid", label: "Paid", align: "right", value: r => r.paid, render: r => <span className="text-success">{money(r.paid)}</span> },
-                  { key: "balance", label: "Balance", align: "right", value: r => r.balance, render: r => <span className={r.balance > 0 ? "text-maple font-bold" : ""}>{money(r.balance)}</span> },
+                  { key: "date", label: "Date", value: e => e.date },
+                  { key: "desc", label: "Description", value: e => e.description },
+                  { key: "amount", label: "Amount", align: "right", value: e => e.amountCents, render: e => (
+                    <span className={e.amountCents > 0 ? "text-maple" : "text-success"}>{money(Math.abs(e.amountCents))}</span>
+                  )},
+                  { key: "balance", label: "Balance", align: "right", value: e => e.balanceCents, render: e => money(e.balanceCents) },
                 ]}
               />
-
             </DetailSection>
+
+            {tenantLeases.length > 0 && (
+              <DetailSection 
+                title="Recurring Charges"
+                actions={
+                  <button onClick={() => setShowRecurring(true)} className="text-xs font-bold text-action uppercase hover:underline">Manage recurring</button>
+                }
+              >
+                <div className="card-soft divide-y divide-border overflow-hidden">
+                  {rent.recurringForTenant(id).map(c => (
+                    <div key={c.id} className="flex items-center justify-between p-4 text-sm">
+                      <div>
+                        <p className="font-bold text-navy">{c.description}</p>
+                        <p className="text-xs text-muted-foreground">{c.frequency}</p>
+                      </div>
+                      <p className="font-extrabold text-navy">{money(c.amountCents)}</p>
+                    </div>
+                  ))}
+                  {rent.recurringForTenant(id).length === 0 && (
+                    <p className="p-4 text-sm text-muted-foreground italic">No active recurring charges.</p>
+                  )}
+                </div>
+              </DetailSection>
+            )}
+
           </div>
         )}
 
@@ -233,7 +292,14 @@ function TenantDetailPage() {
           </DetailSection>
         )}
       </div>
+
+      {showStatement && <TenantStatementSheet tenantId={id} onClose={() => setShowStatement(false)} />}
+      {showRecurring && tenantLeases[0] && (
+        <RecurringChargesSheet leaseId={tenantLeases[0].id} tenantId={id} onClose={() => setShowRecurring(false)} />
+      )}
+      {showAdjustment && <AdjustmentSheet tenantId={id} onClose={() => setShowAdjustment(false)} />}
     </div>
+
   );
 }
 

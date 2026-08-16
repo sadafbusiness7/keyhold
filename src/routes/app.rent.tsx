@@ -23,7 +23,7 @@ import { RequireFinancials } from "@/components/keyhold/access-guard";
 import { PageHeader } from "@/components/keyhold/app-shell";
 import { StatusLabel } from "@/components/keyhold/status";
 import { DataList } from "@/components/keyhold/data-list";
-import { InvoiceSheet, ManualChargeSheet, MoveOutSheet, AddDepositSheet, DepositLedgerSheet } from "@/components/keyhold/rent-panels";
+import { InvoiceSheet, ManualChargeSheet, MoveOutSheet, AddDepositSheet, DepositLedgerSheet, TenantStatementSheet, RecurringChargesSheet, AdjustmentSheet } from "@/components/keyhold/rent-panels";
 import { usePermissions } from "@/lib/mock-access";
 import { tenantById, unitAddress, longDate } from "@/lib/mock-data";
 import { useRent, lastMonthHeldCents } from "@/lib/mock-rent";
@@ -78,12 +78,14 @@ function RentPageInner() {
   const perms = usePermissions();
   const rent = useRent();
 
-  const [tab, setTab] = useState<"ledger" | "credits" | "payouts" | "movedout">("ledger");
+  const [tab, setTab] = useState<"ledger" | "credits" | "payouts" | "movedout" | "arrears">("ledger");
   const [openInvoice, setOpenInvoice] = useState<Invoice | null>(null);
   const [showCharge, setShowCharge] = useState(false);
   const [showMoveOut, setShowMoveOut] = useState(false);
   const [showAddDeposit, setShowAddDeposit] = useState(false);
   const [ledgerTenantId, setLedgerTenantId] = useState<string | null>(null);
+  const [statementTenantId, setStatementTenantId] = useState<string | null>(null);
+
 
   // Only invoices for units this person is allowed to see money for.
   const visibleUnitIds = useMemo(
@@ -207,7 +209,9 @@ function RentPageInner() {
         {([
           ["ledger", "Rent ledger"],
           ["credits", "Credits & deposits"],
+          ["arrears", "Arrears management"],
           ["payouts", "Payouts & reconciliation"],
+
           ["movedout", `Moved out (${rent.moveOuts.length})`],
         ] as const).map(([key, label]) => (
 
@@ -341,9 +345,11 @@ function RentPageInner() {
         />
       )}
 
-      {tab === "credits" && <CreditsPanel setLedgerTenantId={setLedgerTenantId} />}
+      {tab === "credits" && <CreditsPanel setLedgerTenantId={setLedgerTenantId} setStatementTenantId={setStatementTenantId} />}
       {tab === "payouts" && <PayoutsPanel />}
+      {tab === "arrears" && <ArrearsPanel />}
       {tab === "movedout" && <MovedOutPanel />}
+
 
 
       {openInvoice && <InvoiceSheet invoice={openInvoice} onClose={() => setOpenInvoice(null)} />}
@@ -351,11 +357,20 @@ function RentPageInner() {
       {showMoveOut && <MoveOutSheet onClose={() => setShowMoveOut(false)} />}
       {showAddDeposit && <AddDepositSheet onClose={() => setShowAddDeposit(false)} />}
       {ledgerTenantId && <DepositLedgerSheet tenantId={ledgerTenantId} onClose={() => setLedgerTenantId(null)} />}
+      {statementTenantId && <TenantStatementSheet tenantId={statementTenantId} onClose={() => setStatementTenantId(null)} />}
     </>
+
   );
 }
 
-function CreditsPanel({ setLedgerTenantId }: { setLedgerTenantId: (id: string) => void }) {
+function CreditsPanel({ 
+  setLedgerTenantId, 
+  setStatementTenantId 
+}: { 
+  setLedgerTenantId: (id: string) => void;
+  setStatementTenantId: (id: string) => void;
+}) {
+
   const rent = useRent();
   return (
     <div className="space-y-4">
@@ -377,12 +392,21 @@ function CreditsPanel({ setLedgerTenantId }: { setLedgerTenantId: (id: string) =
                   <p className="font-display font-bold text-navy">{tenantById(l.tenantId)?.name}</p>
                   <p className="truncate text-xs text-muted-foreground">{unitAddress(l.unitId)}</p>
                 </div>
-                <button 
-                  onClick={() => setLedgerTenantId(l.tenantId)}
-                  className="inline-flex items-center gap-1 text-[10px] font-bold text-action hover:underline uppercase tracking-tight"
-                >
-                  Ledger <Calculator weight="duotone" className="h-3 w-3" />
-                </button>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => setLedgerTenantId(l.tenantId)}
+                    className="inline-flex items-center gap-1 text-[10px] font-bold text-action hover:underline uppercase tracking-tight"
+                  >
+                    Deposits <Bank weight="duotone" className="h-3 w-3" />
+                  </button>
+                  <button 
+                    onClick={() => setStatementTenantId(l.tenantId)}
+                    className="inline-flex items-center gap-1 text-[10px] font-bold text-action hover:underline uppercase tracking-tight"
+                  >
+                    Statement <Calculator weight="duotone" className="h-3 w-3" />
+                  </button>
+                </div>
+
               </div>
               <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
                 <div>
@@ -529,3 +553,64 @@ function PayoutsPanel() {
     </div>
   );
 }
+
+function ArrearsPanel() {
+  const rent = useRent();
+  const perms = usePermissions();
+  const navigate = Route.useNavigate();
+
+  const arrearsData = useMemo(() => {
+    return rent.leases
+      .map(l => {
+        const balance = -rent.creditFor(l.tenantId);
+        const plan = rent.paymentPlanForTenant(l.tenantId);
+        return {
+          lease: l,
+          tenant: tenantById(l.tenantId),
+          balance,
+          plan
+        };
+      })
+      .filter(d => d.balance > 0)
+      .sort((a, b) => b.balance - a.balance);
+  }, [rent.leases, rent.creditFor, rent.paymentPlanForTenant]);
+
+  return (
+    <div className="space-y-6">
+      <div className="grid gap-4 sm:grid-cols-4">
+        <Metric label="Total Arrears" value={money(arrearsData.reduce((s, d) => s + d.balance, 0))} tone="maple" />
+        <Metric label="Tenants Owing" value={String(arrearsData.length)} tone="navy" />
+        <Metric label="On Plans" value={String(arrearsData.filter(d => d.plan).length)} tone="success" />
+        <Metric label="Action Needed" value={String(arrearsData.filter(d => d.balance > 200000).length)} tone="maple" />
+      </div>
+
+      <DataList
+        name="Arrears"
+        items={arrearsData}
+        getId={d => d.lease.id}
+        columns={[
+          { key: "tenant", label: "Tenant", value: d => d.tenant?.name ?? "—", render: d => (
+            <Link to={`/app/tenants/${d.lease.tenantId}` as any} className="font-display font-bold text-navy hover:underline">{d.tenant?.name}</Link>
+          )},
+          { key: "owing", label: "Owed", align: "right", value: d => d.balance, render: d => <span className="money font-bold text-maple">{money(d.balance)}</span> },
+          { key: "plan", label: "Payment Plan", value: d => d.plan?.status ?? "None", render: d => d.plan ? (
+            <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-bold ${
+              d.plan.status === "on-track" ? "bg-success-soft text-success" : "bg-warning-soft text-warning"
+            }`}>
+              {d.plan.status === "on-track" ? "On track" : "Behind"}
+            </span>
+          ) : <span className="text-muted-foreground text-xs">—</span> },
+          { key: "action", label: "Next step", value: () => "Send reminder", render: d => (
+            <button onClick={() => toast.success(`Reminder sent to ${d.tenant?.name}`)} className="text-action text-xs font-bold uppercase hover:underline">Send N4</button>
+          )}
+        ]}
+        rowActions={[
+          { key: "tenant", label: "View tenant profile", Icon: Users, onSelect: (d) => navigate({ to: `/app/tenants/${d.lease.tenantId}` as any }) },
+          { key: "plan", label: "Create payment plan", Icon: Plus, onSelect: () => toast.info("Payment plan builder opening...") },
+          { key: "waive", label: "Waive late fee", Icon: Trash, onSelect: () => toast.success("Fee waived.") },
+        ]}
+      />
+    </div>
+  );
+}
+
