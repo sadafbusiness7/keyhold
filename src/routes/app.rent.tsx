@@ -80,6 +80,8 @@ function RentPageInner() {
   const [openInvoice, setOpenInvoice] = useState<Invoice | null>(null);
   const [showCharge, setShowCharge] = useState(false);
   const [showMoveOut, setShowMoveOut] = useState(false);
+  const [showAddDeposit, setShowAddDeposit] = useState(false);
+  const [ledgerTenantId, setLedgerTenantId] = useState<string | null>(null);
 
   // Only invoices for units this person is allowed to see money for.
   const visibleUnitIds = useMemo(
