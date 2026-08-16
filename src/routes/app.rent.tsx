@@ -127,6 +127,13 @@ function RentPageInner() {
           <div className="col-span-full flex flex-wrap gap-2 sm:col-auto">
             <button
               type="button"
+              onClick={() => setShowAddDeposit(true)}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-4 text-sm font-semibold text-navy hover:bg-navy-soft"
+            >
+              <Bank weight="duotone" className="h-5 w-5" aria-hidden="true" /> Add deposit
+            </button>
+            <button
+              type="button"
               onClick={() => setShowMoveOut(true)}
               className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-4 text-sm font-semibold text-navy hover:bg-navy-soft"
             >
