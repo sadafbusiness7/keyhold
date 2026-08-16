@@ -27,6 +27,8 @@ import {
   type RentSettings,
   type SavedPaymentMethod,
   type AutopayStatus,
+  type Deposit,
+  type InterestPayment,
 } from "@/lib/rent-engine";
 
 
