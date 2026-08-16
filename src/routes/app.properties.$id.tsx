@@ -239,9 +239,21 @@ function PropertyDetailPage() {
           </DetailSection>
         )}
       </div>
+      {turnoverUnit && (
+        <TurnoverWorkflow
+          unit={turnoverUnit}
+          open={!!turnoverUnit}
+          onOpenChange={(open) => !open && setTurnoverUnit(null)}
+          onComplete={(unitId, data) => {
+            console.log("Turnover complete for unit", unitId, data);
+            // In a real app, this would update the store
+          }}
+        />
+      )}
     </div>
   );
 }
+
 
 function DetailRow({ label, value }: { label: string; value: string | number }) {
   return (
