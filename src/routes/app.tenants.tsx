@@ -6,8 +6,10 @@ import { PageHeader } from "@/components/keyhold/app-shell";
 import { DataList, notWired, type Column } from "@/components/keyhold/data-list";
 import { ActivityFeed } from "@/components/keyhold/activity-feed";
 import { StatusLabel } from "@/components/keyhold/status";
-import { tenants, unitAddress, rentRows, cad, longDate, type Tenant } from "@/lib/mock-data";
+import { tenants as allTenants, unitAddress, rentRows, cad, longDate, type Tenant } from "@/lib/mock-data";
 import { useRent } from "@/lib/mock-rent";
+import { usePermissions } from "@/lib/mock-access";
+
 
 import { useNotices } from "@/lib/mock-notices";
 import { AddTenantChooser, TenantsHelperLine } from "@/components/keyhold/add-tenant-chooser";
@@ -39,8 +41,9 @@ const rentOf = (t: Tenant) => rentRows.find((r) => r.tenantId === t.id);
 function TenantsPageInner() {
   const navigate = Route.useNavigate();
   const { noticesForTenant } = useNotices();
-
+  const perms = usePermissions();
   const rent = useRent();
+
 
 
   const columns: Column<Tenant>[] = [
@@ -79,7 +82,7 @@ function TenantsPageInner() {
       <TenantsHelperLine />
       <DataList
         name="Tenants"
-        items={tenants}
+        items={perms.tenants}
         getId={(t) => t.id}
         getStatus={(t) => rentOf(t)?.status}
         columns={columns}

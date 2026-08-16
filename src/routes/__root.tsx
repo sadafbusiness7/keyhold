@@ -24,7 +24,9 @@ import { OwnersProvider } from "../lib/mock-owners";
 import { CanadaProvider } from "../lib/mock-canada";
 import { ConsentProvider } from "../lib/mock-consent";
 import { ThemeProvider, themeBootScript } from "../lib/theme";
+import { PortfolioProvider } from "../lib/mock-portfolio";
 import { I18nProvider } from "../lib/i18n";
+
 import { DemoBanner } from "../components/keyhold/demo-banner";
 
 
@@ -166,7 +168,9 @@ function RootComponent() {
       <LeasingProvider>
         <AccessProvider>
           <RentProvider>
+            <PortfolioProvider>
             <NoticesProvider>
+
               <MaintenanceProvider>
                 <OwnersProvider>
                   <CanadaProvider>
@@ -179,6 +183,8 @@ function RootComponent() {
                 </OwnersProvider>
               </MaintenanceProvider>
             </NoticesProvider>
+            </PortfolioProvider>
+
           </RentProvider>
         </AccessProvider>
       </LeasingProvider>

@@ -9,6 +9,7 @@ export type Property = {
   id: string;
   /** MOCK: which owner account this property belongs to. */
   ownerId: string;
+  portfolioId?: string; // Link to a regional group
   name: string;
   address: string;
   city: string;
@@ -16,6 +17,9 @@ export type Property = {
   postalCode: string;
   kind: string;
 };
+
+
+export type UnitStatus = "occupied" | "vacant" | "turnover" | "listing";
 
 export type Unit = {
   id: string;
@@ -26,7 +30,15 @@ export type Unit = {
   rent: number;
   tenantId: string | null;
   leaseEnd: string | null;
+  status?: UnitStatus;
+  turnoverDays?: number; // Days vacant during turnover
+  turnoverCostCents?: number; // Total cost of make-ready in cents
+  turnoverStartedOn?: string;
+  turnoverCompletedOn?: string;
+  turnoverTasks?: { id: string; label: string; status: "todo" | "done"; assignee?: string }[];
 };
+
+
 
 export type Tenant = {
   id: string;
@@ -71,10 +83,25 @@ export type Lease = {
   depositHeld: number;
 };
 
+export type Portfolio = {
+  id: string;
+  name: string;
+  propertyIds: string[];
+};
+
+export const portfolios: Portfolio[] = [
+  { id: "toronto", name: "Toronto Portfolio", propertyIds: ["p1", "p3", "p4"] },
+  { id: "hamilton", name: "Hamilton Portfolio", propertyIds: ["p2"] },
+  { id: "vancouver", name: "Vancouver Portfolio", propertyIds: ["p5", "p6"] },
+];
+
 export const properties: Property[] = [
+
+
   {
     id: "p1",
     ownerId: "u_owner",
+    portfolioId: "toronto",
     name: "Lansdowne Duplex",
     address: "412 Lansdowne Ave",
     city: "Toronto",
@@ -82,9 +109,11 @@ export const properties: Property[] = [
     postalCode: "M6H 3Y2",
     kind: "Duplex",
   },
+
   {
     id: "p2",
     ownerId: "u_owner",
+    portfolioId: "hamilton",
     name: "Ottawa Street Triplex",
     address: "88 Ottawa St N",
     city: "Hamilton",
@@ -92,9 +121,11 @@ export const properties: Property[] = [
     postalCode: "L8H 3Z1",
     kind: "Triplex",
   },
+
   {
     id: "p3",
     ownerId: "u_owner",
+    portfolioId: "toronto",
     name: "Birchmount Townhome",
     address: "27 Birchmount Rd",
     city: "Toronto",
@@ -102,9 +133,11 @@ export const properties: Property[] = [
     postalCode: "M1N 3J7",
     kind: "Townhome",
   },
+
   {
     id: "p4",
     ownerId: "u_owner",
+    portfolioId: "toronto",
     name: "Danforth Walk-up",
     address: "1290 Danforth Ave",
     city: "Toronto",
@@ -112,9 +145,11 @@ export const properties: Property[] = [
     postalCode: "M4J 1M6",
     kind: "Walk-up apartment",
   },
+
   {
     id: "p5",
     ownerId: "u_owner",
+    portfolioId: "vancouver",
     name: "Kitsilano Apartments",
     address: "2450 W 4th Ave",
     city: "Vancouver",
@@ -122,9 +157,11 @@ export const properties: Property[] = [
     postalCode: "V6K 1P3",
     kind: "Low-rise apartment",
   },
+
   {
     id: "p6",
     ownerId: "u_owner",
+    portfolioId: "vancouver",
     name: "Mount Pleasant Lofts",
     address: "185 E 8th Ave",
     city: "Vancouver",
@@ -132,6 +169,7 @@ export const properties: Property[] = [
     postalCode: "V5T 1R8",
     kind: "Loft building",
   },
+
 ];
 
 // MOCK: generated units so the demo portfolio is ~40 doors across two regions.
@@ -148,17 +186,22 @@ function makeUnits(propertyId: string, count: number, baseRent: number, startAt 
       rent: baseRent + bedrooms * 350,
       tenantId: n % 7 === 0 ? null : `t-${propertyId}-${n}`,
       leaseEnd: n % 7 === 0 ? null : `2027-0${(n % 9) + 1}-01`,
+      status: n % 7 === 0 ? "vacant" : "occupied",
+      turnoverDays: n % 7 === 0 ? (n * 3) % 45 : 0,
+      turnoverCostCents: n % 7 === 0 ? ((n * 12345) % 150000) : 0,
+
     } satisfies Unit;
   });
 }
 
 export const units: Unit[] = [
-  { id: "u1", propertyId: "p1", label: "Main floor", kind: "2 bed unit", bedrooms: 2, rent: 2350, tenantId: "t1", leaseEnd: "2026-10-31" },
-  { id: "u2", propertyId: "p1", label: "Basement suite", kind: "1 bed suite", bedrooms: 1, rent: 1575, tenantId: "t2", leaseEnd: "2026-09-30" },
-  { id: "u3", propertyId: "p2", label: "Unit A", kind: "2 bed unit", bedrooms: 2, rent: 1895, tenantId: "t3", leaseEnd: "2026-08-31" },
-  { id: "u4", propertyId: "p2", label: "Unit B", kind: "1 bed unit", bedrooms: 1, rent: 1495, tenantId: "t4", leaseEnd: "2027-01-31" },
-  { id: "u5", propertyId: "p2", label: "Unit C", kind: "Bachelor", bedrooms: 0, rent: 1250, tenantId: null, leaseEnd: null },
-  { id: "u6", propertyId: "p3", label: "Whole home", kind: "3 bed townhome", bedrooms: 3, rent: 3100, tenantId: "t5", leaseEnd: "2026-08-31" },
+  { id: "u1", propertyId: "p1", label: "Main floor", kind: "2 bed unit", bedrooms: 2, rent: 2350, tenantId: "t1", leaseEnd: "2026-10-31", status: "occupied" },
+  { id: "u2", propertyId: "p1", label: "Basement suite", kind: "1 bed suite", bedrooms: 1, rent: 1575, tenantId: "t2", leaseEnd: "2026-09-30", status: "occupied" },
+  { id: "u3", propertyId: "p2", label: "Unit A", kind: "2 bed unit", bedrooms: 2, rent: 1895, tenantId: "t3", leaseEnd: "2026-08-31", status: "occupied" },
+  { id: "u4", propertyId: "p2", label: "Unit B", kind: "1 bed unit", bedrooms: 1, rent: 1495, tenantId: "t4", leaseEnd: "2027-01-31", status: "occupied" },
+
+  { id: "u5", propertyId: "p2", label: "Unit C", kind: "Bachelor", bedrooms: 0, rent: 1250, tenantId: null, leaseEnd: null, status: "turnover", turnoverDays: 12, turnoverCostCents: 85000, turnoverStartedOn: "2026-07-28" },
+  { id: "u6", propertyId: "p3", label: "Whole home", kind: "3 bed townhome", bedrooms: 3, rent: 3100, tenantId: "t5", leaseEnd: "2026-08-31", status: "occupied" },
   ...makeUnits("p4", 14, 1450),
   ...makeUnits("p5", 12, 1850),
   ...makeUnits("p6", 8, 1950),

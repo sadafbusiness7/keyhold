@@ -13,6 +13,8 @@
  */
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import { properties as allProperties, units as allUnits, tenants as allTenants, leases as allLeases, rentRows as allRentRows, tickets as allTickets } from "@/lib/mock-data";
+import { usePortfolio } from "./mock-portfolio";
+
 
 /** "owner" is the account holder. "owner-client" is a property owner the manager reports to. */
 export type AccountType = "owner" | "pm" | "tenant" | "owner-client";
@@ -373,9 +375,12 @@ export function usePermissions() {
     setOwnerAccess,
     removeOwnerAccess,
   } = useAccess();
+  
+  const { scopedPropertyIds, activeScope } = usePortfolio();
 
   return useMemo(() => {
     const isDemo = true;
+
     const isOwner = currentUser.accountType === "owner";
 
     const isPm = currentUser.accountType === "pm";
@@ -403,13 +408,18 @@ export function usePermissions() {
             ? [tenantUnit.propertyId]
             : [];
 
+    const finalVisibleIds = activeScope === "all" 
+      ? visiblePropertyIds 
+      : visiblePropertyIds.filter(id => scopedPropertyIds.includes(id));
+
     const levelFor = (propertyId: string): PermissionLevel | null => {
       if (isOwner) return "full";
       if (isPm) return myAssignments.find((a) => a.propertyId === propertyId)?.level ?? null;
       return null;
     };
 
-    const canSee = (propertyId: string) => visiblePropertyIds.includes(propertyId);
+    const canSee = (propertyId: string) => finalVisibleIds.includes(propertyId);
+
     const canSeeFinancials = (propertyId?: string) => {
       if (isTenant) return false; // tenants only ever see their own rent, handled in the portal
       if (isOwnerClient) return false; // owners read money in their own portal, never in the app
@@ -489,8 +499,6 @@ export function usePermissions() {
     currentUser,
     assignments,
     users,
-    // isDemo is a constant for now, no need in deps
-
     accessLog,
     invitePm,
     resendInvite,
@@ -503,6 +511,8 @@ export function usePermissions() {
     inviteOwner,
     setOwnerAccess,
     removeOwnerAccess,
-
+    activeScope,
+    scopedPropertyIds,
   ]);
 }
+

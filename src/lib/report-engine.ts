@@ -294,10 +294,48 @@ export function depositLedger(args: {
 }
 
 /* ------------------------------------------------------------------ */
+/* Vacancy & Turnover                                                 */
+/* ------------------------------------------------------------------ */
+
+export type TurnoverRow = {
+  propertyId: string;
+  property: string;
+  unit: string;
+  status: string;
+  daysVacant: number;
+  costCents: number;
+  turnoverCostCents: number;
+};
+
+export function turnoverAnalysis(args: {
+  units: Unit[];
+  properties: Property[];
+}): TurnoverRow[] {
+  return args.units
+    .filter((u) => u.status === "vacant" || u.status === "turnover" || u.status === "listing" || (u.turnoverDays ?? 0) > 0)
+    .map((unit) => {
+      const prop = args.properties.find((p) => p.id === unit.propertyId);
+      const turnoverDays = unit.turnoverDays ?? 0;
+      return {
+        propertyId: unit.propertyId,
+        property: prop?.name ?? "—",
+        unit: unit.label,
+        status: unit.status || "vacant",
+        daysVacant: turnoverDays,
+        costCents: Math.round((unit.rent / 30) * turnoverDays * 100),
+        turnoverCostCents: unit.turnoverCostCents ?? 0,
+      };
+    })
+    .sort((a, b) => b.daysVacant - a.daysVacant);
+}
+
+
+/* ------------------------------------------------------------------ */
 /* Trends                                                              */
 /* ------------------------------------------------------------------ */
 
 export type MonthMoney = { period: string; label: string; expectedCents: number; collectedCents: number; ratePct: number };
+
 
 export function collectionByMonth(args: { invoices: Invoice[]; payments: Payment[]; today: string; months?: number }): MonthMoney[] {
   const live = args.invoices.filter((i) => !i.voidedOn);

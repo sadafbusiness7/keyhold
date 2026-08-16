@@ -43,8 +43,11 @@ import {
   storeSavedViews,
   vacancyDetail,
   vendorSpend,
+  turnoverAnalysis,
   type SavedView,
+  type TurnoverRow,
 } from "@/lib/report-engine";
+
 
 export const Route = createFileRoute("/app/reports")({
   head: () => ({
@@ -79,7 +82,9 @@ type ReportKey =
   | "vendor-spend"
   | "lease-expiry"
   | "disbursements"
-  | "deposits";
+  | "deposits"
+  | "turnover";
+
 
 const REPORTS: { key: ReportKey; label: string; blurb: string }[] = [
   { key: "rent-roll", label: "Rent roll", blurb: "Every home, who lives there, what they pay and when the lease ends." },
@@ -93,7 +98,9 @@ const REPORTS: { key: ReportKey; label: string; blurb: string }[] = [
   { key: "lease-expiry", label: "Lease expiry schedule", blurb: "Every tenancy ending in the next twelve months." },
   { key: "disbursements", label: "Owner disbursements", blurb: "Statement and net payable for each managed property." },
   { key: "deposits", label: "Security deposit ledger", blurb: "Deposits held, applied and returned." },
+  { key: "turnover", label: "Unit turnover analysis", blurb: "Make-ready costs, vacancy duration, and rent lost during turnover." },
 ];
+
 
 function ReportsPage() {
   const perms = usePermissions();
@@ -278,12 +285,21 @@ function ReportsPage() {
         ]),
       };
     }
+    if (report === "turnover") {
+      const rows = turnoverAnalysis({ units: allUnits, properties: perms.properties });
+      return {
+        title: "Turnover analysis",
+        headers: ["Property", "Unit", "Status", "Days Vacant", "Lost Rent", "Make-Ready Cost"],
+        rows: rows.map((r) => [r.property, r.unit, r.status, r.daysVacant, money(r.costCents), money(r.turnoverCostCents)]),
+      };
+    }
     const rows = depositLedger({ leases: scopedLeases, units, properties: scopedProperties, tenants, invoices, payments, today });
     return {
       title: "Security deposit ledger",
       headers: ["Tenant", "Property", "Home", "State", "Held", "Applied", "Returned", "Since"],
       rows: rows.map((r) => [r.tenant, r.property, r.unit, r.state, money(r.heldCents), money(r.appliedCents), money(r.returnedCents), r.since]),
     };
+
   }, [report, propertyId, from, to, invoices, payments, bills, requests.length, workOrders.length, today, properties.length, statements]);
 
   const subtitle = `${propertyId === "all" ? "All properties" : scopedProperties[0]?.name ?? ""} · ${longDate(from)} – ${longDate(to)}`;
@@ -318,7 +334,7 @@ function ReportsPage() {
     <>
       <PageHeader
         title="Report library"
-        subtitle="Eleven reports, every figure computed from your own records. All amounts in Canadian dollars."
+        subtitle="Twelve reports, every figure computed from your own records. All amounts in Canadian dollars."
         action={
           <div className="col-span-full flex flex-wrap gap-2 sm:col-auto">
             <Link

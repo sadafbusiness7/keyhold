@@ -14,16 +14,20 @@ import {
   Plus,
   PencilSimple,
   Archive,
-  DownloadSimple
+  DownloadSimple,
+  ArrowsClockwise
 } from "@phosphor-icons/react";
+
 import { DetailBreadcrumbs, DetailHeader, DetailTabs, DetailSection } from "@/components/keyhold/detail-layout";
-import { propertyById, units as allUnits, tenants as allTenants, cad } from "@/lib/mock-data";
+import { propertyById, units as allUnits, tenants as allTenants, cad, type Unit, type UnitStatus } from "@/lib/mock-data";
 import { ActivityFeed } from "@/components/keyhold/activity-feed";
 import { StatusLabel } from "@/components/keyhold/status";
 import { DataList } from "@/components/keyhold/data-list";
 import { useRent } from "@/lib/mock-rent";
 import { useMaintenance } from "@/lib/mock-maintenance";
 import { money, invoiceStatus, balanceCents, paidCents } from "@/lib/rent-engine";
+import { TurnoverWorkflow } from "@/components/keyhold/turnover-workflow";
+
 
 export const Route = createFileRoute("/app/properties/$id")({
   component: PropertyDetailPage,
@@ -40,9 +44,12 @@ function PropertyDetailPage() {
   const rent = useRent();
   const maintenance = useMaintenance();
 
+  const [turnoverUnit, setTurnoverUnit] = useState<Unit | null>(null);
+
   const propertyUnits = useMemo(() => allUnits.filter(u => u.propertyId === id), [id]);
   const propertyInvoices = useMemo(() => rent.invoices.filter(i => i.unitId.startsWith(id)), [rent.invoices, id]);
   const propertyRequests = useMemo(() => maintenance.requests.filter(r => r.propertyId === id), [maintenance.requests, id]);
+
 
   if (!property) return <div className="p-8 text-center">Property not found</div>;
 
@@ -137,9 +144,26 @@ function PropertyDetailPage() {
                 }},
                 { key: "rent", label: "Rent", align: "right", value: u => u.rent, render: u => <span className="money font-bold text-navy">{cad(u.rent)}</span> },
                 { key: "leaseEnd", label: "Lease End", value: u => u.leaseEnd ?? "—" },
-                { key: "status", label: "Status", sortable: false, value: u => u.tenantId ? "occupied" : "vacant", render: u => (
-                  <StatusLabel status={u.tenantId ? "occupied" : "vacant"} />
+                { key: "status", label: "Status", sortable: false, value: u => u.status || (u.tenantId ? "occupied" : "vacant"), render: u => (
+                  <StatusLabel status={u.status || (u.tenantId ? "occupied" : "vacant")} />
                 )},
+                { key: "actions", label: "", locked: true, align: "right", value: () => "", render: u => {
+                  const status = u.status || (u.tenantId ? "occupied" : "vacant");
+                  if (status === "vacant" || status === "turnover") {
+                    return (
+                      <button
+                        onClick={() => setTurnoverUnit(u)}
+                        className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-action hover:underline"
+                      >
+                        <ArrowsClockwise weight="bold" className="h-3.5 w-3.5" />
+                        Turnover
+                      </button>
+                    );
+                  }
+                  return null;
+                }},
+
+
               ]}
               emptyIcon={DoorOpen}
               emptyTitle="No units in this property"
@@ -215,9 +239,21 @@ function PropertyDetailPage() {
           </DetailSection>
         )}
       </div>
+      {turnoverUnit && (
+        <TurnoverWorkflow
+          unit={turnoverUnit}
+          open={!!turnoverUnit}
+          onOpenChange={(open) => !open && setTurnoverUnit(null)}
+          onComplete={(unitId, data) => {
+            console.log("Turnover complete for unit", unitId, data);
+            // In a real app, this would update the store
+          }}
+        />
+      )}
     </div>
   );
 }
+
 
 function DetailRow({ label, value }: { label: string; value: string | number }) {
   return (
