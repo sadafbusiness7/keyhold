@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Key, Buildings } from "@phosphor-icons/react";
-import { AccessProvider, usePermissions } from "@/lib/mock-access";
+import { usePermissions } from "@/lib/mock-access";
 import { LeasesProvider } from "@/lib/mock-leases";
 import { OperationsProvider } from "@/lib/mock-operations";
 import { DemoSwitcher } from "@/components/keyhold/demo-switcher";
@@ -32,13 +32,11 @@ export const Route = createFileRoute("/owner")({
     ],
   }),
   component: () => (
-    <AccessProvider>
       <LeasesProvider>
         <OperationsProvider>
           <OwnerPortal />
         </OperationsProvider>
       </LeasesProvider>
-    </AccessProvider>
   ),
 });
 
