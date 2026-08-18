@@ -10,6 +10,7 @@ import {
   ChatCircleDots,
   Receipt,
   CheckCircle,
+  PaperPlaneTilt,
 } from "@phosphor-icons/react";
 import { PageHeader } from "@/components/keyhold/app-shell";
 import { RailCard, StatusLabel } from "@/components/keyhold/status";
@@ -289,6 +290,40 @@ function Dashboard() {
         </div>
       </section>
       <DemoTour />
+    </>
+  );
+}
+
+/**
+ * Manager landing: throughput, not storytelling. The work queue answers
+ * "what do I chase next?" before anything else, scoped to assigned properties.
+ */
+function ManagerDashboard() {
+  const { user, properties, units, tickets, canSeeFinancials } = usePermissions();
+  const open = tickets.filter((t) => t.status !== "resolved").length;
+  return (
+    <>
+      <PageHeader
+        title={`Your queue, ${user.name.split(" ")[0]}`}
+        subtitle={`Sunday, August 9, 2026 · ${properties.length} assigned ${
+          properties.length === 1 ? "property" : "properties"
+        } · ${units.length} homes · ${open} open ${open === 1 ? "job" : "jobs"}`}
+        action={
+          <Link
+            to="/app/bulk"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-5 text-sm font-semibold text-navy hover:bg-navy-soft"
+          >
+            <PaperPlaneTilt weight="duotone" className="h-5 w-5" aria-hidden="true" />
+            Bulk actions
+          </Link>
+        }
+      />
+      <WorkQueue />
+      {!canSeeFinancials() && (
+        <p className="rounded-2xl bg-surface-sunk p-4 text-xs text-muted-foreground">
+          Rent, tenant details and reports aren't part of your access level. Ask the owner if you need them.
+        </p>
+      )}
     </>
   );
 }

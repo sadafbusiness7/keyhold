@@ -412,6 +412,9 @@ function PortfolioSelector({ className = "" }: { className?: string }) {
 
   const [open, setOpen] = useState(false);
 
+  // Tenants and owner clients have no portfolio concept at all.
+  if (!perms.isOwner && !perms.isPm) return null;
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
