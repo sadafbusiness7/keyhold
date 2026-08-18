@@ -28,6 +28,7 @@ import {
   type LeaseSigner,
 } from "@/lib/mock-leases";
 import { cad, longDate } from "@/lib/mock-data";
+import { useModalA11y } from "@/lib/use-modal-a11y";
 
 export const statusTone: Record<DisplayStatus, TagTone> = {
   draft: "navy",
@@ -313,9 +314,10 @@ export function ConfirmDialog({
   onConfirm: () => void;
   onClose: () => void;
 }) {
+  const dialogRef = useModalA11y<HTMLDivElement>(onClose, open);
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-navy/40 p-4" role="dialog" aria-modal="true" aria-label={title}>
+    <div ref={dialogRef} tabIndex={-1} className="fixed inset-0 z-50 grid place-items-center bg-navy/40 p-4" role="dialog" aria-modal="true" aria-label={title}>
       <div className="w-full max-w-md rounded-2xl border border-border bg-card p-5 shadow-lg">
         <h2 className="font-display text-lg font-bold text-navy">{title}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{body}</p>

@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, Link } from "@tanstack/react-router";
 import { Key } from "@phosphor-icons/react";
 import { AppShell } from "@/components/keyhold/app-shell";
 import { EmptyState } from "@/components/keyhold/empty-state";
-import { AccessProvider, usePermissions } from "@/lib/mock-access";
+import { usePermissions } from "@/lib/mock-access";
 import { MessagesProvider } from "@/lib/mock-messages";
 import { LeasesProvider } from "@/lib/mock-leases";
 import { SettingsProvider } from "@/lib/mock-settings";
@@ -14,7 +14,6 @@ import { FormsProvider } from "@/lib/mock-forms";
 
 export const Route = createFileRoute("/app")({
   component: () => (
-    <AccessProvider>
       <MessagesProvider>
         <LeasesProvider>
           <SettingsProvider>
@@ -34,7 +33,6 @@ export const Route = createFileRoute("/app")({
           </SettingsProvider>
         </LeasesProvider>
       </MessagesProvider>
-    </AccessProvider>
   ),
 });
 
