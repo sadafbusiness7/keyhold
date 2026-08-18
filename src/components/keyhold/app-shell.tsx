@@ -142,6 +142,7 @@ function NavList({ collapsed, onNavigate }: { collapsed: boolean; onNavigate?: (
           ? perms.canSeeReports
           : true,
   );
+  // Tenants / owner clients live in their own portals; no management nav for them.
   const core: readonly string[] = perms.isPm ? PM_CORE : OWNER_CORE;
   const primary = allowed.filter((i) => core.includes(i.to));
   const secondary = allowed.filter((i) => !core.includes(i.to));
@@ -185,6 +186,8 @@ function NavList({ collapsed, onNavigate }: { collapsed: boolean; onNavigate?: (
   const inSecondary = secondary.some(
     (i) => pathname === i.to || pathname.startsWith(i.to + "/"),
   );
+
+  if (!perms.isOwner && !perms.isPm) return null;
 
   return (
     <>
