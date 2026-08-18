@@ -1,9 +1,22 @@
 import { Link } from "@tanstack/react-router";
 import { Info, ArrowRight } from "@phosphor-icons/react";
+import { useEffect, useRef } from "react";
 
 export function DemoBanner() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      const height = ref.current.offsetHeight;
+      document.documentElement.style.setProperty('--demo-banner-height', `${height}px`);
+    }
+    return () => {
+      document.documentElement.style.setProperty('--demo-banner-height', '0px');
+    };
+  }, []);
+
   return (
-    <div className="relative z-[100] flex items-center justify-center gap-3 bg-action px-4 py-2 text-primary-foreground shadow-lg">
+    <div ref={ref} className="relative z-50 flex items-center justify-center gap-3 bg-action px-4 py-2 text-primary-foreground shadow-sm">
       <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
         <Info weight="fill" className="h-4 w-4" />
         <span>Demo Mode</span>
