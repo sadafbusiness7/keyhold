@@ -36,20 +36,27 @@ const field = "mt-1 min-h-11 w-full rounded-xl border border-input bg-background
 const methods: PaymentMethod[] = ["e-Transfer", "Cheque", "Cash", "Pre-authorized debit"];
 
 export function Sheet({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
+  const ref = useModalA11y<HTMLDivElement>(onClose);
+  const titleId = `sheet-title-${title.replace(/\W+/g, "-").toLowerCase()}`;
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
       <button className="absolute inset-0 bg-navy/40" aria-label="Close" onClick={onClose} />
       <div
+        ref={ref}
         role="dialog"
-        aria-label={title}
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
         className="relative flex h-full w-full max-w-lg flex-col overflow-y-auto border-l border-border bg-card"
       >
         <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-border bg-card px-5 py-4">
-          <h2 className="font-display text-lg font-bold text-navy">{title}</h2>
+          <h2 id={titleId} className="font-display text-lg font-bold text-navy">
+            {title}
+          </h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label="Cancel and close"
             className="grid h-11 w-11 place-items-center rounded-full text-navy hover:bg-navy-soft"
           >
             <X weight="duotone" className="h-5 w-5" />
