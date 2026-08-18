@@ -95,6 +95,36 @@ const nav = [
   { to: "/app/support", tKey: "nav.support", label: "Support centre", Icon: Question, need: "any" },
 ] as const;
 
+/**
+ * Role-shaped navigation. A landlord logs in twice a week and needs a short,
+ * plain-language list; a manager lives in the app and leads with the work queue.
+ * Anything a role can't use is removed, never greyed out.
+ */
+const OWNER_CORE = [
+  "/app",
+  "/app/rent",
+  "/app/maintenance",
+  "/app/tenants",
+  "/app/leases",
+  "/app/properties",
+  "/app/messages",
+  "/app/reports",
+  "/app/settings",
+] as const;
+
+const PM_CORE = [
+  "/app",
+  "/app/maintenance",
+  "/app/rent",
+  "/app/renewals",
+  "/app/inspections",
+  "/app/tenants",
+  "/app/leases",
+  "/app/properties",
+  "/app/messages",
+  "/app/calendar",
+] as const;
+
 function NavList({ collapsed, onNavigate }: { collapsed: boolean; onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const t = useT();
@@ -112,9 +142,12 @@ function NavList({ collapsed, onNavigate }: { collapsed: boolean; onNavigate?: (
           ? perms.canSeeReports
           : true,
   );
-  return (
-    <ul className="space-y-1 px-3">
-      {allowed.map(({ to, tKey, label, Icon, ...rest }) => {
+  const core: readonly string[] = perms.isPm ? PM_CORE : OWNER_CORE;
+  const primary = allowed.filter((i) => core.includes(i.to));
+  const secondary = allowed.filter((i) => !core.includes(i.to));
+
+  const renderItems = (items: typeof allowed) =>
+    items.map(({ to, tKey, label, Icon, ...rest }) => {
         const text = t(tKey) || label;
         const exact = "exact" in rest && rest.exact;
         const active = exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
@@ -147,8 +180,25 @@ function NavList({ collapsed, onNavigate }: { collapsed: boolean; onNavigate?: (
             </Link>
           </li>
         );
-      })}
-    </ul>
+    });
+
+  const inSecondary = secondary.some(
+    (i) => pathname === i.to || pathname.startsWith(i.to + "/"),
+  );
+
+  return (
+    <>
+      <ul className="space-y-1 px-3">{renderItems(primary)}</ul>
+      {secondary.length > 0 && (
+        <details open={inSecondary} className="mt-2 px-3">
+          <summary className="flex min-h-11 cursor-pointer items-center gap-3 rounded-full px-3 text-sm font-medium text-muted-foreground hover:bg-navy-soft">
+            <CaretDown weight="bold" className="h-4 w-4 shrink-0" aria-hidden="true" />
+            {collapsed ? <span className="sr-only">More tools</span> : "More tools"}
+          </summary>
+          <ul className="mt-1 space-y-1">{renderItems(secondary)}</ul>
+        </details>
+      )}
+    </>
   );
 }
 
