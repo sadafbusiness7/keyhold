@@ -49,6 +49,7 @@ import { DemoSwitcher } from "./demo-switcher";
 import { usePermissions } from "@/lib/mock-access";
 import { usePortfolio } from "@/lib/mock-portfolio";
 import { GlobalSearch, CommandPalette, ShortcutsSheet } from "./global-search";
+import { DemoBanner } from "./demo-banner";
 
 import { ModuleBoundary, OfflineBanner } from "./module-boundary";
 import { ShortcutsProvider, useShortcuts } from "@/lib/shortcuts";
