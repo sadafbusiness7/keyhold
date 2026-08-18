@@ -25,6 +25,7 @@ import {
 import { usePermissions } from "@/lib/mock-access";
 import { DashboardAnalytics } from "@/components/keyhold/dashboard-analytics";
 import { DemoTour } from "@/components/keyhold/demo-tour";
+import { WorkQueue } from "@/components/keyhold/work-queue";
 
 
 export const Route = createFileRoute("/app/")({
@@ -71,7 +72,10 @@ function StatTile({
 }
 
 function Dashboard() {
-  const { user, isOwner, properties, units, rentRows, tickets, leases, canSeeFinancials, canSeeReports } = usePermissions();
+  const { user, isOwner, isPm, properties, units, rentRows, tickets, leases, canSeeFinancials, canSeeReports } =
+    usePermissions();
+
+  if (isPm) return <ManagerDashboard />;
 
   const expectedRent = rentRows.reduce((s, r) => s + r.rent, 0);
   const receivedRent = rentRows.reduce((s, r) => s + (r.rent - r.balance), 0);
