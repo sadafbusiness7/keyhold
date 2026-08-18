@@ -378,6 +378,8 @@ export function usePermissions() {
   
   const { scopedPropertyIds, activeScope } = usePortfolio();
 
+  const ownerAccessFor = useCallback((ownerUserId: string) => ownerAccess.filter((a) => a.ownerUserId === ownerUserId), [ownerAccess]);
+
   return useMemo(() => {
     const isDemo = true;
 

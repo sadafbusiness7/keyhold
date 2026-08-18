@@ -96,8 +96,8 @@ function OwnerRow({ owner, open, onToggle }: { owner: AppUser; open: boolean; on
   const rows = perms.ownerAccessFor(owner.id);
 
   const toggleSection = (propertyId: string, section: OwnerSection) => {
-    const current = rows.find((r) => r.propertyId === propertyId)?.sections ?? [];
-    const next = current.includes(section) ? current.filter((s) => s !== section) : [...current, section];
+    const current = rows.find((r: any) => r.propertyId === propertyId)?.sections ?? [];
+    const next = current.includes(section) ? current.filter((s: any) => s !== section) : [...current, section];
     perms.setOwnerAccess(owner.id, propertyId, next);
   };
 
@@ -133,7 +133,7 @@ function OwnerRow({ owner, open, onToggle }: { owner: AppUser; open: boolean; on
             <tbody>
               {perms.visiblePropertyIds.map((pid) => {
                 const property = propertyById(pid);
-                const granted = rows.find((r) => r.propertyId === pid)?.sections ?? [];
+                const granted = rows.find((r: any) => r.propertyId === pid)?.sections ?? [];
                 return (
                   <tr key={pid} className="border-t border-border">
                     <td className="py-2 font-semibold text-navy">
