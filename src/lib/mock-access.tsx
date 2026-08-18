@@ -378,17 +378,17 @@ export function usePermissions() {
   
   const { scopedPropertyIds, activeScope } = usePortfolio();
 
+  const ownerAccessFor = useCallback((ownerUserId: string) => ownerAccess.filter((a) => a.ownerUserId === ownerUserId), [ownerAccess]);
+
   return useMemo(() => {
     const isDemo = true;
 
     const isOwner = currentUser.accountType === "owner";
-
     const isPm = currentUser.accountType === "pm";
     const isTenant = currentUser.accountType === "tenant";
     const isOwnerClient = currentUser.accountType === "owner-client";
-    const isSuspended = currentUser.status === "suspended";
 
-    // A suspended or not-yet-accepted manager sees nothing at all.
+    const isSuspended = currentUser.status === "suspended";
     const pmActive = isPm && currentUser.status === "active";
     const myAssignments = pmActive ? assignments.filter((a) => a.pmUserId === currentUser.id) : [];
 
@@ -396,10 +396,9 @@ export function usePermissions() {
 
     const ownerClientActive = isOwnerClient && currentUser.status === "active";
     const myOwnerAccess = ownerClientActive ? ownerAccess.filter((a) => a.ownerUserId === currentUser.id) : [];
-    const ownerAccessFor = (ownerUserId: string) => ownerAccess.filter((a) => a.ownerUserId === ownerUserId);
 
     const visiblePropertyIds = isOwner
-      ? allProperties.filter((p) => p.ownerId === "u_owner").map((p) => p.id)
+      ? allProperties.map((p) => p.id)
       : isPm
         ? myAssignments.map((a) => a.propertyId)
         : isOwnerClient
@@ -414,18 +413,18 @@ export function usePermissions() {
 
     const levelFor = (propertyId: string): PermissionLevel | null => {
       if (isOwner) return "full";
-      if (isPm) return myAssignments.find((a) => a.propertyId === propertyId)?.level ?? null;
+      if (isPm) return myAssignments.find((a) => a.pmUserId === currentUser.id && a.propertyId === propertyId)?.level ?? null;
       return null;
     };
 
     const canSee = (propertyId: string) => finalVisibleIds.includes(propertyId);
 
     const canSeeFinancials = (propertyId?: string) => {
-      if (isTenant) return false; // tenants only ever see their own rent, handled in the portal
-      if (isOwnerClient) return false; // owners read money in their own portal, never in the app
+      if (isTenant) return false;
+      if (isOwnerClient) return false;
       if (isOwner) return true;
       if (!pmActive) return false;
-      if (propertyId) return levelFor(propertyId) === "full";
+      if (propertyId) return myAssignments.find(a => a.propertyId === propertyId)?.level === "full";
       return myAssignments.some((a) => a.level === "full");
     };
     const canSeeTenantSensitive = canSeeFinancials;
