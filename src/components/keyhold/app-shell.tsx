@@ -49,6 +49,7 @@ import { DemoSwitcher } from "./demo-switcher";
 import { usePermissions } from "@/lib/mock-access";
 import { usePortfolio } from "@/lib/mock-portfolio";
 import { GlobalSearch, CommandPalette, ShortcutsSheet } from "./global-search";
+import { DemoBanner } from "./demo-banner";
 
 import { ModuleBoundary, OfflineBanner } from "./module-boundary";
 import { ShortcutsProvider, useShortcuts } from "@/lib/shortcuts";
@@ -220,18 +221,20 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
   const [drawer, setDrawer] = useState(false);
 
   return (
-    <div className="min-h-screen w-full">
-      <OfflineBanner />
-      {/* Desktop sidebar */}
+    <div className="flex min-h-screen w-full flex-col">
+      <DemoGate />
+      <div className="flex flex-1">
+        <OfflineBanner />
+        {/* Desktop sidebar */}
 
-      <aside
-        className={`fixed inset-y-0 start-0 z-30 hidden flex-col border-e border-sidebar-border bg-sidebar py-4 lg:flex ${
-          collapsed ? "w-20" : "w-64"
-        }`}
-      >
-        <div className={`flex items-center px-5 pb-4 ${collapsed ? "justify-center px-0" : "justify-between"}`}>
-          <Brand compact={collapsed} />
-        </div>
+        <aside
+          className={`fixed inset-y-0 start-0 z-30 hidden flex-col border-e border-sidebar-border bg-sidebar py-4 lg:flex ${
+            collapsed ? "w-20" : "w-64"
+          }`}
+        >
+          <div className={`flex items-center px-5 pb-4 ${collapsed ? "justify-center px-0" : "justify-between"}`}>
+            <Brand compact={collapsed} />
+          </div>
         <nav aria-label="Main" className="flex-1 overflow-y-auto">
           <NavList collapsed={collapsed} />
         </nav>
@@ -324,13 +327,21 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
         </main>
 
 
-      </div>
+        </div>
 
-      <AskKeyhold />
-      <CommandPalette />
-      <ShortcutsSheet />
+        <AskKeyhold />
+        <CommandPalette />
+        <ShortcutsSheet />
+      </div>
     </div>
   );
+}
+
+function DemoGate() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isDemo = pathname.startsWith("/app") || pathname.startsWith("/portal") || pathname.startsWith("/owner");
+  if (!isDemo) return null;
+  return <DemoBanner />;
 }
 
 

@@ -188,7 +188,7 @@ function RootComponent() {
                 <OwnersProvider>
                   <CanadaProvider>
                     <ConsentProvider>
-                      <DemoGate />
+                      {/* DemoGate moved to AppShell to avoid overlapping the logo */}
                       <Outlet />
                       <Toaster richColors position="top-center" />
                     </ConsentProvider>
@@ -208,9 +208,3 @@ function RootComponent() {
   );
 }
 
-function DemoGate() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isDemo = pathname.startsWith("/app") || pathname.startsWith("/portal") || pathname.startsWith("/owner");
-  if (!isDemo) return null;
-  return <DemoBanner />;
-}
