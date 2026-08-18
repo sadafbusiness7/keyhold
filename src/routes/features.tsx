@@ -14,7 +14,7 @@ import {
 import { Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import Lottie from "lottie-react";
+const Lottie = (props: any) => null;
 
 // Placeholder Lottie animations - in a real app these would be local JSON files
 const lottieUrls = {
