@@ -217,7 +217,7 @@ export function DashboardAnalytics() {
     <section aria-labelledby="analytics-heading" className="mb-6">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
         <h2 id="analytics-heading" className="font-display text-lg font-bold">
-          Portfolio at a glance
+          Your money at a glance
         </h2>
         <label className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
           <span className="sr-only sm:not-sr-only">Property</span>
