@@ -388,6 +388,7 @@ export function usePermissions() {
     const isTenant = currentUser.accountType === "tenant";
     const isOwnerClient = currentUser.accountType === "owner-client";
 
+    const isSuspended = currentUser.status === "suspended";
     const pmActive = isPm && currentUser.status === "active";
     const myAssignments = pmActive ? assignments.filter((a) => a.pmUserId === currentUser.id) : [];
 
