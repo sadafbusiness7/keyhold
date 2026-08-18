@@ -233,7 +233,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
           className={`fixed inset-y-0 start-0 z-30 hidden flex-col border-e border-sidebar-border bg-sidebar py-4 lg:flex ${
             collapsed ? "w-20" : "w-64"
           }`}
-          style={{ top: 'var(--demo-banner-height, 0px)' }}
+          style={{ top: '39px' }}
         >
           <div className={`flex items-center px-5 pb-4 ${collapsed ? "justify-center px-0" : "justify-between"}`}>
             <Brand compact={collapsed} />
@@ -310,7 +310,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
 
       <div className={`${collapsed ? "lg:ps-20" : "lg:ps-64"}`}>
         {/* Desktop top bar with global search */}
-        <header className="sticky top-[var(--demo-banner-height,0px)] z-20 hidden border-b border-border bg-sidebar/90 backdrop-blur lg:block">
+        <header className="sticky top-[39px] z-20 hidden border-b border-border bg-sidebar/90 backdrop-blur lg:block">
           <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-6 py-3">
             <div className="flex items-center gap-3">
               <PortfolioSelector />

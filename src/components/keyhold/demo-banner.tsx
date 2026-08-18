@@ -6,11 +6,18 @@ export function DemoBanner() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (ref.current) {
-      const height = ref.current.offsetHeight;
-      document.documentElement.style.setProperty('--demo-banner-height', `${height}px`);
-    }
+    const updateHeight = () => {
+      if (ref.current) {
+        const height = ref.current.offsetHeight;
+        document.documentElement.style.setProperty('--demo-banner-height', `${height}px`);
+        console.log('Demo banner height set:', height);
+      }
+    };
+    
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
     return () => {
+      window.removeEventListener('resize', updateHeight);
       document.documentElement.style.setProperty('--demo-banner-height', '0px');
     };
   }, []);

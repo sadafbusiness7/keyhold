@@ -66,7 +66,11 @@ export type AccessLogEntry = {
 };
 
 const DAY = 86_400_000;
-const iso = (offsetMs: number) => new Date(Date.now() + offsetMs).toISOString();
+const iso = (offsetMs: number) => {
+  // Use a fixed reference time for SSR to avoid hydration mismatches
+  const now = typeof window === 'undefined' ? 1723975260000 : Date.now();
+  return new Date(now + offsetMs).toISOString();
+};
 
 // MOCK users — Mr. J's account.
 export const seedUsers: AppUser[] = [
