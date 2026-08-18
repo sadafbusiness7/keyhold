@@ -31,6 +31,7 @@ import {
   type Deposit,
 } from "@/lib/rent-engine";
 import { downloadTablesPdf } from "@/lib/finance-engine";
+import { useModalA11y } from "@/lib/use-modal-a11y";
 
 const field = "mt-1 min-h-11 w-full rounded-xl border border-input bg-background px-3 text-sm";
 const methods: PaymentMethod[] = ["e-Transfer", "Cheque", "Cash", "Pre-authorized debit"];

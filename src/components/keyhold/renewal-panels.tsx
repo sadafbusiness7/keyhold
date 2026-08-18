@@ -28,6 +28,7 @@ import {
   type RenewalStatus,
 } from "@/lib/mock-renewals";
 import { calcN1, NOTICE_RULES } from "@/lib/notices-engine";
+import { useModalA11y } from "@/lib/use-modal-a11y";
 
 export const inputCls =
   "min-h-11 w-full rounded-xl border border-input bg-card px-3 text-sm tabular-nums";
@@ -198,8 +199,10 @@ export function RenewalDrawer(props: DrawerProps) {
     toast.success("Renewal offer drafted.");
   };
 
+  const dialogRef = useModalA11y<HTMLDivElement>(onClose);
+
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-navy/40" role="dialog" aria-modal="true" aria-label={`Renewal for ${tenantName}`}>
+    <div ref={dialogRef} tabIndex={-1} className="fixed inset-0 z-50 flex justify-end bg-navy/40" role="dialog" aria-modal="true" aria-label={`Renewal for ${tenantName}`}>
       <button type="button" className="flex-1" aria-label="Close" onClick={onClose} />
       <div className="flex h-full w-full max-w-xl flex-col overflow-y-auto bg-background p-5 shadow-2xl sm:p-6">
         <div className="mb-4 flex items-start justify-between gap-3">

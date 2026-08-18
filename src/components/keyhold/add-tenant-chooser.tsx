@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "@tanstack/react-router";
 import { UserPlus, FilePlus, ArrowRight, X } from "@phosphor-icons/react";
+import { useModalA11y } from "@/lib/use-modal-a11y";
 
 /**
  * The two legitimate ways a tenant can enter Keyhold.
@@ -54,6 +55,7 @@ export function AddTenantChooser({
         ? createPortal(
         <div
           className="fixed inset-0 z-50 flex items-end justify-center bg-navy/40 p-0 sm:items-center sm:p-6"
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label="Add a tenant"

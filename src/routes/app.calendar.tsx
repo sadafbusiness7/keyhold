@@ -21,6 +21,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 import { getCalendarIcal } from "@/lib/calendar.functions";
 import { useServerFn } from "@tanstack/react-start";
+import { useModalA11y } from "@/lib/use-modal-a11y";
 
 
 export const Route = createFileRoute("/app/calendar")({
@@ -266,9 +267,12 @@ function CalendarPage() {
 /** Quick-view popover: details plus one or two actions, no navigation away. */
 function QuickView({ event, onClose }: { event: CalendarEvent; onClose: () => void }) {
   const { label, Icon, chip, to, action } = typeMeta[event.type];
+  const dialogRef = useModalA11y<HTMLDivElement>(onClose);
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-navy/25 p-3 sm:items-center" role="presentation" onClick={onClose}>
       <div
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label={event.title}
