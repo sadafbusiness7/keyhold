@@ -35,6 +35,8 @@ export function AddTenantChooser({
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+  const closeChooser = useCallback(() => setOpen(false), []);
+  const dialogRef = useModalA11y<HTMLDivElement>(closeChooser, open);
 
   const cls =
     trigger === "solid"
